@@ -405,7 +405,6 @@ if [ "$STAGE" -ge 13 ]; then
   need_grep $P/references/state-schema.md '"data_sensitivity"'
   need_grep $P/references/state-schema.md '"handoff"'
   need_grep $P/references/bridge.md 'handoff.md'
-  need_grep $P/references/bridge.md 'Wake on the event'
   need_grep $P/skills/pf-build/SKILL.md 'handoff.md'
   need_grep $P/skills/pf-build/SKILL.md '\-\-handoff'
   need_grep $P/skills/pf-build/SKILL.md 'Mode B'
@@ -611,6 +610,22 @@ if [ "$STAGE" -ge 12 ]; then
   if grep -n 'BUILD-REQUEST\.md\|BUILD-RESULT\.md' $BB $P/skills/pf-build/SKILL.md $P/tests/pf-build.md >/dev/null; then bad "unsuffixed v1 filenames remain"; else ok "no unsuffixed filenames"; fi
 fi
   for f in $P/skills/*/SKILL.md atelier-builder/skills/*/SKILL.md; do if grep -m1 "^description:" "$f" | grep -qE "<[^>]+>"; then bad "$f description has <tag>"; else ok "$f description tag-free"; fi; done
+
+# --- Autonomy + credential fixes (PR-event wake, fail-closed credentials, NEEDS-INPUT, bounded standing-yes merge)
+need_grep $P/references/bridge.md 'Woken by the PR event'
+need_grep $P/references/security.md 'Credential isolation'
+need_grep $P/references/security.md 'never.*personal'
+need_grep atelier-builder/references/security.md 'Credential isolation'
+need_grep $P/references/bridge.md 'NEEDS-INPUT'
+need_grep $P/references/bridge.md 'receive a raw push'
+need_grep $P/references/handoff.md 'cannot be pushed to'
+need_grep atelier-builder/skills/pf-next/SKILL.md 'NEEDS-INPUT'
+need_grep $P/skills/pf-build/SKILL.md 'NEEDS-INPUT'
+need_grep $P/skills/pf-build/SKILL.md 'never fall back to a personal login'
+need_grep $P/skills/pf-merge/SKILL.md 'standing-yes'
+need_grep $P/references/state-schema.md 'merge_policy'
+need_grep $P/skills/pf-setup/SKILL.md 'needs-input'
+need_grep atelier-builder/skills/pf-build-from-spec/SKILL.md 'gh pr ready'
 
 # --- Public-release guarantees (Atelier generalization + audit)
 # Top-level package files present and valid

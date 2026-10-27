@@ -2,15 +2,24 @@
 
 Standing decision: the factory supports **two** handoff modes and lets the user **choose per project**, defaulting to **A**. Before a project's first build the PM explains both — pros, cons and **cost** — records the choice, and does not re-ask every build. The choice can be changed per project or overridden on a single run. Both modes keep every human approval gate exactly where it is.
 
-This replaces the old poll-only completion signal in `bridge.md`: mode A wakes on a GitHub event (no more blind 3-minute timer as the primary path), mode B returns the result inline (no waiting at all).
+This improves on the old blind 3-minute timer in `bridge.md`: mode A is **woken by the PR** (not polling) as its completion signal, mode B returns the result inline (no waiting at all). Honest framing: a Cowork session **cannot be pushed to** from outside — nothing but a scheduled check-in it sets, a delivered notification for a subscribed PR (where the surface supports it), or the user can wake it. "Event-wake" means *the notification pipeline delivering the real PR event*, not a live push.
 
 ## The two modes
 
-### A — Local build + event wake  (DEFAULT)
-The builder (Claude Code) runs on **the user's own computer**, started the existing way (the Chrome hand-off in `bridge.md`, or typed by the user). The change from before: the PM does **not** poll on a timer to learn it finished. It **subscribes to the project's GitHub repo** and **wakes on the event** — the builder opens the pull request (lane builds) or pushes to `main` (solo) when done, and that GitHub notification reaches the PM the moment it happens. The `*-RESULT-*.md` file stays the durable record; a slow poll (every ~15 min) remains only as a guaranteed fallback if no event arrives within the stage timeout.
-- **Pros:** builds on hardware you already pay for (your PC); you can open Claude Code and watch or step in; **no secrets ever leave your machine**; nothing new to run. This removes the polling wait.
-- **Cons:** your computer must be on with the Code session running for a build to happen; the PM waits on your machine's pace.
-- **Cost: $0.** Your CPU and power (already paid for), GitHub free, the event notification free. It does **not** draw on your Claude plan usage while it waits.
+### A — Local build + PR-event wake  (DEFAULT)
+The builder (Claude Code) runs on **the user's own computer**, started the existing way (the Chrome hand-off in `bridge.md`, or typed by the user).
+
+**The PM is woken by the PR, it does not poll.** A Cowork session can't receive a raw webhook, but the notification pipeline (`ReadNotifications`) carries **GitHub activity on subscribed PRs** — so the autonomy path is:
+1. **At setup, the repo's PR activity is subscribed** (`/pf-setup handoff`), so its events are delivered to this session as notifications.
+2. **The builder opens a draft PR at the start of a lane build** (`main`-push for solo), giving the PM something to be woken by immediately. Every later event on it is a wake: **done** → the builder marks the PR ready for review (and writes `*-RESULT-*.md`); **blocked on a question** → the builder adds a `needs-input` label (and writes `NEEDS-INPUT-<lane>.md`). Both "done" and "blocked" are PR activity, so **both wake the PM through the same channel — nothing is polled.**
+3. On each wake the PM calls `ReadNotifications`, then reads GitHub with the project's **scoped lane token (fails closed if missing — never a personal login, `security.md` 16)** and acts on the matching result or question.
+
+A **scheduled check-in is only a rare backstop** — a single long timer at the stage timeout (build 90 min, etc.), used **only if** notifications aren't being delivered on this surface (then it degrades gracefully to a paced check). It is not the primary signal and does not run on a fast loop.
+
+**Chrome stays needed** for exactly two things with no other path: typing the one `/pf-next` command to *start* the build, and (when a question arrives) reading/answering it on the Code page.
+- **Pros:** builds on hardware you already pay for (your PC); you can watch or step in; **no secrets ever leave your machine**; and the PM is **woken by the PR event**, so it truly waits idle instead of polling.
+- **Cons:** your computer must be on with the Code session running; the autonomy depends on the GitHub-notification subscription being delivered to the session (set up at `/pf-setup handoff`) — where a surface doesn't deliver it, the backstop check covers it, slower.
+- **Cost: $0.** Your CPU and power (already paid for); and every GitHub piece of the wake route is a **free** feature — watching/subscribing to PRs, PR notifications, draft PRs and labels — with **no GitHub Actions minutes** used (CI, if any, runs self-hosted/local per `cost-posture.md`). The notification is free, and waiting idle draws **no** Claude plan usage. Chrome (the start command + answering a question) is also free.
 
 ### B — Cloud build  (opt-in, PC-independent)
 The build runs **in the cloud where the PM runs**: it clones the repo from GitHub, builds and tests, pushes the branch/PR, and deploys to the free Azure target — **blocking**, so the PM gets the result directly with **no polling and no waiting on your PC**.
@@ -25,7 +34,7 @@ The build runs **in the cloud where the PM runs**: it clones the repo from GitHu
 - **Data-sensitivity guardrail (hard):** when `brief.data_sensitivity: high` (data-sensitive — client, financial or personal data), the default stays **A** and **B is not offered by default**. If the user explicitly asks for B on such a project, the PM warns plainly that the client-data path should stay on the local/watched mode, requires the secret-handling (Azure Key Vault, no long-lived secret in the cloud) and the Phase-2 safety net, and confirms once more. **Client data never builds in the cloud without that explicit, warned yes.** The pentest step is **always mode A** (own pre-production host, watched, never cloud, never scheduled).
 
 ## How each mode signals completion (replaces poll-only)
-- **A (event):** right after the hand-off, the PM subscribes to the repo's pull-request activity (and `main` pushes for solo). It waits on the GitHub event; on the PR-opened / push notification it reads the matching `*-RESULT-*.md` (validated by exact header + mtime newer than the request) and proceeds. It falls back to a slow poll only if no event arrives within the stage timeout. Requires the repo on GitHub and PR notifications enabled (`/pf-setup handoff`).
+- **A (woken by the PR event):** the PM subscribes to the repo's pull-request activity at setup, then **waits idle until a notification arrives** (`ReadNotifications` carries GitHub activity on subscribed PRs). The builder opens a draft PR at build start; it marking the PR **ready** (done) or adding a **`needs-input`** label (blocked) each delivers a notification that wakes the PM, which then reads GitHub with the scoped token (fail-closed, never a personal login) and reads the matching `*-RESULT-*.md` (validated by exact header + mtime) or opens the Code page for the question. **No polling** on the happy path. A single long **backstop check** at the stage timeout covers the case where this surface doesn't deliver GitHub notifications; it is not the primary signal. A Cowork session cannot receive a raw push — this is the notification pipeline delivering the real PR event.
 - **B (cloud):** the PM runs the build in its own cloud session and gets the result **inline** — there is nothing to wait on. The `*-RESULT-*.md` is still written to the project folder and committed to the repo as the durable record. The cloud session needs GitHub (clone/push) and the target's deploy credentials reachable per `/pf-setup handoff` (Key Vault / short-lived token), never a stored long-lived secret.
 
 ## Unchanged in both modes

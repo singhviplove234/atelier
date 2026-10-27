@@ -77,7 +77,7 @@ Before any output goes into `failures:` or `notes:`, mask every value of a known
 
 - Ensure the repo exists: if no remote, `gh repo create <slug> --private --source . --push` from `main` first (PM lane only).
 - **`branch: main`**: commit on `main`, `git push`. `pr_url` stays empty.
-- **`branch: lane/<lane>`**: you are already on `lane/<lane>` (step 2); commit, `git push -u origin lane/<lane>` (never `--force`), then `gh pr create --base main --head lane/<lane> --title "<lane>: build from SPEC" --body "Acceptance: <n/m>"` (or `gh pr view --json url -q .url` if it already exists); record its URL as `pr_url`. Never push a lane branch to `main`.
+- **`branch: lane/<lane>`**: you are already on `lane/<lane>` (step 2); commit, `git push -u origin lane/<lane>` (never `--force`), then open the PR **as a draft** — `gh pr create --draft --base main --head lane/<lane> --title "<lane>: build from SPEC" --body "Acceptance: <n/m>"` (or `gh pr view --json url -q .url` if it already exists); record its URL as `pr_url`. When the build passes every gate, **mark the PR ready for review** — `gh pr ready <pr_url>` — which is the PR event that wakes the PM that the lane is done. Never push a lane branch to `main`. (If you opened the draft early because a question blocked you — see `/pf-next` — it already exists; just mark it ready now.)
 - Keep `npm run dev` running and note its URL as `preview_url`.
 
 ## 8. Write the result
@@ -95,4 +95,4 @@ acceptance: <passed>/<total>
 failures: <one line per failed check, or none>
 notes: <short>
 ```
-`status: ok` only when lint, build and every acceptance check passed. Then: "Result written — Cowork is polling and will pick it up."
+`status: ok` only when lint, build and every acceptance check passed. Then: "Result written — Cowork will pick it up (it is woken by the PR event, not polling)."

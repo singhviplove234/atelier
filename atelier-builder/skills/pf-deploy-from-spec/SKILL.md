@@ -34,4 +34,4 @@ live_url: <url or empty>
 http_status: <code or empty>
 notes: <short>
 ```
-`status: ok` only when the health check passed. Then: "Result written — Cowork is polling and will pick it up."
+`status: ok` only when the health check passed. Then: "Result written — Cowork will pick it up (it is woken by the PR event, not polling)."
