@@ -1,5 +1,7 @@
 # Atelier
 
+> **New to Atelier? [INSTALL.md](INSTALL.md) is a plain, step-by-step install guide anyone can follow.**
+
 **Describe an idea. Atelier plans it, designs it, builds it, ships it, and keeps it running — pausing only when it needs your yes.**
 
 Atelier is a pair of plugins for [Claude](https://claude.com) that turn a plain-language idea into a real, live web product and then look after it. You don't need to be a developer. You describe what you want; Atelier acts as your product manager, designer, engineer and operator, and stops at every important decision to show you the work and ask before it does anything that matters.
