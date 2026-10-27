@@ -1,0 +1,9 @@
+{
+  "name": "atelier",
+  "version": "1.0.0",
+  "description": "Describe an idea; Atelier plans, designs, builds, deploys and keeps it running — with an approval gate at every step. The Cowork half.",
+  "author": {
+    "name": "Atelier"
+  },
+  "keywords": ["design", "build", "deploy", "pipeline", "product", "no-code", "automation", "claude-code"]
+}
