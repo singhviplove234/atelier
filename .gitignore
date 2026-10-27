@@ -1,0 +1,16 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Node (only present if a user builds inside the repo; plugins ship no deps)
+node_modules/
+npm-debug.log*
+
+# Local project state the factory writes at runtime (never committed)
+factory.json
+lanes/
+*-REQUEST*.md
+*-RESULT*.md

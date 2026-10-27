@@ -1,0 +1,22 @@
+{
+  "name": "atelier",
+  "owner": {
+    "name": "Atelier"
+  },
+  "metadata": {
+    "description": "Atelier — an autonomous product factory for Claude. Take an idea from plan to a live, maintained product.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "atelier",
+      "source": "./atelier",
+      "description": "The Cowork half: the PM/orchestrator. Plans, designs, drives the build, deploys, monitors, maintains and grows a product — pausing only at your approval gates."
+    },
+    {
+      "name": "atelier-builder",
+      "source": "./atelier-builder",
+      "description": "The Claude Code half: the builder. Runs one build/deploy/harden/pentest request at a time and writes a result back."
+    }
+  ]
+}
