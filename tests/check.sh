@@ -626,6 +626,8 @@ need_grep $P/skills/pf-merge/SKILL.md 'standing-yes'
 need_grep $P/references/state-schema.md 'merge_policy'
 need_grep $P/skills/pf-setup/SKILL.md 'needs-input'
 need_grep atelier-builder/skills/pf-build-from-spec/SKILL.md 'gh pr ready'
+need_grep atelier-builder/skills/pf-build-from-spec/SKILL.md 'gh label create needs-input'
+need_grep atelier-builder/skills/pf-next/SKILL.md 'gh label create needs-input'
 
 # --- Public-release guarantees (Atelier generalization + audit)
 # Top-level package files present and valid
