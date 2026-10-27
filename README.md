@@ -1,5 +1,7 @@
 # Atelier
 
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE) [![Release](https://img.shields.io/github/v/release/singhviplove234/atelier?sort=semver)](https://github.com/singhviplove234/atelier/releases) [![Made for Claude](https://img.shields.io/badge/made%20for-Claude-8A2BE2)](https://claude.com)
+
 > **New to Atelier? [INSTALL.md](INSTALL.md) is a plain, step-by-step install guide anyone can follow.**
 
 **Describe an idea. Atelier plans it, designs it, builds it, ships it, and keeps it running — pausing only when it needs your yes.**
