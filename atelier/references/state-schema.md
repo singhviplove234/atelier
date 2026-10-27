@@ -27,6 +27,7 @@ Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A repl
     "data_sensitivity": "normal"
   },
   "handoff": { "mode": "event" },
+  "merge_policy": "ask",
   "ship_mode": "guarded",
   "planning": { "methodology": "", "budget_forecast": "", "documents": [], "dashboard_url": "" },
   "monitoring": { "uptime": "", "errors": "", "alerts": "", "rollback": "", "health_route": "" },
@@ -53,6 +54,7 @@ Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A repl
 | `brief.*` | The approved brief; `stack` locks at design approval; `deploy_hint` may name a target from `references/targets/` |
 | `brief.data_sensitivity` | `normal` or `high`. `high` (data-sensitive client/financial/personal data) triggers the security CI gate (`security.md` 15) and the handoff guardrail: default mode A, cloud mode B only on an explicit warned yes (`handoff.md`) |
 | `handoff.mode` | `event` (A, default — local build, GitHub-event wake) or `cloud` (B — cloud build). Set once before the first build via `/pf-build` (the PM explains both with pros/cons/cost); overridable per run with `--handoff`. See `references/handoff.md` |
+| `merge_policy` | `ask` (default — `/pf-merge` asks before each merge) or `standing-yes` (opt-in, per project; the user pre-authorizes merges that are **already approved, fully reviewed and green on the current commit** — e.g. a team project). The standing yes is bounded to merges only; deploy/go-live, pentest scope and client-data go-live always ask regardless. See `pf-merge` §2 and `security.md` 16 (reads use the scoped token, fail closed) |
 | `ship_mode` | `guarded` (default — `/pf-ship` pauses at every human gate) or `streamlined` (low-stakes `data_sensitivity: normal` only — auto-advance to a preview, pause once at go-live). Streamlined never applies to `data_sensitivity: high`. Overridable per run with `--guarded`/`--streamlined`. See `pf-ship` |
 | `planning.*` | Set by `/pf-plan` (the PM/BA/PO stage, `references/planning.md`): `methodology` (`ship-it`/`agile`/`kanban`), `budget_forecast` (plain forecast under the cost posture — a budget never unlocks paid), `documents` (links to the brief/PRD, architecture, MVP, stack, budget docs + backlog/sprints), `dashboard_url` (the living db-backed progress dashboard for agile/team projects) |
 | `gates.plan` | `pending` / `approved` per "Approval words". Set by `/pf-plan` on plan sign-off; precedes `gates.design`. A project started straight at `/pf-design` leaves it `pending` (planning optional for small/solo work) |
