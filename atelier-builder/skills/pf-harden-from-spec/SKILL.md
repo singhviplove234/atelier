@@ -66,4 +66,4 @@ reverted: <commits or none>
 needs_decision: <paid items the user must approve, or none>
 notes: <short>
 ```
-`status: ok` when the safety-net tests pass on the branch, `budget_met: yes`, (if `seo` ran) every page scores SEO 100 with crawler fetch 4/4, and (if `security` ran) every section-C check passes or is listed under `needs_decision`. Then: "Result written — Cowork is polling and will pick it up."
+`status: ok` when the safety-net tests pass on the branch, `budget_met: yes`, (if `seo` ran) every page scores SEO 100 with crawler fetch 4/4, and (if `security` ran) every section-C check passes or is listed under `needs_decision`. Then: "Result written — Cowork will pick it up (it is woken by the PR event, not polling)."
