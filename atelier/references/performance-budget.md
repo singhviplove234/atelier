@@ -2,6 +2,8 @@
 
 Standing requirement: "regardless how heavy our website is it should load quickly and stay superfast without lagging." This file is the contract. The builder enforces it before a build may report `status: ok`; `/pf-harden` re-checks it on the **live** site and fixes regressions.
 
+**Stack neutrality.** These budgets are measured outcomes (load time, Lighthouse, Web Vitals, payload ceilings), not framework rules — they apply to **whatever stack the plan chose** (`brief.stack`). The default stack is Next.js; on any other framework the same numbers must still be met.
+
 ## Targets (measured on Lighthouse **mobile** preset, throttled, median of 3 runs)
 
 | Metric | Budget | Why |
