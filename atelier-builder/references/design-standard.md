@@ -28,6 +28,14 @@ The **foundation** (tokens, accessibility, licensed fonts/icons, the non-negotia
 - **Motion (baseline):** short, purposeful transitions (~150–250 ms, ease-out); respect `prefers-reduced-motion`; never block interaction.
 - **"Liquid-glass" look (optional, tasteful):** a frosted translucent surface (`backdrop-blur` + translucent bg) may be used for a nav bar or an overlay when the direction wants a premium feel — but sparingly, always with a solid fallback and AA text contrast over it, and it must not break the performance budget (blur is costly) or `prefers-reduced-transparency`.
 
+## Component sources (shadcn-compatible, free — adapt, don't hand-write plain Tailwind)
+The build is Next.js + Tailwind, so premium UI need not be written from scratch. When a direction wants marketing or brand polish, pull sections from vetted **shadcn-compatible** sources and adapt them rather than shipping plain-Tailwind boxes:
+- **shadcn/ui** — the base for forms, tables, dashboards and app UI (the `product` direction leans on this).
+- **Magic UI** (free, open source) — the default for marketing/brand sections: marquees, bento grids, animated beams, animated text and number counters.
+- **21st.dev** — search the wider shadcn component ecosystem when the two above don't have the piece.
+
+Rules (these **reinforce** the contracts here, never loosen them): **copy the component source in** — we own and edit it, no new runtime dependency unless it earns its weight under the JS budget; **keep our `pf-design-system` tokens** — never import a library's demo palette, colours or fonts (that is how a page ends up looking like someone else's brand); **functional motion only**, under the motion rules below and `performance-budget.md` — never stack several animation libraries on one page; and **free tiers only** — never a paid tier or template without the user's explicit yes (`cost-posture.md`). These are sources to adapt, not a new design language: the foundation and every contract still govern.
+
 ## Motion & animation (the motion-led layer — strongest in the `brand` direction)
 Motion is a design tool, used in proportion to the direction (rich for `brand`, light for `marketing`/`editorial`, minimal for `product`). The craft below is distilled from a real shipped motion-led brand site (a premium-brand site shipped in 2026); the **grammar, defaults and rules are generalizable** — re-tune the exact numbers to each project's footage and feel.
 
@@ -54,7 +62,7 @@ Motion is a design tool, used in proportion to the direction (rich for `brand`, 
 - **Library budget:** a scroll/animation library is added only if it earns its weight under the simplicity + JS-budget rules; prefer CSS transitions + `IntersectionObserver` for reveals and reserve a library (GSAP ScrollTrigger, Motion/Framer Motion) for scrubbed scenes or a form swap where CSS can't do it.
 - **Avoid (these all shipped lag once):** full-size image sets on every device; preloading every scene at once (starves text and video); `mix-blend-mode` on canvases; a CSS image mask scrubbed every frame on a large canvas (bake the effect into the frames instead); library `x`/`y` stacked on CSS `translate`; starting third-party scripts at idle; cover-cropping square frames on portrait; and **measuring only on a warm-cache desktop** — every real lag complaint came from a cold cache, a second browser (Edge/Safari) or a real phone.
 
-## How it is checked (build step 6; a `design` lens in `/pf-harden` reuses this)
+## How it is checked (build step 6 — a build-time acceptance check, not a separate harden pass)
 Mostly reuses tools already in the build — this adds taste rules, not new scanners:
 - Tokens from `pf-design-system` are the only source of colour/type/spacing; grep for hard-coded hex colours or arbitrary `px` font sizes outside the token set → fix.
 - Exactly one `<h1>` per page and a visible type hierarchy (reuse the SEO heading check).

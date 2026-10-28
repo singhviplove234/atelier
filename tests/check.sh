@@ -637,6 +637,19 @@ need_grep atelier-builder/skills/pf-harden-from-spec/SKILL.md 'security-audit'
 need_grep atelier-builder/skills/pf-pentest-from-spec/SKILL.md 'security-audit'
 need_grep THIRD-PARTY-NOTICES.md 'security-audit'
 need_grep atelier/references/skill-catalog.md 'security-audit'
+# New design-library guidance, polish fixes, and the gated (token-thrifty) deep audit
+need_grep atelier-builder/references/design-standard.md 'Magic UI'
+need_grep atelier/references/design-standard.md 'Magic UI'
+need_grep atelier-builder/references/security.md 'takeover path'
+need_grep atelier-builder/skills/pf-harden-from-spec/SKILL.md '6543'
+need_grep atelier-builder/skills/pf-harden-from-spec/SKILL.md 'not.*every routine harden'
+# Audit fixes: deep-audit gate is reachable (request fields), audit reused not repeated, pentest not polled
+need_grep atelier/references/bridge.md 'deep_audit'
+need_grep atelier/skills/pf-harden/SKILL.md 'deep_audit'
+need_grep atelier-builder/skills/pf-harden-from-spec/SKILL.md 'deep_audit'
+need_grep atelier-builder/skills/pf-pentest-from-spec/SKILL.md 'reuse.*don.t repeat'
+need_grep atelier/skills/pf-pentest/SKILL.md 'single backstop check'
+need_grep atelier/skills/pf-ship/SKILL.md 'standing-yes'
 
 # --- Public-release guarantees (Atelier generalization + audit)
 # Top-level package files present and valid
