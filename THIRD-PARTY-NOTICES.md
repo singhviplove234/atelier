@@ -12,6 +12,7 @@ their respective authors.
 | `atelier/skills/humanizer` | MIT | © 2025 Siqi Chen | bundled, license in folder |
 | `atelier/skills/design-md` | MIT | © 2026 VoltAgent | bundled, license in folder |
 | `atelier/skills/find-skill` | MIT | © 2026 fockus | adapted from `fockus/claude-skill-find-skill`; license in folder |
+| `atelier-builder/skills/security-audit` | MIT | © 2025–2026 Cloudflare, Inc. | `cloudflare/security-audit-skill`; license in folder |
 
 Full license text for each lives in that skill's directory (`LICENSE`). If you
 redistribute Atelier, keep those files in place.

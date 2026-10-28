@@ -628,6 +628,15 @@ need_grep $P/skills/pf-setup/SKILL.md 'needs-input'
 need_grep atelier-builder/skills/pf-build-from-spec/SKILL.md 'gh pr ready'
 need_grep atelier-builder/skills/pf-build-from-spec/SKILL.md 'gh label create needs-input'
 need_grep atelier-builder/skills/pf-next/SKILL.md 'gh label create needs-input'
+# Bundled Cloudflare security-audit skill (MIT) wired into harden + pentest
+need_file atelier-builder/skills/security-audit/SKILL.md
+need_file atelier-builder/skills/security-audit/LICENSE
+need_grep atelier-builder/skills/security-audit/SKILL.md '^name: security-audit'
+need_grep atelier-builder/skills/security-audit/LICENSE 'Cloudflare'
+need_grep atelier-builder/skills/pf-harden-from-spec/SKILL.md 'security-audit'
+need_grep atelier-builder/skills/pf-pentest-from-spec/SKILL.md 'security-audit'
+need_grep THIRD-PARTY-NOTICES.md 'security-audit'
+need_grep atelier/references/skill-catalog.md 'security-audit'
 
 # --- Public-release guarantees (Atelier generalization + audit)
 # Top-level package files present and valid
