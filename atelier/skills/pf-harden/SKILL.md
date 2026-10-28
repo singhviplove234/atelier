@@ -25,6 +25,8 @@ project: <slug>
 code_path: <code root>/<slug>
 live_url: <deploy.live_url or empty>
 target: <deploy.target>
+data_sensitivity: <brief.data_sensitivity>
+deep_audit: <yes on a pre-go-live/final harden or if the user asked for a deep security audit, else no>
 passes: <list>
 ```
 Delete any stale `HARDEN-RESULT.md`. Store `harden.request_id`, `harden.status = requested`; log `{stage: "harden", event: "request written"}`. Hand off per `handoff.md`. **Mode A (event, default):** drive Chrome per `bridge.md` on `lanes[<pm_lane>].code_url` with `/pf-next <slug> harden --go` (fallback: "In your Claude Code session (lane `<pm_lane>`) type **`/pf-next <slug> harden`** and confirm."), then wake on the GitHub PR event; fall back to a slow poll (~every 15 min) for `HARDEN-RESULT.md` (first line exactly `PF-HARDEN-RESULT v1`, same `request_id`) up to 120 minutes. **Mode B (cloud):** run the harden passes inline in the cloud per `handoff.md` and read the result directly (load tests still run against a local copy with a test database, never the live URL). `--handoff event|cloud` overrides for this run.
