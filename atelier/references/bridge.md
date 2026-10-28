@@ -111,6 +111,8 @@ project: <slug>
 code_path: <code root>/<slug>
 live_url: <url or empty>
 target: <name from references/targets/>
+data_sensitivity: normal|high        ← from factory.json brief
+deep_audit: no|yes                   ← yes runs the deep security-audit this pass (final/pre-go-live, or on request)
 passes: safety,perf,seo,security,compliance,indexes,caching,load,limits
 ```
 
