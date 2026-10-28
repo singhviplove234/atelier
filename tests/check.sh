@@ -74,7 +74,7 @@ if [ "$STAGE" -ge 7 ]; then
   need_grep $P/skills/pf-build/SKILL.md 'non-empty `repo_url`'   # C1: never blank a good repo_url
   need_grep $P/references/bridge.md '^notes:'         # I1: notes in PF-BUILD shape
   need_grep $BB '## Stack'                            # I2
-  need_grep $BB 'unsupported stack'                   # I2
+  need_grep $BB "isn.t buildable"                      # I2: builds the locked stack, flags un-buildable (stack-neutral)
   need_grep $BD 'gh repo clone'                       # I3
   need_grep $BB 'supabase db push'                    # I4
   need_grep $BB 'TEST_USER_EMAIL'                     # I4
@@ -650,6 +650,13 @@ need_grep atelier-builder/skills/pf-harden-from-spec/SKILL.md 'deep_audit'
 need_grep atelier-builder/skills/pf-pentest-from-spec/SKILL.md 'reuse.*don.t repeat'
 need_grep atelier/skills/pf-pentest/SKILL.md 'single backstop check'
 need_grep atelier/skills/pf-ship/SKILL.md 'standing-yes'
+# Stack neutrality: contracts are principles (not Next-locked), plan picks the framework, builder builds the locked stack
+need_grep atelier-builder/references/security.md 'Stack neutrality'
+need_grep atelier-builder/references/design-standard.md 'Stack neutrality'
+need_grep atelier-builder/references/performance-budget.md 'Stack neutrality'
+need_grep atelier/references/platform-selection.md 'not framework-locked'
+need_grep atelier/skills/pf-plan/SKILL.md 'app framework/language'
+need_grep atelier-builder/skills/pf-build-from-spec/SKILL.md 'build whatever stack the plan locked'
 
 # --- Public-release guarantees (Atelier generalization + audit)
 # Top-level package files present and valid
