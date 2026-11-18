@@ -8,6 +8,9 @@ Required: (none)
 Optional: —
 Checks: `gh auth status` succeeds
 
+## Preview
+None — GitHub Pages serves one site per repo. Verify on the local production build (`npx serve out`) and run e2e there.
+
 ## Deploy steps
 1. **Local build** to static: `next build` with `output: 'export'` and `basePath: '/<slug>'` in `next.config` → `./out`. Commit the config change before deploying so the tree stays clean.
 2. Push `./out` to branch `gh-pages`: `npx gh-pages -d out` (or `git subtree push`).

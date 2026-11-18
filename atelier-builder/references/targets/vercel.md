@@ -8,6 +8,9 @@ Required: `VERCEL_TOKEN`
 Optional: `SUPABASE_URL`, `SUPABASE_ANON_KEY` (only for apps with a backend)
 Checks: `npx vercel --version` runs
 
+## Preview
+`npx vercel build --token "$VERCEL_TOKEN"` then `npx vercel deploy --prebuilt --yes --token "$VERCEL_TOKEN"` (no `--prod`) → a unique preview URL, not indexed, production untouched. `preview_url` = the printed URL. **Promote:** run the Deploy steps below (production build + `--prod`) from the same commit.
+
 ## Deploy steps
 1. `npx vercel pull --yes --environment=production --token "$VERCEL_TOKEN"` (first run links/creates the project named after the repo).
 2. Env vars from `.env.example`: `npx vercel env add <NAME> production --token "$VERCEL_TOKEN"` fed from the local env — never typed.

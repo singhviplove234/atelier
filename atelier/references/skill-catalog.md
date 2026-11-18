@@ -59,6 +59,10 @@ you set Atelier up. Grouped by the stage that calls them.
 - **remove-ai-marks** — **When:** `/pf-build` / `/pf-grow`, before delivering copy. **How:** strips AI-provenance tells from site copy (honest polish, never to deceive).
 - **brandkit** — **When:** a `brand`-direction project needing a fuller brand kit. **How:** assembles brand assets/boards; the design and compliance contracts still bind.
 
+### Required on the Code session
+- **diagram-design** — **When:** every project, before every build. **How:** renders the SPEC's `## Diagrams` (and the plan's architecture diagram) from their Mermaid source into `docs/diagrams/`, in the project's brand from the SPEC's tokens. The builder refuses to build until every page and feature is diagrammed and rendered, so this is the one helper that is **not optional**. A Claude Code plugin from its author's repo (MIT); `/pf-setup` step 0b2 installs it, `/pf-next doctor` confirms it.
+- **apple-look** *(optional, mobile app builds only)* — **When:** `design-standard.md` "Mobile apps". **How:** Apple's Human Interface Guidelines as rules for SwiftUI / Flutter / React Native UI. Installed under its own name by `/pf-setup` step 0d-opt (its upstream name collides with another skill).
+
 ### Build discipline (Claude Code, optional)
 - **superpowers** — **When:** on the Code session during `/pf-build`. **How:** reinforces plan-first + self-verification + TDD + systematic debugging as the builder works, so mistakes are caught before Atelier's gates. Overlaps what the factory already enforces, so it's polish on *how* the Code session works, not a new capability; separately owned, so it's installed from its own marketplace, never bundled.
 

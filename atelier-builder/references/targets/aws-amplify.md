@@ -8,6 +8,9 @@ Required: AWS credentials via `aws configure`/SSO (short-lived — never a long-
 Optional: `SUPABASE_URL`, `SUPABASE_ANON_KEY`
 Checks: `aws --version` and `aws amplify list-apps` run
 
+## Preview
+A second branch on the same app: `aws amplify create-branch --app-id "$AMPLIFY_APP_ID" --branch-name preview` (first run), then the same manual deployment as the Deploy steps with `--branch-name preview`. `preview_url` = `https://preview.<AMPLIFY_APP_ID>.amplifyapp.com`. **Promote:** the Deploy steps below (branch `main`) with the same zipped build output.
+
 ## Deploy steps
 1. Build locally: `npm ci && npm run build` (static export or Next build) — **local build**, never an Amplify-hosted build.
 2. Create/confirm the app (first run): `aws amplify create-app --name <slug>` → `AMPLIFY_APP_ID`; create a branch `aws amplify create-branch --app-id "$AMPLIFY_APP_ID" --branch-name main`.

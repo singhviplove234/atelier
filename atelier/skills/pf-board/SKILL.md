@@ -12,7 +12,7 @@ One live view of every project the factory is running. Read first:
 Load the `artifact-capabilities` skill before creating the panel (for the `db` capability).
 
 ## 0. Flags
-`--check`: print the factory-wide summary + a one-line-per-project status in chat; do not open the panel; stop. `--schedule daily|weekly`: set a refresh cadence and stop.
+`--check`: print the factory-wide summary + a one-line-per-project status in chat; do not open the panel; stop. `--schedule daily|weekly`: set a refresh cadence and stop. **Token-light: on `--check` read only `state-schema.md` to parse state — skip the other references under *Read first* above and load them only when opening/refreshing the panel.**
 
 ## 1. Gather
 List every project: each `factory.json` under the connected `Atelier` folder. For each, read `factory.json` (+ `lanes/<lane>.json`) and compute its row per `control-panel.md`: stage, gates, lanes merged/total, `live_url` + health (from `monitoring` + a quick health check if live), handoff mode, maintenance, growth, and **needs** (any pending human gate or open review). Compute the summary counts.

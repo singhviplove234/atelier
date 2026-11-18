@@ -8,6 +8,9 @@ Required: (none — the deployment token is fetched per run into a shell variabl
 Optional: `SUPABASE_URL`, `SUPABASE_ANON_KEY`
 Checks: `az account show` succeeds
 
+## Preview
+`npx @azure/static-web-apps-cli deploy ./out --deployment-token "$SWA_TOKEN" --env preview` → a named pre-production environment (the Free plan includes a small number of them — reuse the one name `preview`, never create one per build). `preview_url` = the printed environment URL. **Promote:** the Deploy steps below (`--env production`) with the same built folder.
+
 ## Deploy steps
 1. `az staticwebapp create --name <slug> --resource-group pf-<slug> --location <region> --sku Free` (create the RG first if missing). Hold the deployment token in a shell variable for this command only — `SWA_TOKEN=$(az staticwebapp secrets list --name <slug> --query properties.apiKey -o tsv)` — never write it to a file or print it.
 2. **Local build**: `npm run build` (for static export set `output: 'export'` in `next.config` → `./out`).

@@ -23,6 +23,8 @@ The marker lives at `<Atelier folder>/.atelier/bootstrap.json` (names + date onl
 - Otherwise continue. The marker makes this safe to re-run: it only ever installs what is missing.
 
 ## 1. Take stock
+**Diagram Design — REQUIRED, and not installed here.** It is a Claude Code *plugin* on the Code session, not an account skill, so this skill cannot install it: say so in the plan, and point to `/pf-setup` step 0b2 (the builder refuses to build without it; `/pf-next doctor` confirms it).
+
 List the skills available in this session. For each entry in `skill-catalog.md`, mark it:
 - **bundled** — `find-skill`, `humanizer`, `design-md` → always present, nothing to do.
 - **built-in** — `docs`, `docx`, `pdf`, `pptx`, `/code-review`, `/security-review` → present in Claude already, nothing to install.

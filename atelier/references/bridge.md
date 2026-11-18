@@ -49,6 +49,8 @@ code_path: <code root>/<slug> | <code root>/<slug>--<lane>
 lane: <lane>
 branch: main | lane/<lane>
 mode: continue        ← optional hint; the builder decides by what is on disk/GitHub
+ci: hook | self-hosted | hosted   ← from factory.json.ci (verification.md D); absent = hook
+live: yes             ← only when deploy.live_url is set: the project has real data, so this build never migrates or seeds production (migrations.md A)
 notes: <fix request>  ← optional; on a re-run after "tell me what to fix"
 ```
 
@@ -62,6 +64,7 @@ repo_url: <url or empty>
 pr_url: <url or empty>        ← empty for solo (pushed to main)
 preview_url: <url or empty>
 acceptance: <n passed>/<n total>
+verify: pass|fail (<n> e2e, <m> unit)   ← the repo's own gate (verification.md)
 failures: <one line per failed check, or none>
 notes: <short free text>
 ```
@@ -91,6 +94,8 @@ request_id: <slug>-deploy-<yyyymmddHHMM>
 project: <slug>
 code_path: <code root>/<slug>
 target: <name from references/targets/>
+stage: preview | live     ← deploy-rule.md "Preview first"; absent = live
+destructive_ok: <migration file names the user said yes to, or none>   ← live only (migrations.md D)
 ```
 
 `DEPLOY-RESULT.md`
@@ -98,8 +103,13 @@ target: <name from references/targets/>
 PF-DEPLOY-RESULT v1
 request_id: <echoed>
 status: ok|failed
-live_url: <url or empty>
+stage: preview|live
+preview_url: <url or empty>
+live_url: <url or empty>      ← set by the live stage only
 http_status: <code or empty>
+e2e: <n passed>/<n total> against <url or "local production build">
+migrations: <n applied, or none>   ← live only
+live_tag: <live-yyyymmdd-HHMM or empty>
 notes: <short free text>
 ```
 
@@ -124,6 +134,15 @@ status: ok|failed
 branch: harden/<yyyymmdd>
 pr_url: <url>
 perf_before / perf_after / budget_met / indexes_added / caching / load / limits / reverted / needs_decision / notes  ← see pf-harden-from-spec
+```
+
+`DOCTOR-RESULT.md` (in the watch dir itself, not a project folder — written by `/pf-next doctor`, read by `/pf-setup --check`; it has no request file because it changes nothing)
+```
+PF-DOCTOR-RESULT v1
+checked: <timestamp>
+plugin: <builder plugin version>
+<item> | ok|missing | <the one line that fixes it>     ← one row per check; env vars by name only
+ready | <n> missing
 ```
 
 Rules: plain text; first line is the version header; secrets never appear (env var names only); the builder deletes nothing.

@@ -35,7 +35,7 @@ State which and why in one line; for Agile, break the MVP into user stories and 
 ## 5. The planning documents (what a product team makes)
 Generate the set the project warrants, as **living docs** (Claude Docs) by default, exported to **Word/PDF on request**:
 - **Product brief / PRD** — problem, users, goals, scope (MVP vs later), success metrics.
-- **Architecture overview** — the stack, the pieces and how they fit (a diagram), data-model sketch, integrations, hosting.
+- **Architecture overview** — the stack, the pieces and how they fit (a diagram), data-model sketch, integrations, hosting. *The diagram has two layers.* Write it as **Mermaid** first: that is the editable source of truth, saved in the architecture doc now and copied into the repo's docs once `/pf-build` creates it. Then render the sign-off version — the one that goes in the brief and deck — with the **Diagram Design** skill when it is installed (`references/skills.md` says what it is and how it installs). It is a Claude Code plugin, so the render happens on the Code seat (hand it the Mermaid, get back the PNG/SVG); if it is not installed, render the Mermaid as-is. Never hand-draw the diagram, and never let the rendered version drift from the Mermaid source. At build time this diagram becomes the SPEC's `app-architecture` block, joined by a journey diagram and one diagram per page and per feature (`spec-format.md` `## Diagrams`) — every project is fully diagrammed before a line is built.
 - **MVP definition** — the smallest shippable slice and its acceptance.
 - **Tech-stack decision** — what and why (locked at design approval).
 - **Budget forecast** — section 3.
@@ -49,6 +49,9 @@ For an Agile/team project, create a **living dashboard** the user monitors progr
 
 ## 7. After launch — the factory keeps it running (maintenance)
 Planning does not end at launch. For a product that stays live, the factory moves it to the **Kanban/maintenance** methodology and the post-launch loops (monitoring + alerts, the maintenance patch/upgrade pass, the growth loop — see the roadmap). The plan names who/what maintains it and sets the project up so `/pf-harden`, the maintenance loop and monitoring keep it healthy — the factory is the builder **and** the production-support/maintenance role, not just a one-time build.
+
+## 7b. Delivery — when the product is for someone else
+A product built for a client ends with **`/pf-deliver`** (`delivery.md`): the repo's own docs (architecture, runbook, admin guide, changelog — written by every build), a delivery pack with the proof, a guided ownership transfer with secrets rotated afterwards, and the recipient's acceptance as the final gate. Plan for it from the start: the plan records the recipient, and the timeline includes the handover.
 
 ## 8. Hand to the pipeline
 Write the brief + requirements, record `planning.methodology`, `planning.budget_forecast`, `planning.documents` and `planning.dashboard_url` in `factory.json`. **GATE — plan sign-off:** the user approves the requirement set, the lanes and the methodology before anything is designed; on approval set `gates.plan = approved`, then hand to `/pf-design`. Under `/pf-ship`, pf-plan is **stage 0** — it runs first, and plan sign-off precedes design sign-off.
