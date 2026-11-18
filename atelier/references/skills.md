@@ -11,6 +11,7 @@ don't fit a per-skill row.
 ## How skills arrive (Atelier is one-stop)
 - **Bundled** (always present): `find-skill`, `humanizer`, `design-md` — the ones whose licenses allow redistribution (`THIRD-PARTY-NOTICES.md`).
 - **Built-in**: `/code-review`, `/security-review`, and the Claude document skills (`docs`, `docx`, `pdf`, `pptx`).
+- **Required on the Code session**: `diagram-design` (third-party, MIT © Cathryn Lavery) — the one tool a build cannot run without. It renders every diagram the factory makes: the plan's architecture diagram and, before any build, the SPEC's `## Diagrams` (app architecture + journey, one user-flow per page, one sequence per feature — `spec-format.md`); the builder's Diagrams gate refuses to scaffold without it. It is a Claude Code plugin, installed from the author's repo only by `/pf-setup` step 0b2 (`/plugin marketplace add cathrynlavery/diagram-design`, then `/plugin install diagram-design@diagram-design`; check with `/diagram-design:doctor`) — never copied into this repo.
 - **Installed on first run**: everything else the factory uses (`tech-doc-audit`, `swot-analysis`, `llmcouncil`, the design-taste and animation skills, `remove-ai-marks`, `brandkit`, and optionally `superpowers`) is installed from its **own official source** by `/pf-bootstrap` on the first run on a Claude account — never copied into this repo. After that, `skill-catalog.md` tells Atelier how and when to use each.
 
 ## Team projects — defer to your own lane standard, if you have one

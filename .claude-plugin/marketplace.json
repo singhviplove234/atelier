@@ -5,7 +5,7 @@
   },
   "metadata": {
     "description": "Atelier — an autonomous product factory for Claude. Take an idea from plan to a live, maintained product.",
-    "version": "1.0.0"
+    "version": "1.1.0"
   },
   "plugins": [
     {

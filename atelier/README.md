@@ -13,7 +13,7 @@ Takes an idea all the way: **plan → design → build → deploy → harden →
 | `/pf-plan <idea>` | PM | PM/BA/PO: interviews for the full requirement, forecasts the budget (under the cost posture — a budget never unlocks paid), decides solo vs team lanes and creates them, picks a methodology, writes the product docs (PRD, architecture, MVP, stack, budget) + a living dashboard, audits the plan with **tech-doc-audit** (11 roles) | plan sign-off |
 | `/pf-design <idea>` | any seat | Brief (incl. lanes + deploy hint) → Claude Design artboards from the shared Design System, to the chosen **design direction** | your approval of the design |
 | `/pf-lanes add/list/status` | PM | Declare team lanes; see every lane's state. If you have your own team-lane standard skill, lanes run inside it; otherwise the built-in lane steps are used | — |
-| `/pf-build [--lane x]` | each lane's seat | Writes `SPEC.md` + `BUILD-REQUEST-<lane>.md`; hands off by the chosen **handoff mode** (A: build on your machine, wake on the GitHub event; B: build in the cloud, result inline) and runs `/pf-next` on the Code side | your approval of the lane's build |
+| `/pf-build [--lane x]` | each lane's seat | Writes `SPEC.md` (incl. **`## Diagrams`** — app, every page, every feature diagrammed; the builder refuses to build without them) + `BUILD-REQUEST-<lane>.md`; hands off by the chosen **handoff mode** (A: build on your machine, wake on the GitHub event; B: build in the cloud, result inline) and runs `/pf-next` on the Code side | your approval of the lane's build |
 | `/pf-merge --lane x` | PM | Merges an approved lane's PR into `main`; flips the build gate when all lanes are merged | "merge?" |
 | `/pf-deploy` | PM | Picks the platform by **fit** across providers (`references/platform-selection.md`), asks "deploy now?", deploys `main`, runs the health check, and **auto-rolls-back** a bad deploy (app only, never the DB) | "deploy now?" |
 | `/pf-harden` | PM | After deploy: safety-net tests, speed budget on the live site, SEO, defensive security, DB indexes, free caching, local k6 load test, hosting-limits check; one commit per fix on a PR; nothing paid is created | "harden now?", "merge + redeploy?" |
@@ -21,6 +21,7 @@ Takes an idea all the way: **plan → design → build → deploy → harden →
 | `/pf-monitor` | PM | Free uptime + error monitoring + alerts to you, and confirms auto-rollback | — |
 | `/pf-maintain [--schedule]` | PM | Keeps it patched, re-checks the contracts for drift, verifies backups + runs a **tested restore**; proposes a PR (never auto-merged for sensitive) | your merge |
 | `/pf-grow [--schedule]` | PM | Reads Search Console/GA4/Clarity, proposes the next SEO/content/conversion fixes; changes nothing on its own | — |
+| `/pf-deliver` | PM | Final stage for a product built for someone else: checks the repo's docs (architecture + every diagram, runbook, admin guide, changelog), assembles the delivery pack from recorded proof, walks the ownership transfer with secrets rotated afterwards | recipient's acceptance — and every account change is your click |
 | `/pf-board` | PM | One live control panel of every project — stage, gates, health, maintenance, what's waiting on you | — |
 | `/pf-ship <idea|slug>` | PM | The conductor: runs the whole chain, pausing only at the human gates. `ship_mode` guarded (default) or streamlined (low-stakes only) | each gate (or just go-live, streamlined) |
 
@@ -41,7 +42,15 @@ Each is a hard gate at build (enumerated in `/pf-build` acceptance) and re-check
 - **The right design for each project** (`design-standard.md`) — `/pf-design` picks a **design direction** (brand/product/editorial/marketing) and executes it to an **Apple-grade design** bar with a performant motion layer; Inter/Lucide, WCAG AA, reduced-motion honoured — never Apple's own fonts/symbols, never at the cost of speed or a11y.
 - **Legal & compliance** (`compliance.md`) — dependency licences, privacy + consent, terms + data-deletion, no copied assets, attribution/NOTICES, data-subject access/correct/delete, third-party API terms, AI-output provenance; minors/health/financial flagged for a lawyer. Each build also writes a tight **project CLAUDE.md**.
 - **Free-first, quality/security never compromised** (`cost-posture.md`, `recommendations.md`) — the cheapest option *from those that clear the bar*; a stated budget never unlocks paid; paid only when a real need forces it, with the price, on a yes.
+- **Checkable by anyone, without the factory** (`verification.md`) — every repo has one command, `verify` (lint, types, build, unit + isolation tests, end-to-end, dependency audit, secret scan), wired to a pre-push hook and, for team and data-sensitive projects, a CI workflow. **Every page and feature diagram has an end-to-end test**, each feature's failure path included.
+- **Data that cannot be lost by a build** (`migrations.md`) — separate test and production databases once data is real; forward-only, expand-then-contract migrations; a destructive change needs its own yes and a backup first.
+- **Seen before it is live** (`deploy-rule.md` "Preview first") — every deploy goes to a preview and passes the e2e suite there before the go-live question; each live release is git-tagged.
+- **A repo that explains itself** — architecture, runbook (with a first-response list for incidents), admin guide and changelog are written by every build and handed over by `/pf-deliver` (`delivery.md`).
 - **Reviewed by Claude's own reviewer** — every build runs the **built-in** `/code-review` and `/security-review` (free, in-session) and fixes Critical/High before it passes; optional Superpowers adds plan-first + self-verify.
+
+## Product shapes the plan knows
+- **SaaS** (`saas-blueprint.md`) — tenancy, roles, billing, plans and limits, lifecycle email, admin back-office, account lifecycle and onboarding are decided at plan time and written into the SPEC in full; money paths are treated as data-sensitive and no live charge is ever made by the factory.
+- **Mobile apps** (`mobile-release.md`, target `expo-eas`) — store fees, owner-held developer accounts and review time are stated before the stack is locked; releases go to TestFlight / Play testing, and **Submit for review is always your click**.
 
 ## Keep it running (the production-support half)
 - **Monitor** (`monitoring.md`) — free uptime + error tracking + alerts (Azure-native default; Sentry/UptimeRobot alternatives, pros/cons shown), PII scrubbed, plus **auto-rollback** on a bad deploy (app only, DB flagged not reverted).

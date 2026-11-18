@@ -1,9 +1,9 @@
 ---
 name: pf-next
-description: "Runs one named Atelier request — /pf-next SLUG build|merge|deploy|harden [--lane x] [--go] — by reading the matching request file under the Atelier folder and running the right builder skill. Use when the user (or the Cowork seat typing through Chrome) says /pf-next."
+description: "Runs one named Atelier request — /pf-next SLUG build|merge|deploy|harden|pentest [--lane x] [--go] — by reading the matching request file under the Atelier folder and running the right builder skill. Also /pf-next doctor [SLUG], a read-only check that this Code seat has every tool the factory needs. Use when the user (or the Cowork seat typing through Chrome) says /pf-next."
 ---
 
-# /pf-next <slug> <build|merge|deploy|harden|pentest> [--lane <name>] [--go]
+# /pf-next <slug> <build|merge|deploy|harden|pentest> [--lane <name>] [--go] · /pf-next doctor [<slug>]
 
 Runs exactly one request. Triggered only by a typed command — never by a timer, hook or file watcher.
 
@@ -16,6 +16,13 @@ Watch dir = `PF_WATCH_DIR` if set, else the `Atelier` folder in your home direct
 - `pentest` → `PENTEST-REQUEST.md` (carries `mode: scanners|agent|both`), result `PENTEST-RESULT.md` (**never** skips confirm — ignore `--go`; re-confirm the target against `factory.json.security_testing.authorized_targets[]` before running)
 
 The request file must exist, its first line must be the expected header (`PF-BUILD v1` / `PF-MERGE v1` / `PF-DEPLOY v1` / `PF-HARDEN v1` / `PF-PENTEST v1`), and it must be **pending**: the result file is missing, older than it, or carries a different `request_id`. Otherwise say exactly what is wrong ("no pending build request for lane backend in pf-app") and stop. Bare `/pf-next` with no arguments → list every pending request across projects and stop; never guess.
+
+## 1b. `/pf-next doctor [<slug>]` — is this seat ready? (read-only; no request file, no confirm)
+Check each item and print one table — item · ok/missing · the one line that fixes it — then write the same table to `<watch dir>/DOCTOR-RESULT.md` under the first line `PF-DOCTOR-RESULT v1` (plus `checked: <timestamp>` and `plugin: <this plugin's version>`). It installs nothing, changes nothing and prints **no secret value** — for env vars it reports only whether the **name** is set.
+- Tools: `node -v` (20+), `git --version`, `gh --version` and `gh auth status`, `npx playwright --version` (e2e + diagram PNG export), `gitleaks version` (secret scan in `verify`), and `/diagram-design:doctor`.
+- The watch dir exists and is writable; the code root (`PF_CODE_DIR`, default `~/dev/atelier`) exists or can be created.
+- With a `<slug>`: read `<watch dir>/<slug>/factory.json` → for `deploy.target` (or `brief.deploy_hint`), each **Required** env var name in that target file is set and each **Checks** command passes; when the project has a Data model, the database names are set (and the `PROD_`-prefixed ones when `database` is `split`); when `ci` is `self-hosted`, `gh api repos/<owner>/<slug>/actions/runners` shows a runner online; in the project checkout, `git config core.hooksPath` is `.githooks`.
+End with `ready` or `<n> missing — fix the first, then run /pf-next doctor again`.
 
 ## 2. Confirm
 Show `Next: <kind> <slug> [lane] — request_id <id>`. For `pentest`, always ask and name the target (never skip, even with `--go`). For build/merge/deploy, ask yes/no — **unless `--go` was given, which means skip the confirm** (the Cowork seat passes it only after the user approved that stage there).

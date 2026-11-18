@@ -8,6 +8,9 @@ Required: `RENDER_API_KEY`; `RENDER_SERVICE_ID` (after first create)
 Optional: `SUPABASE_URL`, `SUPABASE_ANON_KEY`
 Checks: `curl -s -H "Authorization: Bearer $RENDER_API_KEY" https://api.render.com/v1/services` returns 200
 
+## Preview
+None on the free tier (Render's preview environments are a paid feature — never enable them without a priced yes). Verify on the local production build and run e2e there.
+
 ## Deploy steps
 1. Build locally (static output, or a Docker image pushed to a free registry).
 2. Static site → upload the built output; service → point Render at the prebuilt image, or let Render build from the repo (its build is **included free** on the free tier — acceptable here since it is not separately metered like GitHub Actions). Create via `POST /v1/services` (first run), then `POST /v1/services/<id>/deploys`.

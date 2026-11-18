@@ -8,6 +8,9 @@ Required: `gcloud` auth (`gcloud auth login`, or a service account via Workload 
 Optional: `SUPABASE_URL`, `SUPABASE_ANON_KEY`
 Checks: `gcloud --version` and `gcloud config get-value project` run
 
+## Preview
+`gcloud run deploy <slug> --image <image> --region "$GCP_REGION" --no-traffic --tag preview` → a tagged revision URL that takes no production traffic. `preview_url` = the printed tag URL. **Promote:** `gcloud run services update-traffic <slug> --region "$GCP_REGION" --to-tags preview=100` — the same image, no rebuild. First deploy of a project has no existing service: there is no preview, verify on the local production build.
+
 ## Deploy steps
 1. Build the image **locally**: `docker build -t <GCP_REGION>-docker.pkg.dev/<GCP_PROJECT>/pf/<slug>:<tag> .` — never Cloud Build.
 2. Auth + push: `gcloud auth configure-docker <GCP_REGION>-docker.pkg.dev` then `docker push <image>` to Artifact Registry.

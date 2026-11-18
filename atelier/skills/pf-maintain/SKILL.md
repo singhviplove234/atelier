@@ -11,7 +11,7 @@ Keep a live product healthy over time — the factory as production support. Rea
 - `${CLAUDE_PLUGIN_ROOT}/references/cost-posture.md` (spend watch), `recommendations.md` (any option it surfaces), `state-schema.md`
 
 ## 0. Flags
-`--schedule weekly|monthly`: set/confirm the recurring schedule (via the scheduled-task tools; the user approves) and stop. `--check`: report last run, what is pending, backup/restore status, **secrets due for rotation, and the latest spend-vs-forecast reading**; stop. `--dry-run`: print what it would do; change nothing; stop.
+`--schedule weekly|monthly`: set/confirm the recurring schedule (via the scheduled-task tools; the user approves) and stop. `--check`: report last run, what is pending, backup/restore status, **secrets due for rotation, and the latest spend-vs-forecast reading**; stop. `--dry-run`: print what it would do; change nothing; stop. **Token-light: on `--check` read only `state-schema.md` to parse state — skip the other references under *Read first* above and load them only on a real maintenance run.**
 
 ## 1. Gate
 Locate the project; read `factory.json`. Require `deploy.live_url` (something is live to maintain). Seat = `pm_lane`.

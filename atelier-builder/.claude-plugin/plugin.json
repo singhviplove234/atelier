@@ -1,9 +1,15 @@
 {
   "name": "atelier-builder",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "The Claude Code half of Atelier: builds, deploys, hardens and pentests a project from the request files the Atelier Cowork plugin writes, and replies with PF-*-RESULT blocks.",
   "author": {
     "name": "Atelier"
   },
-  "keywords": ["build", "deploy", "claude-code", "pipeline", "nextjs"]
+  "keywords": [
+    "build",
+    "deploy",
+    "claude-code",
+    "pipeline",
+    "nextjs"
+  ]
 }

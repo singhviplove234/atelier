@@ -27,6 +27,8 @@ Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A repl
     "data_sensitivity": "normal"
   },
   "handoff": { "mode": "event" },
+  "ci": "hook",
+  "database": "single",
   "merge_policy": "ask",
   "ship_mode": "guarded",
   "planning": { "methodology": "", "budget_forecast": "", "documents": [], "dashboard_url": "" },
@@ -36,14 +38,15 @@ Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A repl
     "spend": { "as_of": "", "providers": [ { "provider": "azure", "mtd": "$0.00", "forecast": "$0/month", "free_limit_note": "" } ], "alert": "" } },
   "growth": { "last_run": "", "report_url": "" },
   "artifacts": { "design_system_url": "", "design_url": "" },
-  "gates": { "plan": "pending", "design": "pending", "build": "pending", "deploy": "pending" },
+  "gates": { "plan": "pending", "design": "pending", "build": "pending", "deploy": "pending", "delivery": "pending" },
+  "delivery": { "recipient": "", "pack_url": "", "transfer": {}, "accepted": "", "access_after": "" },
   "code_path": "<code root>/my-saas-idea",
   "repo_url": "",
   "pm_lane": "solo",
   "lanes": {
     "solo": { "branch": "main", "code_path": "<code root>/my-saas-idea", "scope": "all", "code_url": "", "request_id": "", "request": "", "result": "", "status": "idle", "approved": false, "pr_url": "", "preview_url": "" }
   },
-  "deploy": { "target": "", "chosen_by": "", "request_id": "", "live_url": "", "custom_domain": "", "netlify_site_id": "" },
+  "deploy": { "target": "", "chosen_by": "", "request_id": "", "preview_url": "", "live_url": "", "live_tag": "", "custom_domain": "", "netlify_site_id": "" },
   "log": [ { "ts": "2026-10-16T10:00:00+05:30", "stage": "design", "event": "created" } ]
 }
 ```
@@ -54,7 +57,10 @@ Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A repl
 | `brief.*` | The approved brief; `stack` locks at design approval; `deploy_hint` may name a target from `references/targets/` |
 | `brief.data_sensitivity` | `normal` or `high`. `high` (data-sensitive client/financial/personal data) triggers the security CI gate (`security.md` 15) and the handoff guardrail: default mode A, cloud mode B only on an explicit warned yes (`handoff.md`) |
 | `handoff.mode` | `event` (A, default — local build, GitHub-event wake) or `cloud` (B — cloud build). Set once before the first build via `/pf-build` (the PM explains both with pros/cons/cost); overridable per run with `--handoff`. See `references/handoff.md` |
+
 | `merge_policy` | `ask` (default — `/pf-merge` asks before each merge) or `standing-yes` (opt-in, per project; the user pre-authorizes merges that are **already approved, fully reviewed and green on the current commit** — e.g. a team project). The standing yes is bounded to merges only; deploy/go-live, pentest scope and client-data go-live always ask regardless. See `pf-merge` §2 and `security.md` 16 (reads use the scoped token, fail closed) |
+| `ci` | `hook` (default — the repo's pre-push hook runs `verify`), `self-hosted` or `hosted` (adds the GitHub Actions workflow). Set at plan or by `/pf-setup ci`; passed to the builder as the request's `ci:` line. See `references/verification.md` D |
+| `database` | `single` (before go-live) or `split` (separate test and production databases — required from the first build after go-live, and from the first build for `data_sensitivity: high`). Names only. See `references/migrations.md` A |
 | `ship_mode` | `guarded` (default — `/pf-ship` pauses at every human gate) or `streamlined` (low-stakes `data_sensitivity: normal` only — auto-advance to a preview, pause once at go-live). Streamlined never applies to `data_sensitivity: high`. Overridable per run with `--guarded`/`--streamlined`. See `pf-ship` |
 | `planning.*` | Set by `/pf-plan` (the PM/BA/PO stage, `references/planning.md`): `methodology` (`ship-it`/`agile`/`kanban`), `budget_forecast` (plain forecast under the cost posture — a budget never unlocks paid), `documents` (links to the brief/PRD, architecture, MVP, stack, budget docs + backlog/sprints), `dashboard_url` (the living db-backed progress dashboard for agile/team projects) |
 | `gates.plan` | `pending` / `approved` per "Approval words". Set by `/pf-plan` on plan sign-off; precedes `gates.design`. A project started straight at `/pf-design` leaves it `pending` (planning optional for small/solo work) |
@@ -74,8 +80,10 @@ Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A repl
 | `lanes.<name>.approved` | `true` once the lane's owner approved the build in `/pf-build`; `/pf-merge` requires it |
 | `lanes.<name>.pr_url` | PR for `lane/<name>`; empty for `solo` |
 | `deploy.target` | A name from `references/targets/`; `chosen_by` ∈ `hint` / `rule` / `user`; `request_id` of the deploy request |
+| `deploy.preview_url` / `live_tag` | The last preview deployed (`deploy-rule.md` "Preview first") and the `live-<yyyymmdd-HHMM>` git tag of what is live now (the rollback and changelog marker) |
+| `gates.delivery` / `delivery.*` | Set by `/pf-deliver` (`references/delivery.md`): the gate flips only on the recipient's acceptance; `recipient` (name or organization — no contact details), `pack_url`, `transfer` (per-item status), `accepted` date, `access_after` (`ended` or the retained scope). Optional stage — an unstarted delivery stays `pending` and blocks nothing |
 | `deploy.live_url` | Set only after the target's health check passes. `custom_domain` set by `/pf-setup domain`. `netlify_site_id` is not a secret and may be stored |
-| `log[]` | Append-only; `ts`, `stage` (`design`/`build`/`merge`/`deploy`/`setup`), `event`, optional `lane` |
+| `log[]` | Append-only; `ts`, `stage` (`plan`/`design`/`build`/`merge`/`deploy`/`harden`/`pentest`/`monitor`/`maintain`/`deliver`/`setup`), `event`, optional `lane` |
 
 ## Who writes what (avoids write collisions when the folder is cloud-synced)
 
@@ -85,10 +93,8 @@ Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A repl
 
 Rules: secrets are never stored here (env var names only). Lane names are kebab-case; `solo` is reserved.
 
-
 ## harden (added 17 Oct 2026)
 `"harden": {"request_id": "", "status": "none|requested|ok|failed", "branch": "", "pr_url": "", "budget_met": null, "last_run": ""}` — written by `/pf-harden` (PM lane only).
-
 
 ## security_testing (added 21 Oct 2026 — data-sensitive projects)
 `brief.data_sensitivity`: `"normal"` | `"high"` (data-sensitive: client private/financial data). When `high`, a clean `/pf-pentest` is recommended as a required gate before the first client-data deploy.

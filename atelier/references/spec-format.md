@@ -1,6 +1,6 @@
 # SPEC.md — the build contract
 
-Written by `/pf-build` into the project folder. Exactly these eight H2 headings, in this order, every one present (write `None` under a heading that doesn't apply). `/pf-build` refuses to send a spec with a missing heading.
+Written by `/pf-build` into the project folder. Exactly these **nine** H2 headings, in this order, every one present (write `None` under a heading that doesn't apply — except `## Diagrams`, which is never `None`). `/pf-build` refuses to send a spec with a missing heading, and the builder refuses to build one. (`/pf-build` also writes a `## Scope` section *before* these nine — it is the lane's scope note, not one of the nine.)
 
 ```
 # <Project name>
@@ -12,6 +12,7 @@ Written by `/pf-build` into the project folder. Exactly these eight H2 headings,
 ## Components
 ## Data model
 ## Routes / API
+## Diagrams
 ## Acceptance checks
 ```
 
@@ -35,6 +36,13 @@ Tables/collections with fields and types, plus which are user-scoped. `None` whe
 
 ## Routes / API
 Endpoints as `METHOD /path — input → output`. Include auth requirement per route. `None` when no backend.
+
+## Diagrams
+**Every project, page and feature is diagrammed before a line is built — this heading is the gate.** Each diagram is a fenced ` ```mermaid ` block whose first line is an id comment (`%% id: app-architecture`); the id is the filename the builder renders to, so it must be unique and stable across builds. Three groups:
+- **App (always two):** `app-architecture` — the stack, the pieces and how they fit, carried over from the plan's architecture overview (`planning.md` §5) and updated to the locked stack; `app-journey` — the sitemap / primary user journey across the screens.
+- **One per screen:** `page-<slug>` for every in-scope `### <Screen>` — a user-flow diagram: how the user arrives, what they can do, where each action leads. *Grouping rule:* screens that differ only in the data they show (a list and its detail view, the three tabs of one settings page) may share one diagram — declare it with a second comment line `%% covers: <Screen A>, <Screen B>`; every in-scope screen must appear in exactly one `page-` block's id or `covers:` line.
+- **One per feature:** `feature-<slug>` — a sequence or flow diagram: user action → UI → route → data → response, **including the failure path**. The feature set is defined, not guessed: (1) each **route group** under `## Routes / API` — routes sharing the first path segment after `/api/` (`/api/notes` and `/api/notes/:id` are one group); (2) each **user-scoped table** under `## Data model` — any table marked user-scoped, or with an owner/user id column, or under RLS; (3) each **capability the Brief names** — auth/sign-in, payments, search, upload, email/notifications, scheduled jobs, integrations with a named third party. One `feature-` block may satisfy several of these at once (the notes route group + the notes table + "save notes" is one feature) — declare it with `%% covers: routes /api/notes, table notes, capability notes`. Every route group, user-scoped table and named capability must appear in exactly one `feature-` block's id or `covers:` line.
+Mermaid is the editable source of truth. The builder renders every block with the **Diagram Design** plugin (install: `skills.md`; the builder's gate: `pf-build-from-spec` §1b) into `docs/diagrams/<id>.mmd|.png|.svg`, in the project's brand from `## Tokens`, and commits them with the build. It refuses to scaffold if any screen or feature is uncovered, or if Diagram Design is not installed on the Code seat. A later build re-renders only the blocks that changed and removes the files of ids that no longer exist — the rendered copy never drifts from the source.
 
 ## Acceptance checks
 Numbered, testable statements the builder must run and report pass/fail on, e.g. `1. GET / returns 200 and contains the Home headline`. At least one per screen; at least one per route.

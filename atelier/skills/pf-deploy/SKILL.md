@@ -14,7 +14,7 @@ Ship an approved build and verify it is live. Read first:
 
 ## 0. Flags first
 
-`--check` → straight to the check paragraph in step 5 (no target decision, no question). `--dry-run` → decide the target in memory, print the `DEPLOY-REQUEST.md` that would be written, write nothing, ask nothing, stop. Seat identity = `--lane` (default `solo`); it must equal `factory.json.pm_lane`, else "Only the PM lane (`<pm_lane>`) deploys." and stop.
+`--check` → straight to the check paragraph in step 5 (no target decision, no question). `--dry-run` → decide the target in memory, print the `DEPLOY-REQUEST.md` that would be written, write nothing, ask nothing, stop. Seat identity = `--lane` (default `solo`); it must equal `factory.json.pm_lane`, else "Only the PM lane (`<pm_lane>`) deploys." and stop. **Token-light: on `--check` read only `state-schema.md` to parse state — skip the other references under *Read first* above and load them only on a real deploy run.**
 
 ## 1. Gate
 
@@ -28,15 +28,18 @@ Apply `deploy-rule.md`: `brief.deploy_hint` wins if it names a file in `referenc
 
 Write `deploy.target` / `chosen_by` to `factory.json` and append `log {stage: "deploy", event: "target: <target> (<chosen_by>)"}`.
 
+## 3b. Preview first (`deploy-rule.md` "Preview first")
+If the chosen target's `## Preview` is not `None`: in `guarded` mode ask with AskUserQuestion "Deploy a preview to <target> first? (not public, not indexed, production untouched)" — **Yes (Recommended)** / **No**; in `streamlined` mode run it without asking. Write `DEPLOY-REQUEST.md` with `stage: preview`, hand off exactly as in step 5, and on the result record `deploy.preview_url` and the `e2e:` line. A failed preview stops here with its `notes:` shown — nothing live has changed. If the target has no preview (or this is a first deploy on a target that needs an existing service), the builder runs the same e2e suite on the local production build instead; carry its `e2e:` line into step 4.
+
 ## 4. Ask — always
 
-Even though the gate is approved, ask with AskUserQuestion, options **Yes** / **No**: `Target: <name> — <one-line reason from the rule or 'your choice'>. Deploy now?`
+Even though the gate is approved, ask with AskUserQuestion, options **Yes** / **No**: `Target: <name> — <one-line reason from the rule or 'your choice'>. Preview: <preview_url, or "none on this target — checked on a local production build"> (e2e <n>/<m>). Deploy now?` **If the repo has migrations not yet applied to production that carry a `-- destructive:` line** (`references/migrations.md` D; read them from the repo with the scoped token), list each one in plain words **in the same question** and ask for a separate, explicit yes to it; write the approved file names on the request's `destructive_ok:` line. A destructive migration is never covered by `--go`, a standing yes or a schedule.
 
 On **No**: say "Not deploying. `deploy.target` is recorded; run /pf-deploy again when ready." Stop.
 
 ## 5. Hand-off (file-based — see `bridge.md`)
 
-Make `request_id` = `<slug>-deploy-<yyyymmddHHMM>`; write `<folder>/DEPLOY-REQUEST.md` per `bridge.md` with `request_id`, `project`, `code_path`, `target`; store `deploy.request_id`. Delete any stale `DEPLOY-RESULT.md`. Append `log {stage: "deploy", event: "request written"}`. Then tell the user:
+Make `request_id` = `<slug>-deploy-<yyyymmddHHMM>`; write `<folder>/DEPLOY-REQUEST.md` per `bridge.md` with `request_id`, `project`, `code_path`, `target`, `stage: live` and `destructive_ok:`; store `deploy.request_id`. Delete any stale `DEPLOY-RESULT.md`. Append `log {stage: "deploy", event: "request written"}`. Then tell the user:
 
 **Drive Claude Code through Chrome** per `bridge.md`: open `lanes[<pm_lane>].code_url`, verify it is this project's session, type `/pf-next <slug> deploy --go`, Enter, confirm, close the tab. Only then say:
 
@@ -54,11 +57,13 @@ Required secrets (`VERCEL_TOKEN`, Supabase keys, Azure login) live only on the u
 
 Deploy is the only irreversible stage, so verify before recording success:
 - Take `live_url` from the result file. Run the target file's **Health check** (normally HTTP 200 on `live_url`; WebFetch or a browser tool). Retry every 30 seconds for up to **5 minutes**.
-- On 200: write `deploy.live_url`, set `gates.deploy = "approved"`, append `log {stage: "deploy", event: "live"}`, show the URL, and add: "Custom domain? Run `/pf-setup domain <yourdomain>`." Done.
+- On 200: write `deploy.live_url` and `deploy.live_tag` (from the result), set `factory.json.database` per `migrations.md` A if the result notes a single-database go-live (and tell the user the split is needed before the next build — `/pf-setup database`), set `gates.deploy = "approved"`, append `log {stage: "deploy", event: "live"}`, show the URL, and add: "Custom domain? Run `/pf-setup domain <yourdomain>`." Done.
 - On `status: failed`, or no 200 within 5 minutes: the builder auto-rolls-back to the last known-good version per `monitoring.md` D (app only, never the DB). Leave `live_url` empty (or set to the rolled-back live URL if the revert restored service) and `gates.deploy` at `pending`, append `log {stage: "deploy", event: "failed + rolled back: <notes>"}` (note `rolled_back`/`needs_decision` from the result), show the `notes:` and any logs after masking every env var named in the target file's Env vars plus `SUPABASE_*`, `DATABASE_URL`, `CRON_SECRET` with `***`, and stop.
+- **Mobile (`expo-eas`):** there is no HTTP 200 — the target's health check is the build and submission status, `live_url` is the TestFlight / Play testing link, and the stage **ends at the store test track**. Tell the user exactly what is left and that it is theirs: "Your turn: check the listing and click Submit for review" (`references/mobile-release.md` C). Never submit or release for him.
 - **After a successful first deploy,** offer monitoring in one line: "Want me to set up free uptime + error alerts and auto-rollback? Run `/pf-monitor <slug>`." (`/pf-ship` runs it automatically as the next stage.)
 
 ## Never
 - Deploy without the "Deploy now?" answer being Yes.
+- Let a destructive migration through without its own explicit yes, or point a preview at production data.
 - Record `live_url` before a 200 is observed.
 - Put a secret value in `factory.json` or a message.

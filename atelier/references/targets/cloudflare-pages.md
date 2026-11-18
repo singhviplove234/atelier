@@ -8,6 +8,9 @@ Required: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`
 Optional: —
 Checks: `npx wrangler --version` runs
 
+## Preview
+`npx wrangler pages deploy <outdir> --project-name <slug> --branch preview` → a preview alias (`https://preview.<slug>.pages.dev`), production untouched. `preview_url` = the printed URL. **Promote:** the Deploy steps below (`--branch main`) with the same built folder.
+
 ## Deploy steps
 1. **Local build**: `npm run build` (Next.js: `npx @cloudflare/next-on-pages`).
 2. `npx wrangler pages project create <slug> --production-branch main` (first run).

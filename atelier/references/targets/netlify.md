@@ -8,6 +8,9 @@ Required: `NETLIFY_AUTH_TOKEN`
 Optional: —
 Checks: `npx netlify --version` runs. The site id is created on first deploy and stored in `factory.json.deploy.netlify_site_id` (not a secret)
 
+## Preview
+`npx netlify deploy --dir <outdir> --site "$NETLIFY_SITE_ID" --auth "$NETLIFY_AUTH_TOKEN"` (no `--prod`) → a draft URL, production untouched. `preview_url` = the printed Website draft URL. **Promote:** the Deploy steps below with the same built folder.
+
 ## Deploy steps
 1. **Local build**: `npm run build`.
 2. First run: `npx netlify sites:create --name <slug>` → record site id as `NETLIFY_SITE_ID` (env, never printed).
