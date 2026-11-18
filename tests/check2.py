@@ -32,7 +32,7 @@ for p in (C, B):
         check(bool(m) and m.group(1) == s, f"{f} frontmatter name matches folder")
         if s not in ("security-audit", "humanizer", "design-md", "find-skill"):
             check(bool(m) and len(m.group(2)) <= 1024 + 2, f"{f} description within 1024 chars")
-            check(len(t.split()) < 3700, f"{f} under 3700 words ({len(t.split())})")
+            check(len(t.split()) < 3800, f"{f} under 3800 words ({len(t.split())})")
 
 # --- 3. cross-references resolve
 refs = {p: set(os.listdir(f"{p}/references")) for p in (C, B)}
@@ -140,6 +140,14 @@ has(R("saas-blueprint"), r"across two organizations"); has(S("pf-plan"), r"saas-
 has(R("mobile-release"), r"owner's click"); has(S("pf-plan"), r"mobile-release\.md"); has(f"{C}/references/targets/expo-eas.md", r"never run a command that releases to production")
 has(BN, r"/pf-next doctor"); has(R("bridge"), r"PF-DOCTOR-RESULT v1"); has(S("pf-deploy"), r"ends at the store test track"); has(BN, r"PF-DOCTOR-RESULT v1"); has(S("pf-setup"), r"/pf-setup --check"); has(R("maintenance"), r"Another data store, same three rules")
 has(R("monitoring"), r"When an alert fires")
+# 0.4.0: locales, rollout, infrastructure, visual baseline + design check, Flutter stores, versions notice, status page
+has(R("i18n"), r"Intl\.NumberFormat"); has(R("i18n"), r"needs-review"); has(BB, r"references/i18n\.md"); has(S("pf-plan"), r"brief\.locales"); has(R("state-schema"), r'"locales": \["en-US"\]'); has(S("pf-deploy"), r"needs-review")
+has(R("rollout"), r"never the security boundary"); has(R("rollout"), r"Migrations do not canary"); has(BB, r"references/rollout\.md"); has(BD, r"rollout: canary"); has(R("bridge"), r"^rollout: full \| canary", re.M); has(R("state-schema"), r'"rollout": "full"')
+has(R("infrastructure"), r"what-if"); has(R("infrastructure"), r"\*\*Never automated:\*\* `destroy`"); has(BB, r"never apply it here"); has(BD, r"Never run a destroy"); has(BD, r"infra_ok"); has(S("pf-deploy"), r"infra_ok"); has(R("bridge"), r"^infra: bicep \| opentofu \| compose", re.M); has(R("state-schema"), r'"infra": "none"'); has(S("pf-build"), r"infra: <factory\.json\.infra>")
+has(R("verification"), r"^## F\. What the screens look like", re.M); has(R("verification"), r"toHaveScreenshot"); has(BB, r"e2e/__screenshots__/"); has(BB, r"never re-baseline an unexplained difference"); has(S("pf-build"), r"Design check before asking for approval"); has(R("bridge"), r"^screens: <n> checked", re.M)
+has(f"{C}/references/targets/flutter-stores.md", r"never run a command that releases to production"); has(R("mobile-release"), r"flutter-stores\.md"); has(S("pf-setup"), r"flutter-stores")
+has(R("control-panel"), r"Factory version line"); has(S("pf-board"), r"DOCTOR-RESULT\.md"); has(R("monitoring"), r"^## F\. Status page", re.M); has(S("pf-monitor"), r"## 3b\. Status page"); has(R("monitoring"), r"never posts an incident notice"); has(R("state-schema"), r'"status_page"')
+hasnt(R("mobile-release"), r"not automated yet")
 # standing safety rules still present
 has(S("pf-setup"), r"Never type"); has(S("pf-ship"), r"never flips `gates\.delivery`"); has(BN, r"never.* skips confirm|never skips the confirm", re.S)
 

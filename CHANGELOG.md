@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.0
+- **Looks like the design.** Every screen is screenshotted at phone and desktop size: a visual baseline that fails the build on an unexplained change, and a design check against the approved artboards before the build is approved.
+- **Locale-ready.** Dates, numbers and money always go through the locale formatter; full translation machinery when the plan lists more than one locale.
+- **Infrastructure as code** for multi-resource cloud setups: dry-run at preview, applied only after a yes.
+- **Feature flags and canary rollouts**, only when a release needs them.
+- **Flutter and native store releases** (`flutter-stores` target).
+- **Status page and customer notices**; a version-mismatch notice on the control panel.
+- Fixed: the SPEC contract had lost its per-heading definitions.
+
 ## 1.1.0
 - **Diagrams before code.** The SPEC has a ninth heading, `## Diagrams`: the app, every page and every feature is diagrammed before anything is built, and the builder refuses to build otherwise. Rendered with the Diagram Design plugin (required on the Code session).
 - **Checks that travel with the repo.** Every product gets one `verify` command wired to a pre-push hook (and an optional CI workflow), with an end-to-end test for every page and feature diagram.

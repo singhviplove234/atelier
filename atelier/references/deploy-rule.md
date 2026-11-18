@@ -2,7 +2,7 @@
 
 Targets live in `references/targets/<name>.md`, one file each (Fits, Env vars, Preview, Deploy steps, Health check, Custom domain). Adding a tool = adding a file; no skill changes.
 
-Shipping targets: `vercel`, `azure-static-web-apps`, `azure-container-apps`, `cloudflare-pages`, `netlify`, `github-pages`, `aws-amplify`, `gcp-cloud-run`, `render`, `fly-io`, `oracle` for the web, and `expo-eas` for mobile apps released to the App Store and Google Play (`mobile-release.md` — a store release has its own fees, review and owner-only publish step). The registry is extensible — a provider not listed gets a new target file (see `platform-selection.md`).
+Shipping targets: `vercel`, `azure-static-web-apps`, `azure-container-apps`, `cloudflare-pages`, `netlify`, `github-pages`, `aws-amplify`, `gcp-cloud-run`, `render`, `fly-io`, `oracle` for the web, and `expo-eas` (React Native + Expo) and `flutter-stores` (Flutter and native) for mobile apps released to the App Store and Google Play (`mobile-release.md` — a store release has its own fees, review and owner-only publish step). The registry is extensible — a provider not listed gets a new target file (see `platform-selection.md`).
 
 ## How `/pf-deploy` picks
 
@@ -12,7 +12,7 @@ Shipping targets: `vercel`, `azure-static-web-apps`, `azure-container-apps`, `cl
    - Next.js / Supabase-only → `azure-static-web-apps` Free (when you hold Azure credits) **or** `cloudflare-pages`/`netlify`/`vercel` (Hobby, non-commercial) — all $0 at small scale.
    - A server / container / background work → a scale-to-zero host: `azure-container-apps`, `gcp-cloud-run`, `fly-io`, `render`, or `aws-amplify` — the best free fit for the runtime.
    - An always-on box / self-hosted open-source → `oracle` (Always Free ARM).
-   - A mobile app (React Native + Expo) → `expo-eas`; its companion website (privacy policy, support page) deploys separately through a web target.
+   - A mobile app → `expo-eas` (React Native + Expo) or `flutter-stores` (Flutter / native); its companion website (privacy policy, support page) deploys separately through a web target.
    State **one** recommendation with the reason + cost, then offer 2–3 real alternatives (including an open-source/self-host option when it fits). Azure is a strong option, never the automatic one.
 3. **Ask** with AskUserQuestion: the recommendation first, marked "(Recommended)", then the alternatives, each with one line from its `## Fits`. Record `chosen_by: user` (or `rule` if the user accepts the recommendation).
 
@@ -30,6 +30,9 @@ Nothing goes live unseen and untested. When the chosen target's `## Preview` is 
 1. **Preview** — the built output goes to the target's preview slot: a real URL on the real host, production untouched. The deployer runs the target's health check on it and the full **e2e suite against it** (`E2E_BASE_URL=<preview_url>`, `verification.md` B). A preview is never indexed (`X-Robots-Tag: noindex` where the host does not add it), never applies a migration, and — when the project has a Data model — uses the **test** database, never production data (`migrations.md` A). A failed preview stops the deploy; nothing live has changed.
 2. **Live** — only after the go-live yes, which now shows the preview link and the e2e count. The live stage **promotes what was previewed** (the target's *Promote* line) rather than building something new, applies pending migrations first (`migrations.md` D), and tags the deployed commit `live-<yyyymmdd-HHMM>` — the marker the next rollback and the changelog use.
 A target whose Preview is `None` (and the first-ever deploy on targets that need an existing service) skips stage 1: the same health check and e2e suite run against the **local production build** instead, and the go-live question says so. `streamlined` projects (`pf-ship`) run the preview without asking and pause once, at go-live; `guarded` projects are asked before the preview too.
+
+## Infrastructure and gradual rollout (only where the plan set them)
+When `factory.json.infra` is not `none`, the cloud resources are code in the repo's `infra/` and are previewed, approved and applied by the deploy exactly as `infrastructure.md` D says — a deletion, a replacement or a billable resource needs its own yes. When the deploy request says `rollout: canary`, the live stage sends 10% of traffic to the new version, bakes, then 100% (`rollout.md` B); otherwise it is `full`.
 
 ## Auto-rollback (a bad deploy heals itself — see `references/monitoring.md` D)
 
