@@ -8,6 +8,9 @@ Required: SSH access to the Always-Free VM — `ORACLE_VM_HOST` (user@ip); the k
 Optional: `SUPABASE_URL`/`SUPABASE_ANON_KEY`, or a self-hosted Postgres on the box
 Checks: `ssh "$ORACLE_VM_HOST" 'docker --version'` runs
 
+## Preview
+A second compose project on the same VM: `docker compose -p <slug>-preview up -d` with the new image on a different internal port, served by Caddy at `preview.<domain>` (or the VM IP on that port) with `X-Robots-Tag: noindex`. `preview_url` = that address. **Promote:** `docker compose up -d` for the main project with the same image tag, then `docker compose -p <slug>-preview down`.
+
 ## Deploy steps
 1. Build **locally** (container image or static output): `docker build -t <slug>:<tag> .` — never a remote/paid build.
 2. Ship the image to the VM: `docker save <slug>:<tag> | ssh "$ORACLE_VM_HOST" 'docker load'` (or push to a free registry and pull on the VM).

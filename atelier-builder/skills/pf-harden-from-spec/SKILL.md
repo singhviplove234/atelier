@@ -20,7 +20,7 @@ First line must be exactly `PF-HARDEN v1`. Lines: `request_id:`, `project:`, `co
 
 ## 3. Passes (in this order; each pass = measure → fix → re-measure → one commit)
 
-**safety** (always first, never skippable): for every screen and route in the SPEC, make sure a test exists (Playwright for screens, request tests for routes); write missing ones; run them; they must pass before anything else changes. Commit `harden: safety-net tests`.
+**safety** (always first, never skippable): for every screen and route in the SPEC, make sure a test exists (Playwright for screens, request tests for routes) — on a project built since 0.3.0 these are the build's diagram-derived `e2e/` tests and `npm run verify` already runs them, so this pass normally only confirms them; write missing ones (same rule: one per `page-`/`feature-` diagram, failure path included); run them; they must pass before anything else changes. Commit `harden: safety-net tests`.
 
 **perf** — the performance budget. Run Lighthouse (mobile, perf preset, 3 runs, median) on `live_url` if set else `<local>`, every SPEC screen; read `npm run build` First Load JS. For every budget miss apply the matching fix from `performance-budget.md` section "How the builder meets it" (static generation, `next/image`, `next/font`, dynamic import of heavy widgets, caching headers, no layout shift). Re-measure. One commit per fix: `harden(perf): <what>`. Record the before/after table.
 

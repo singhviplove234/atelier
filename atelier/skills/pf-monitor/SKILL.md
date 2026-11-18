@@ -11,7 +11,7 @@ Put eyes on a live product and make a bad deploy heal itself. Read first:
 - `${CLAUDE_PLUGIN_ROOT}/references/state-schema.md`
 
 ## 0. Flags
-`--check`: report what monitoring / alerts / rollback are currently live for this project and stop. `--dry-run`: print the stack it would set up and the steps; create nothing; stop.
+`--check`: report what monitoring / alerts / rollback are currently live for this project and stop. `--dry-run`: print the stack it would set up and the steps; create nothing; stop. **Token-light: on `--check` read only `state-schema.md` to parse state — skip the other references under *Read first* above and load them only on a real monitor run.**
 
 ## 1. Gate
 Locate the project; read `factory.json`. Require `deploy.live_url` (a deployed site). If empty: "Deploy the site first (`/pf-deploy`) — there's nothing live to monitor yet." and stop. Seat = `pm_lane`.

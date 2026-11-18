@@ -35,6 +35,42 @@ None
 ## Routes / API
 POST /api/contact — {name, email, message} → 200 {ok:true}; no auth; logs to server console.
 
+## Diagrams
+```mermaid
+%% id: app-architecture
+flowchart LR
+  Browser --> Next[Next.js static pages] --> Contact[/api/contact route/] --> Log[(server log)]
+```
+```mermaid
+%% id: app-journey
+flowchart LR
+  Home -->|Get in touch| Contact -->|Send| Thanks[Success text]
+```
+```mermaid
+%% id: page-home
+flowchart TD
+  Arrive[Visitor lands on /] --> Read[Reads headline and body] --> CTA[Clicks Get in touch] --> Contact[/contact]
+```
+```mermaid
+%% id: page-contact
+flowchart TD
+  Arrive[Arrives from Home] --> Fill[Fills Name, Email, Message] --> Send[Clicks Send]
+  Send -->|valid| Ok[Shows success text]
+  Send -->|invalid| Err[Shows field errors, stays on page]
+```
+```mermaid
+%% id: feature-contact
+%% covers: routes /api/contact, capability contact form
+sequenceDiagram
+  Visitor->>Form: Send
+  Form->>API: POST /api/contact
+  alt valid body
+    API-->>Form: 200 ok true
+  else invalid body
+    API-->>Form: 400 validation error
+  end
+```
+
 ## Acceptance checks
 1. GET / returns 200 and the HTML contains "Notes that stay out of your way."
 2. GET /contact returns 200 and the HTML contains "Say hello."

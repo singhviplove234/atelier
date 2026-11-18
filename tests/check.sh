@@ -41,7 +41,7 @@ check_skill(){ # name stage
 check_skill pf-design 3
 [ "$STAGE" -ge 3 ] && { need_file $P/skills/pf-design/references/brief-template.md; need_grep $P/skills/pf-design/SKILL.md 'pf-design-system'; need_grep $P/skills/pf-design/SKILL.md 'kebab'; need_grep $P/skills/pf-design/references/brief-template.md 'Next.js \+ Tailwind \+ shadcn/ui'; }
 check_skill pf-build 4
-[ "$STAGE" -ge 4 ] && { need_grep $P/skills/pf-build/SKILL.md 'dry-run'; need_grep $P/skills/pf-build/SKILL.md 'PF-BUILD-RESULT v1'; need_grep $P/skills/pf-build/SKILL.md 'mode: continue'; need_grep $P/skills/pf-build/SKILL.md '<code root>'; need_grep $P/skills/pf-build/SKILL.md 'eight headings'; }
+[ "$STAGE" -ge 4 ] && { need_grep $P/skills/pf-build/SKILL.md 'dry-run'; need_grep $P/skills/pf-build/SKILL.md 'PF-BUILD-RESULT v1'; need_grep $P/skills/pf-build/SKILL.md 'mode: continue'; need_grep $P/skills/pf-build/SKILL.md '<code root>'; need_grep $P/skills/pf-build/SKILL.md 'nine'; }
 check_skill pf-deploy 5
 [ "$STAGE" -ge 5 ] && { need_grep $P/skills/pf-deploy/SKILL.md 'PF-DEPLOY-RESULT v1'; need_grep $P/skills/pf-deploy/SKILL.md '[Dd]eploy now'; need_grep $P/skills/pf-deploy/SKILL.md '200'; need_grep $P/skills/pf-deploy/SKILL.md '5 minutes'; need_grep $P/skills/pf-deploy/SKILL.md 'deploy-rule'; }
 
@@ -116,8 +116,8 @@ if [ "$STAGE" -ge 8 ]; then
   need_grep $P/skills/pf-build/SKILL.md 'data_sensitivity'                    # cloud guardrail for data-sensitive projects
   # heading order check in spec-format and fixtures
   for f in $P/references/spec-format.md atelier-builder/tests/fixtures/landing/SPEC.md atelier-builder/tests/fixtures/app/SPEC.md; do
-    order=$(grep -E '^## ' "$f" | head -8 | tr '\n' '|')
-    [ "$order" = "## Brief|## Stack|## Screens|## Tokens|## Components|## Data model|## Routes / API|## Acceptance checks|" ] && ok "$f heading order" || bad "$f heading order: $order"
+    order=$(grep -E '^## ' "$f" | head -9 | tr '\n' '|')
+    [ "$order" = "## Brief|## Stack|## Screens|## Tokens|## Components|## Data model|## Routes / API|## Diagrams|## Acceptance checks|" ] && ok "$f heading order" || bad "$f heading order: $order"
   done
 fi
 
@@ -673,5 +673,8 @@ need_grep README.md 'plugin install atelier-builder@atelier'
 # Plugin manifests carry the new names
 need_grep $P/.claude-plugin/plugin.json '"name": *"atelier"'
 need_grep atelier-builder/.claude-plugin/plugin.json '"name": *"atelier-builder"'
+
+# Second pass: cross-references, mirrored contracts, the Diagrams gate on the fixtures, feature wiring, personal-data scan
+python3 -I tests/check2.py | grep -E "^FAIL|PASS, "; [ "${PIPESTATUS[0]}" -eq 0 ] || fail=1
 
 [ $fail -eq 0 ] && echo "ALL PASS" || { echo "FAILURES"; exit 1; }

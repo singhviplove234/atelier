@@ -8,6 +8,9 @@ Required: `GHCR_TOKEN` (GitHub token with write:packages, for ghcr.io) plus the 
 Optional: —
 Checks: `az account show` succeeds; `docker info` succeeds
 
+## Preview
+Set the app to multiple-revision mode once (`az containerapp revision set-mode --name <slug> --resource-group pf-<slug> --mode multiple`), then deploy the new image as a revision that takes **no traffic**: `az containerapp update --name <slug> --resource-group pf-<slug> --image <registry>/<slug>:<gitsha> --revision-suffix <gitsha>` followed by `az containerapp ingress traffic set --name <slug> --resource-group pf-<slug> --revision-weight <previous revision>=100`, and give it a label URL: `az containerapp revision label add --name <slug> --resource-group pf-<slug> --label preview --revision <slug>--<gitsha>`. `preview_url` = the label's URL. **Promote:** `az containerapp ingress traffic set … --revision-weight <slug>--<gitsha>=100` — the same image, no rebuild. First deploy of a project has no previous revision: there is no preview, verify on the local production build.
+
 ## Deploy steps
 1. `az group create --name pf-<slug> --location <region>` (idempotent). Registry = `ghcr.io/<owner>/<slug>` (login: `echo $GHCR_TOKEN | docker login ghcr.io -u <owner> --password-stdin`, token from env var `GHCR_TOKEN` with `write:packages`; never print it). Only if the user explicitly approves the ~US$5/month: `az acr create --name <acr> --resource-group pf-<slug> --sku Basic`; `az acr login --name <acr>`.
 2. **Build locally** — never `az acr build`: `docker build -t <registry>/<slug>:<gitsha> .` (generate a standard Next.js standalone / Python / Go Dockerfile if absent) then `docker push`.

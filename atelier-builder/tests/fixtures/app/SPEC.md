@@ -37,13 +37,94 @@ Nav(links[], user) · Card(title, body) · Input(label, name, type) · Button(la
 
 ## Data model
 Table `notes`: `id uuid pk`, `user_id uuid` (references auth.users; user-scoped via RLS), `body text`, `created_at timestamptz default now()`.
-Table `profiles`: `user_id uuid pk`, `display_name text`.
+Table `profiles`: `user_id uuid pk` (user-scoped via RLS), `display_name text`.
 Nightly cron: delete notes older than 365 days.
 
 ## Routes / API
 GET /api/notes — → 200 [{id, body, created_at}] for the signed-in user; 401 when logged out.
 POST /api/notes — {body} → 201 {id}; auth required.
 PATCH /api/profile — {display_name} → 200; auth required.
+
+## Diagrams
+```mermaid
+%% id: app-architecture
+flowchart LR
+  Browser --> Next[Next.js App Router] --> Auth[Supabase Auth]
+  Next --> DB[(Supabase Postgres + RLS)]
+  Cron[Nightly job] --> Purge[/api/cron/purge/] --> DB
+```
+```mermaid
+%% id: app-journey
+flowchart LR
+  Login -->|Sign in| Dashboard -->|Nav| Settings --> Dashboard
+```
+```mermaid
+%% id: page-login
+flowchart TD
+  Arrive[Signed-out visitor] --> Form[Email + Password] --> Submit[Sign in]
+  Submit -->|ok| Dash[/]
+  Submit -->|wrong| Err[Wrong email or password.]
+```
+```mermaid
+%% id: page-dashboard
+flowchart TD
+  Arrive[Signed-in user on /] --> List[Sees notes or empty state] --> Add[Writes a note, clicks Add] --> List
+```
+```mermaid
+%% id: page-settings
+flowchart TD
+  Arrive[From Nav] --> Edit[Changes display name] --> Save --> Saved[Saved.]
+```
+```mermaid
+%% id: feature-auth
+%% covers: capability sign-in
+sequenceDiagram
+  User->>Login: email + password
+  Login->>Supabase Auth: sign in
+  alt valid
+    Supabase Auth-->>Login: session cookie, redirect /
+  else invalid
+    Supabase Auth-->>Login: error, show message
+  end
+```
+```mermaid
+%% id: feature-notes
+%% covers: routes /api/notes, table notes, capability notes
+sequenceDiagram
+  User->>Dashboard: Add
+  Dashboard->>API: POST /api/notes
+  alt signed in
+    API->>DB: insert with user_id (RLS)
+    API-->>Dashboard: 201 id
+  else signed out
+    API-->>Dashboard: 401
+  end
+```
+```mermaid
+%% id: feature-profile
+%% covers: routes /api/profile, table profiles
+sequenceDiagram
+  User->>Settings: Save
+  Settings->>API: PATCH /api/profile
+  alt signed in
+    API->>DB: update own row (RLS)
+    API-->>Settings: 200
+  else signed out
+    API-->>Settings: 401
+  end
+```
+```mermaid
+%% id: feature-cron-purge
+%% covers: capability scheduled jobs
+sequenceDiagram
+  Scheduler->>API: POST /api/cron/purge with CRON_SECRET
+  alt secret matches
+    API->>DB: delete notes older than 365 days
+    API-->>Scheduler: 200
+  else missing or wrong secret
+    API-->>Scheduler: 401
+  end
+```
 
 ## Acceptance checks
 1. Sign in with the seeded test user succeeds and redirects to `/`.

@@ -13,9 +13,12 @@ The Claude Code half of the factory. The Cowork `atelier` plugin writes a reques
 ## The contracts it enforces
 The build/deploy/harden/pentest skills read their contracts from `references/` (mirrored from the Cowork plugin, kept byte-identical by the validator): `performance-budget.md`, `seo-ai-visibility.md`, `security.md`, `code-simplicity.md`, `design-standard.md`, `compliance.md`, `cost-posture.md` (free-first — build locally, create nothing billable without a yes), `monitoring.md` (rollback), `deploy-rule.md`, `security-testing.md`, and the `targets/` registry. A contract is a hard gate: `pf-build-from-spec` refuses to pass a lane that misses any of the six build contracts.
 
+## What every repo it builds now carries (0.3.0)
+`npm run verify` (one command for lint, types, build, tests, e2e, audit, secret scan) wired to a pre-push hook and — when the request says `ci: self-hosted|hosted` — a workflow; one e2e test per `page-`/`feature-` diagram; `docs/ARCHITECTURE.md`, `docs/RUNBOOK.md`, `docs/ADMIN-GUIDE.md`, `CHANGELOG.md`; migrations written expand-then-contract and applied to the **test** database only (production is touched by the live deploy alone, after a backup); deploys go to a preview first and tag each live release `live-<yyyymmdd-HHMM>`. Contracts: `references/verification.md`, `references/migrations.md`, `references/deploy-rule.md`.
+
 ## Requirements on this machine
-- Node 20+, `gh` logged in; per target: `vercel` CLI / `az` CLI / Docker Desktop / `wrangler` / `netlify` / `gcloud` / `flyctl` (see `references/targets/`).
-- Env vars by **name** only (never stored or printed): per target as listed in its file; for backends `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_DB_URL`, `TEST_USER_EMAIL`, `TEST_USER_PASSWORD`; optional `CRON_SECRET`, `INDEXNOW_KEY`, `PF_WATCH_DIR`.
+- Node 20+, `gh` logged in, Playwright (`npx playwright install chromium`) for the diagram-derived e2e tests, `gitleaks` for the secret scan in `verify`, and the Diagram Design plugin; run **`/pf-next doctor`** to check everything at once; per target: `vercel` CLI / `az` CLI / Docker Desktop / `wrangler` / `netlify` / `gcloud` / `flyctl` (see `references/targets/`).
+- Env vars by **name** only (never stored or printed): per target as listed in its file; for backends `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_DB_URL`, `TEST_USER_EMAIL`, `TEST_USER_PASSWORD` (these unprefixed names are the **test** database; production uses the same names with a `PROD_` prefix once the project is split — `references/migrations.md`); optional `CRON_SECRET`, `INDEXNOW_KEY`, `PF_WATCH_DIR`.
 - Remote Control on (`/remote-control`) so Cowork can reach this session in Chrome; permissions allow-listed for `npm npx git gh vercel az docker` (see `/pf-setup` in Cowork).
 - Code checkouts at `<code root>/<slug>`.
 

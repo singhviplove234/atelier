@@ -4,6 +4,8 @@ Standing requirement: every product the factory designs carries Apple-level craf
 
 **Stack neutrality.** The craft here — the token system, hierarchy, accessibility (AA contrast, visible focus, reduced-motion) and the motion discipline — is **stack-neutral**. The default build is **Next.js + Tailwind + shadcn/ui**; on whatever stack the plan chose (`brief.stack`), apply the same rules with that stack's components and styling (SvelteKit + Tailwind, Astro, a Rails/Django view layer, a mobile UI kit, etc.). The design bar is identical on any framework; only the component source changes.
 
+**Mobile apps.** When the plan locks a mobile stack (React Native/Expo, Flutter, SwiftUI), the app follows that platform's published human-interface rules for layout, spacing, type, controls and accessibility, on top of this contract. For Apple platforms the `apple-look` skill supplies those rules when installed (`references/skills.md`); without it, apply the platform's HIG from your own knowledge. Two consequences: a native Apple app uses the **system font and SF Symbols** (the one place they are licensed — the web bans above do not apply there), and this is *platform convention*, not a visual style — the tokens, AA contrast, motion and budget rules here still govern, and no web site is ever styled to look like an iOS app.
+
 ## Pick the design direction (evaluate the project first)
 `/pf-design` judges what the product is and sets `brief.design_direction` to the best fit; the design-system and build then execute that direction on the shared foundation below. Directions:
 - **brand** — a premium/luxury or lifestyle brand, D2C, portfolio, or anything sold on feel. Cinematic and generous: large hero (image or motion), scroll-reveal and parallax, refined type pairing (a display serif/grotesque + Inter), big whitespace, tasteful micro-interactions, optional frosted glass. **Motion-led** (see below).
@@ -21,12 +23,12 @@ The **foundation** (tokens, accessibility, licensed fonts/icons, the non-negotia
 - **Clarity** — legible text at every size, generous whitespace, honest state and feedback.
 
 ## The system (what `pf-design-system` encodes, and the build implements)
-- **Type:** `Inter` (an SF-style, open-licence web font) via `next/font`, self-hosted; optional `Newsreader`/serif for display only. A small, strict scale — about `12·14·16·18·20·24·30·36·48` px — with line-heights ~1.5 for body and ~1.1 for display. One family for UI, two weights (400/600) plus 700 for display. Never Apple's SF Pro / New York (licensed for Apple-platform apps only).
+- **Type:** `Inter` (an SF-style, open-licence web font) via `next/font`, self-hosted; optional `Newsreader`/serif for display only. A small, strict scale — about `12·14·16·18·20·24·30·36·48` px — with line-heights ~1.5 for body and ~1.1 for display. One family for UI, two weights (400/600) plus 700 for display. Never Apple's SF Pro / New York on the web (they are licensed for Apple-platform apps only — so on a **native Apple app build** the system font *is* the right choice; see Mobile apps below).
 - **Spacing:** a 4-pt grid (`4·8·12·16·24·32·48·64`), used for padding, gaps and section rhythm. Consistent page gutters (16px mobile, more on desktop).
 - **Colour:** one accent, a neutral grey ramp (bg / surface / border / muted-text / text), semantic success/warn/error, in light **and** dark. Contrast meets WCAG AA (body ≥ 4.5:1) — this ties into the accessibility checks already in the build.
 - **Radii & elevation:** 2–3 radii (e.g. 8 / 12 / full); shadows soft and sparing for depth, not decoration.
 - **Components:** Button (primary/secondary/ghost), Card, Input + field states, Nav, Hero, Footer, plus whatever the brief needs — each with hover/focus/active/disabled states and a visible keyboard focus ring.
-- **Icons:** an open set — **Lucide** or **Heroicons** — never Apple SF Symbols.
+- **Icons:** an open set — **Lucide** or **Heroicons** — never Apple SF Symbols on the web (allowed only inside a native Apple app build, where they are licensed; see Mobile apps below).
 - **Motion (baseline):** short, purposeful transitions (~150–250 ms, ease-out); respect `prefers-reduced-motion`; never block interaction.
 - **"Liquid-glass" look (optional, tasteful):** a frosted translucent surface (`backdrop-blur` + translucent bg) may be used for a nav bar or an overlay when the direction wants a premium feel — but sparingly, always with a solid fallback and AA text contrast over it, and it must not break the performance budget (blur is costly) or `prefers-reduced-transparency`.
 
@@ -72,7 +74,7 @@ Mostly reuses tools already in the build — this adds taste rules, not new scan
 - `prefers-reduced-motion` and, where glass is used, `prefers-reduced-transparency` are honoured; animations use only `transform`/`opacity`/`background-position`/a canvas frame (no layout-animating jank, no `filter` or `mix-blend-mode` over a moving element) and cause no CLS. Under reduced-motion the site shows posters/already-revealed content and stays fully usable.
 - Scrubbed/parallax/in-view-video scenes lazy-load their heavy media (in-view or `fetchpriority="low"`, not on first paint), and the **scroll-motion weight budget** in `performance-budget.md` is met (first-visit and full-scroll payload ceilings, no frame > 50 ms during a continuous scroll, no empty rectangle on screen). Overlay/hero elements are positioned with CSS `translate`, not library `x`/`y` stacked on it.
 - The chosen `brief.design_direction` is actually expressed (a `brand` site looks premium/motion-led, a `product` app looks clean and dense) — not every project rendered as the same minimal template.
-- Fonts are self-hosted `Inter` (or the chosen open font), not Apple fonts; icons are the chosen open set — no SF Symbols, no SF Pro/New York files in the repo.
+- Fonts are self-hosted `Inter` (or the chosen open font), not Apple fonts; icons are the chosen open set — no SF Symbols, no SF Pro/New York files in a **web** repo (a native Apple app build uses the system font/symbols and ships no font files).
 - Spacing and radii come from the scale (no stray values). Report a short design table in `notes:`: tokens-only? · one-h1? · focus states? · reduced-motion? · fonts/icons licensed? — fix any "no" within the simplicity/perf/a11y limits.
 
 The aim is Apple-grade feel — clear, calm, consistent, premium — using only assets we may freely ship, and never at the cost of speed, accessibility or the other contracts.

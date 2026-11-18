@@ -5,7 +5,7 @@ Prereq: a project from `tests/pf-design.md`; `/pf-setup` done so `lanes.solo.cod
 | # | Setup | Do | Expected |
 |---|---|---|---|
 | 1 | `gates.design == pending` | `/pf-build` | Refuses: "Design isn't approved yet — run /pf-design and approve it first." Nothing written. |
-| 2 | design approved | `/pf-build --dry-run` | `SPEC.md` written with all eight headings in order; `BUILD-REQUEST-<lane>.md` content printed starting `PF-BUILD v1`; no request file written; `factory.json` unchanged except a `log` entry. |
+| 2 | design approved | `/pf-build --dry-run` | `SPEC.md` written with all nine headings in order (incl. `## Diagrams`, every page and feature covered); `BUILD-REQUEST-<lane>.md` content printed starting `PF-BUILD v1`; no request file written; `factory.json` unchanged except a `log` entry. |
 | 3 | delete the `## Tokens` heading from `SPEC.md` by hand | `/pf-build --validate-only` | Refuses naming the missing heading: "SPEC.md is missing: ## Tokens"; `SPEC.md` not regenerated. |
 | 3b | a build that fails before `gh repo create` (e.g. kill the builder mid-way) | re-run `/pf-build` | Builder continues from the existing `<code root>/<slug>` checkout — no second `create-next-app`; `repo_url` not blanked. |
 | 4 | design approved | `/pf-build` | Writes `BUILD-REQUEST-<lane>.md`; asks you to run `/pf-next`; starts polling. `/pf-build --check` before running /pf-next → "No result yet". |
