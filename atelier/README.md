@@ -46,11 +46,15 @@ Each is a hard gate at build (enumerated in `/pf-build` acceptance) and re-check
 - **Data that cannot be lost by a build** (`migrations.md`) — separate test and production databases once data is real; forward-only, expand-then-contract migrations; a destructive change needs its own yes and a backup first.
 - **Seen before it is live** (`deploy-rule.md` "Preview first") — every deploy goes to a preview and passes the e2e suite there before the go-live question; each live release is git-tagged.
 - **A repo that explains itself** — architecture, runbook (with a first-response list for incidents), admin guide and changelog are written by every build and handed over by `/pf-deliver` (`delivery.md`).
+- **Looks like the design, and keeps looking like it** (`verification.md` F) — every screen is screenshotted at phone and desktop size; the PM compares them with the approved artboards before asking you to approve, and they become a visual baseline that fails the build on any unexplained change.
+- **Locale-ready** (`i18n.md`) — dates, numbers and money always go through the locale formatter; full translation machinery only when the plan lists more than one locale.
+- **Infrastructure as code, when there is infrastructure** (`infrastructure.md`) — multi-resource cloud setups live in `infra/`, are dry-run at preview and applied only after your yes; deletions and billable resources need their own yes.
+- **Flags and canary releases, only when asked for** (`rollout.md`) — typed, server-side, expiring flags; 10% → 100% rollouts on hosts that split traffic.
 - **Reviewed by Claude's own reviewer** — every build runs the **built-in** `/code-review` and `/security-review` (free, in-session) and fixes Critical/High before it passes; optional Superpowers adds plan-first + self-verify.
 
 ## Product shapes the plan knows
 - **SaaS** (`saas-blueprint.md`) — tenancy, roles, billing, plans and limits, lifecycle email, admin back-office, account lifecycle and onboarding are decided at plan time and written into the SPEC in full; money paths are treated as data-sensitive and no live charge is ever made by the factory.
-- **Mobile apps** (`mobile-release.md`, target `expo-eas`) — store fees, owner-held developer accounts and review time are stated before the stack is locked; releases go to TestFlight / Play testing, and **Submit for review is always your click**.
+- **Mobile apps** (`mobile-release.md`, targets `expo-eas` and `flutter-stores`) — store fees, owner-held developer accounts and review time are stated before the stack is locked; releases go to TestFlight / Play testing, and **Submit for review is always your click**.
 
 ## Keep it running (the production-support half)
 - **Monitor** (`monitoring.md`) — free uptime + error tracking + alerts (Azure-native default; Sentry/UptimeRobot alternatives, pros/cons shown), PII scrubbed, plus **auto-rollback** on a bad deploy (app only, DB flagged not reverted).

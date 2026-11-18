@@ -27,6 +27,9 @@ Per `monitoring.md` A–C:
 - **PII scrubbing:** confirm the app strips request bodies, tokens and personal records before any error is sent (`monitoring.md` C); for Sentry, the `beforeSend` scrubber is a build task.
 - **Sentry / UptimeRobot (if chosen):** open the signup/project page in Chrome, pre-fill the non-secret fields, stop; the user signs up and pastes the DSN/key, stored as an env var by name.
 
+## 3b. Status page (client-facing or paid products)
+Per `monitoring.md` F: offer the free public status page of the chosen uptime provider — on a different provider than the app — with AskUserQuestion (Yes / Not needed). On yes: open the provider's status-page setup in Chrome, pre-fill the page name and the monitors, stop; the user creates it. Record the URL as `monitoring.status_page`, and note two one-line tasks for the next build: the footer/error-page link and the `INCIDENT_BANNER` config. Remind the user that incident notices are drafted by Claude and **posted by the user**.
+
 ## 4. Verify and record
 Fire **one test alert** (a deliberate failing check or a test event) and confirm it reaches the user. Record `factory.json.monitoring` (`uptime`, `errors`, `alerts`, `rollback`, `health_route`) and `log {stage:"monitor", event:"set up <stack>"}`. Report what is live and what is pending anything waiting on the user's signup/secret.
 
