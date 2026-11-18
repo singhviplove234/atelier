@@ -6,6 +6,7 @@ Standing requirement: Phase 3. After launch the factory does not walk away — i
 On each run, against the live project, on a `maintenance/<date>` branch:
 1. **Dependencies & security advisories.** `npm outdated` + `npm audit` + `osv-scanner`; list what is behind and what has a known vulnerability. Apply **safe** updates (patch/minor + lockfile); hold majors for a human note with the reason.
 2. **Re-run the repo's own gate.** `npm run verify` on the maintenance branch after the updates (`verification.md`) — the e2e suite is what proves an upgrade broke nothing; a red `verify` means the update is held, not shipped.
+2a. **Housekeeping the gate depends on.** List feature flags past their remove-by date for deletion (`rollout.md` A5); when the repo has `infra/`, run its dry run and report any drift between the code and what is live — reported, never auto-corrected (`infrastructure.md` D); a dependency update that changes a screen shows up as a visual-baseline difference (`verification.md` F) and is held for review, not re-baselined.
 2b. **Re-run the contracts on the live site.** A light `/pf-harden` re-check (perf budget, SEO, security headers/RLS, a11y) to catch drift since launch; open fixes on the branch.
 3. **Certificates & host limits.** TLS cert not within 14 days of expiry (ties to `monitoring.md`); host plan limits not about to bite (the `limits` check).
 4. **Backups healthy (section C).** Confirm backups ran and, periodically, run a **restore drill**.

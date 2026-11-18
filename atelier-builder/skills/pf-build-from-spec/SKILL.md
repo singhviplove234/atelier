@@ -12,7 +12,7 @@ Input is a `BUILD-REQUEST-<lane>.md`, normally via `/pf-next <slug> build --lane
 
 ## 1. Parse the request
 
-Read `BUILD-REQUEST-<lane>.md`. Lines: `request_id:`, `project:` (folder = `<watch dir>/<project>`), `spec:` (`SPEC-<lane>.md`, relative to that folder), `code_path:`, `lane:`, `branch:` (`main` or `lane/<lane>`), optional `mode: continue`, optional `ci:` (`hook` — the default when absent — `self-hosted` or `hosted`; see §6c), optional `live: yes` (the project is already live — see §5b), optional `notes:` (a plain-English fix request about the product). The first line must be exactly `PF-BUILD v1`; any other header → reply `status: failed`, `notes: unsupported version`. Read `spec`. Refuse (reply `status: failed`, `failures: spec missing heading <x>`) if any of the **nine** headings is absent: Brief, Stack, Screens, Tokens, Components, Data model, Routes / API, Diagrams, Acceptance checks. Read `## Scope`: build **only** the screens and routes in this lane's scope; items marked "owned by lane <x>" are not touched (a team lane never edits another lane's files). `<slug>` = the last folder name of `code_path`.
+Read `BUILD-REQUEST-<lane>.md`. Lines: `request_id:`, `project:` (folder = `<watch dir>/<project>`), `spec:` (`SPEC-<lane>.md`, relative to that folder), `code_path:`, `lane:`, `branch:` (`main` or `lane/<lane>`), optional `mode: continue`, optional `ci:` (`hook` — the default when absent — `self-hosted` or `hosted`; see §6d), optional `live: yes` (the project is already live — see §5b), optional `infra:` (`bicep`/`opentofu`/`compose` — see §6c), optional `notes:` (a plain-English fix request about the product). The first line must be exactly `PF-BUILD v1`; any other header → reply `status: failed`, `notes: unsupported version`. Read `spec`. Refuse (reply `status: failed`, `failures: spec missing heading <x>`) if any of the **nine** headings is absent: Brief, Stack, Screens, Tokens, Components, Data model, Routes / API, Diagrams, Acceptance checks. Read `## Scope`: build **only** the screens and routes in this lane's scope; items marked "owned by lane <x>" are not touched (a team lane never edits another lane's files). `<slug>` = the last folder name of `code_path`.
 
 Read `## Stack` and **build whatever stack the plan locked**, to the same contracts (`security.md`, `design-standard.md`, `performance-budget.md` are **stack-neutral** — apply the chosen stack's equivalents, the bar never drops). Scaffold with that stack's standard tool: the default (`Next.js (App Router) + Tailwind + shadcn/ui, TypeScript`, ± Supabase) via `create-next-app` as in step 3 below; another framework via its own init (`npm create astro@latest`, `npm create svelte@latest`, `npm create vite@latest`, `django-admin startproject`, etc.). The **plan** stage is responsible for choosing a buildable stack, so a locked stack should always be buildable here; only if you genuinely cannot build the locked stack to the contracts, reply `status: failed`, `failures: locked stack <text> isn't buildable — re-plan with a buildable stack`. **Never silently build the default when a different stack was locked.**
 
@@ -90,7 +90,14 @@ Requires `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_DB_URL` (names only). Ru
 ## 6b. Docs gate — the repo explains itself (always)
 Read `${CLAUDE_PLUGIN_ROOT}/references/delivery.md` section A and keep its four documents current on every build: `docs/ARCHITECTURE.md` (every rendered diagram embedded in order), `docs/RUNBOOK.md` (including its **"When something breaks"** first-response list), `docs/ADMIN-GUIDE.md` (plain language, no commands; write `Not applicable — this product has no admin tasks` rather than leaving it out) and `CHANGELOG.md` (one dated entry for this build, newest first). No secret value, customer record or personal contact detail in any of them. A missing or stale document (it names a screen, route or command that no longer exists) → fix; report `docs: 4 current` in `notes:`.
 
-## 6c. Wire the gate into the repo (always)
+## 6c. Screens and the conditional contracts
+- **Screenshots (always, `verification.md` F):** every `page-` test captures its screen at 390 px and 1440 px (animations off, dynamic content masked) as the committed visual baseline in `e2e/__screenshots__/`; a deliberate change re-baselines that screen; never re-baseline an unexplained difference. Also write the current shots to `<folder>\screens\<screen>-<size>.png` for the PM's design check. Report `screens: <n> checked, <k> re-baselined: <names>`.
+- **Locales (always A; B when the Brief's `Locales:` lists more than one):** `${CLAUDE_PLUGIN_ROOT}/references/i18n.md` — report `i18n: <n> locales, <k> needs-review`.
+- **Flags (only when the Brief has `Flags:`):** `${CLAUDE_PLUGIN_ROOT}/references/rollout.md` A — server-evaluated, both states tested, never the security boundary; report `flags: <n> (<k> stale)`.
+- **Infrastructure (only when the request says `infra:` other than `none`):** `${CLAUDE_PLUGIN_ROOT}/references/infrastructure.md` B–C — write `infra/` and pass its lint and scan; **never apply it here** (deploy does, after a yes); report `infra: <tool>, <n> resources, lint clean`.
+Any miss → `status: failed`, `failures: <screens|i18n|flags|infra>: <check>`.
+
+## 6d. Wire the gate into the repo (always)
 Per `verification.md` sections C–E: write `.githooks/pre-push` (executable) running `verify`, run `git config core.hooksPath .githooks` here, and make that the README's first setup line. **Workflow by the request's `ci:` line:** `hook` or absent → no workflow file (delete `.github/workflows/verify.yml` if present); `self-hosted` → write it with `runs-on: self-hosted`; `hosted` → `runs-on: ubuntu-latest`; on `pull_request` and pushes to `main`; steps: checkout, install, `verify`; it never deploys and holds no production secret. Never choose `self-hosted` or `hosted` yourself. Then run the section E checks; any miss → `failures: verify: <check>`.
 
 Before any output goes into `failures:` or `notes:`, mask every value of a known secret env var (`VERCEL_TOKEN`, `SUPABASE_*`, `CRON_SECRET`, `TEST_USER_PASSWORD`) with `***`.
@@ -115,6 +122,7 @@ pr_url: <url or empty>
 preview_url: <url or empty>
 acceptance: <passed>/<total>
 verify: pass|fail (<n> e2e, <m> unit)
+screens: <n> checked, <k> re-baselined: <names or none>
 failures: <one line per failed check, or none>
 notes: <short>
 ```

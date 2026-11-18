@@ -50,6 +50,7 @@ lane: <lane>
 branch: main | lane/<lane>
 mode: continue        ← optional hint; the builder decides by what is on disk/GitHub
 ci: hook | self-hosted | hosted   ← from factory.json.ci (verification.md D); absent = hook
+infra: bicep | opentofu | compose   ← from factory.json.infra (infrastructure.md A); absent = none
 live: yes             ← only when deploy.live_url is set: the project has real data, so this build never migrates or seeds production (migrations.md A)
 notes: <fix request>  ← optional; on a re-run after "tell me what to fix"
 ```
@@ -65,6 +66,7 @@ pr_url: <url or empty>        ← empty for solo (pushed to main)
 preview_url: <url or empty>
 acceptance: <n passed>/<n total>
 verify: pass|fail (<n> e2e, <m> unit)   ← the repo's own gate (verification.md)
+screens: <n> checked, <k> re-baselined: <names or none>   ← visual baseline (verification.md F); screenshots are in <project folder>/screens/
 failures: <one line per failed check, or none>
 notes: <short free text>
 ```
@@ -96,6 +98,8 @@ code_path: <code root>/<slug>
 target: <name from references/targets/>
 stage: preview | live     ← deploy-rule.md "Preview first"; absent = live
 destructive_ok: <migration file names the user said yes to, or none>   ← live only (migrations.md D)
+rollout: full | canary     ← live only; absent = full (rollout.md B)
+infra_ok: <deletions / replacements / billable resources the user said yes to, or none>   ← live only, when factory.json.infra is not none (infrastructure.md D)
 ```
 
 `DEPLOY-RESULT.md`
@@ -110,6 +114,8 @@ http_status: <code or empty>
 e2e: <n passed>/<n total> against <url or "local production build">
 migrations: <n applied, or none>   ← live only
 live_tag: <live-yyyymmdd-HHMM or empty>
+infra_plan: +<a> ~<c> -<d>, billable: <list or none>   ← when the repo has infra/
+rollout: full | canary 10→100 | rolled back at 10
 notes: <short free text>
 ```
 

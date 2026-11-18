@@ -17,6 +17,8 @@ Load the `artifact-capabilities` skill before creating the panel (for the `db` c
 ## 1. Gather
 List every project: each `factory.json` under the connected `Atelier` folder. For each, read `factory.json` (+ `lanes/<lane>.json`) and compute its row per `control-panel.md`: stage, gates, lanes merged/total, `live_url` + health (from `monitoring` + a quick health check if live), handoff mode, maintenance, growth, and **needs** (any pending human gate or open review). Compute the summary counts.
 
+**Versions (per `control-panel.md`):** read this plugin's own version from `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json` and the builder's from the `plugin:` line of `DOCTOR-RESULT.md` in the Atelier projects folder (missing → "unknown — run `/pf-setup --check`"). Put a one-line notice in the summary when they differ.
+
 ## 2. Create or find the panel
 Find it: Artifact `list` for the title **"Atelier — Control Panel"**. If absent, create it per `control-panel.md` — a **published Artifact with the `db` capability** (or the Dashboard type): a page that renders the `projects` collection as a status table / cards with a summary header, coloured by health and gate state. **Publish once** (one approval). Put nothing secret on it.
 
