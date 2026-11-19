@@ -1,6 +1,6 @@
 # Advisor model — a stronger model on call for the builder (optional, experimental)
 
-Added in 0.5.0. Claude Code can pair the model that does the work (the *main* model) with a stronger one it may consult (the *advisor*). This page is what the factory tells the user about it; it is an option (`options.md`), off by default, and **nothing in the factory depends on it** — every gate applies to whatever model built the code.
+Claude Code can pair the model that does the work (the *main* model) with a stronger one it may consult (the *advisor*). This page is what the factory tells the user about it; it is an option (`options.md`), off by default, and **nothing in the factory depends on it** — every gate applies to whatever model built the code.
 
 ## What is true about it (checked against Claude Code's own documentation, November 2026 — re-check before relying on any line; the feature is marked experimental)
 - **How it is set:** `/advisor fable` (or `opus`, `sonnet`, `off`) in a Claude Code session, or the `advisorModel` setting. `/advisor` with no argument opens a picker.

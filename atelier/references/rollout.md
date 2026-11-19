@@ -1,6 +1,6 @@
 # Feature flags and gradual rollout — only when a release needs them
 
-Added in 0.4.0. Most projects need neither: preview-first deploys, e2e tests and auto-rollback already make an ordinary release safe (`deploy-rule.md`). A flag or a gradual rollout is added when the plan or a build names a reason — an unfinished feature that must merge to `main`, a risky change to a product with real users, or a client who wants to switch something on themselves. Free-first: no paid flag service.
+Most projects need neither: preview-first deploys, e2e tests and auto-rollback already make an ordinary release safe (`deploy-rule.md`). A flag or a gradual rollout is added when the plan or a build names a reason — an unfinished feature that must merge to `main`, a risky change to a product with real users, or a client who wants to switch something on themselves. Free-first: no paid flag service.
 
 ## A. Feature flags
 1. **One typed list, in the repo.** `flags.ts` (or the stack's equivalent): each flag has a name, a default (**off**), an owner, the date it was added and a **remove-by date**. Values come from the host's environment/config, so flipping a flag is a config change, not a code change — and the previous value is the rollback. (On a fully static site the value is read at build time, so a flip is a redeploy of the same commit; say so in the runbook.)

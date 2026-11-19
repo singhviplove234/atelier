@@ -1,6 +1,6 @@
 # Delivery — handing a finished product to its owner
 
-Added in 0.3.0 (18 Nov 2026). "live and tested" is not "delivered". A client (or your own future self) must be able to **run, change and recover the product without the factory**. Delivery is the last stage, run by `/pf-deliver` after deploy, harden and monitor — and for a `data_sensitivity: high` project after a clean pentest. It is a human gate: the product is delivered when the recipient accepts it, never when Claude says so. (Not to be confused with `handoff.md`, which is the *seat* handoff between Cowork and Claude Code during a build.)
+Added in 1.1.0 (18 Nov 2026). "live and tested" is not "delivered". A client (or your own future self) must be able to **run, change and recover the product without the factory**. Delivery is the last stage, run by `/pf-deliver` after deploy, harden and monitor — and for a `data_sensitivity: high` project after a clean pentest. It is a human gate: the product is delivered when the recipient accepts it, never when Claude says so. (Not to be confused with `handoff.md`, which is the *seat* handoff between Cowork and Claude Code during a build.)
 
 ## A. What is in the repo (written by every build, so it never drifts)
 The builder keeps four documents current on every build (`pf-build-from-spec` §6b) — delivery only checks they exist and are current:

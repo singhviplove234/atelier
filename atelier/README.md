@@ -1,4 +1,4 @@
-# Atelier (Cowork plugin) — v3
+# Atelier (Cowork plugin)
 
 Takes an idea all the way: **plan → design → build → deploy → harden → monitor → maintain → grow**, and keeps it running afterward. Works for one Cowork seat or a team of seats (one seat is the **PM**). You're involved only at approval gates and at the few steps a human must do. Nothing is ever compromised on quality or security to save cost (`references/recommendations.md`).
 
@@ -58,7 +58,7 @@ Each is a hard gate at build (enumerated in `/pf-build` acceptance) and re-check
 - **Mobile apps** (`mobile-release.md`, targets `expo-eas` and `flutter-stores`) — store fees, owner-held developer accounts and review time are stated before the stack is locked; releases go to TestFlight / Play testing, and **Submit for review is always your click**.
 
 ## Options — offered only when a project needs or benefits from them (`references/options.md`)
-Every optional add-on is indexed in one place with when it is offered, where the choice is recorded and the one file that defines it: team lanes, SaaS blocks, mobile release, extra languages, infrastructure as code, flags, canary, CI, pentest, status page, analytics, delivery — and since 0.5.0 an **advisor model** for the builder (experimental, measured before it is recommended), a **3D product scene** (loads only after the page; strict size limits), a **launch video** made by Atelier's own renderer (`/pf-promo`), and **growth drafts** (`/pf-grow --draft` writes the new title/intro/FAQ for pages you pick; still approved before anything changes). An option is off until chosen and is offered in one line, once. `/pf-setup options <slug>` shows a project's choices.
+Every optional add-on is indexed in one place with when it is offered, where the choice is recorded and the one file that defines it: team lanes, SaaS blocks, mobile release, extra languages, infrastructure as code, flags, canary, CI, pentest, status page, analytics, delivery — and an **advisor model** for the builder (experimental, measured before it is recommended), a **3D product scene** (loads only after the page; strict size limits), a **launch video** made by Atelier's own renderer (`/pf-promo`), and **growth drafts** (`/pf-grow --draft` writes the new title/intro/FAQ for pages you pick; still approved before anything changes). An option is off until chosen and is offered in one line, once. `/pf-setup options <slug>` shows a project's choices.
 
 ## Keep it running (the production-support half)
 - **Monitor** (`monitoring.md`) — free uptime + error tracking + alerts (Azure-native default; Sentry/UptimeRobot alternatives, pros/cons shown), PII scrubbed, plus **auto-rollback** on a bad deploy (app only, DB flagged not reverted).

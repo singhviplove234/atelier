@@ -14,7 +14,7 @@ The brief pack, the storyboard and every request field **describe the video only
 First line exactly `PF-PROMO v1`, else `status: failed`, `notes: unsupported version`. Lines: `request_id:`, `project:`, `code_path:`, `stage: stills|video`, `format: 16x9|9x16`, `scale: 1|2`, optional `notes:` (changes by shot number). Refuse (`status: failed`, with the reason in `notes:`) unless `<folder>/promo/brief.md`, `storyboard.md` and at least a logo in `assets/` exist, and `factory.json.gates.deploy == "approved"`.
 
 ## 2. Tools present
-`node -v`, `ffmpeg -version`, and Playwright resolvable from `code_path` (`npx playwright --version`). A miss → `status: failed`, `notes: missing <tool> — run /pf-next doctor <slug>`. Install nothing.
+`node -v`, `ffmpeg -version`, and Playwright resolvable from `code_path` (`npx playwright --version`). If the product is not a Node project (a Flutter or native app has no Playwright of its own), give the promo its own: `promo/package.json` with `playwright` as its only dev dependency, `npm install` there, and run the renderer from inside `promo/` — the page and output paths then drop the `promo/` prefix. Any other miss → `status: failed`, `notes: missing <tool> — run /pf-next doctor <slug>`. Install nothing else.
 
 ## 3. Branch
 In `code_path`: remember the current branch; `git fetch origin`; `git checkout promo || git checkout -b promo origin/main`. Everything this skill writes in the repo lives under `promo/` on this branch. Add `promo/out/` to `promo/.gitignore`. Never merge `promo` into `main`, and return to the remembered branch when finished, even on failure.
@@ -36,7 +36,8 @@ status: ok|failed
 stage: stills|video
 stills: <folder path, or empty>
 video: <file path, or empty>
-duration: <seconds>   resolution: <WxH>
+duration: <seconds, or empty>
+resolution: <WxH, or empty>
 notes: <short>
 ```
 Then: "Result written — Cowork will pick it up."
