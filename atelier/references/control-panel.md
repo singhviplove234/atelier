@@ -8,6 +8,7 @@ A factory-wide summary line, then a row/card per project:
 - **Stage** — the furthest point reached: Plan → Design → Build → Deploy → Live → Delivered (from `gates` + `deploy.live_url`; Delivered only when `gates.delivery` is approved).
 - **Gates** — plan / design / build / deploy / delivery: pending or approved, and what it is waiting on. Delivery shows only for a project with a recipient.
 - **Checks** — the latest build's `verify` result and the CI mode (`hook` / `self-hosted` / `hosted`), and whether the database is `single` or `split`.
+- **Options** — which optional add-ons are on for this project (`options.md`), as short labels; empty when none.
 - **Lanes** — n merged / n total (from `lanes`), or "solo".
 - **Live** — the `live_url` and its health: up / down / unknown (from `monitoring` + the last health check).
 - **Handoff** — mode A (local) or B (cloud).
@@ -20,7 +21,7 @@ Summary: total projects · n live · n healthy / n with an issue · n waiting on
 The panel is a **published Artifact with a shared database** (the `db` capability; or the Dashboard artifact type). It is **published once** (one approval). Every refresh **writes rows to its database** (ArtifactData / write_db), **never republishes the page** — so keeping it current never re-prompts a page-update approval. The page renders live from the db. `/pf-board` upserts those rows from each project's `factory.json` + `lanes/<lane>.json`.
 
 ## db schema (the `projects` collection, one document per slug)
-`slug`, `name`, `methodology`, `data_sensitivity`, `stage`, `gates` (plan/design/build/deploy/delivery), `verify` (pass/fail + date), `ci`, `database`, `lanes` (merged/total or "solo"), `live_url`, `health` (up/down/unknown), `handoff_mode`, `maintenance` (last_run / backups / restore_tested), `growth` (last_run), `needs` (what is waiting on the user, or empty), `updated`. A `meta/summary` document holds the factory-wide counts and `versions` (`cowork`, `builder`, `notice`).
+`slug`, `name`, `methodology`, `data_sensitivity`, `stage`, `gates` (plan/design/build/deploy/delivery), `verify` (pass/fail + date), `ci`, `database`, `options` (labels of what is on), `lanes` (merged/total or "solo"), `live_url`, `health` (up/down/unknown), `handoff_mode`, `maintenance` (last_run / backups / restore_tested), `growth` (last_run), `needs` (what is waiting on the user, or empty), `updated`. A `meta/summary` document holds the factory-wide counts and `versions` (`cowork`, `builder`, `notice`).
 
 ## Rules
 - **No secrets, no personal data on the panel** — URLs, statuses and counts only; never an env value, token or customer record (ties to `security.md` / `compliance.md`).

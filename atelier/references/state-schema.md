@@ -31,6 +31,8 @@ Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A repl
   "ci": "hook",
   "database": "single",
   "infra": "none",
+  "options": { "advisor": "none", "scene_3d": "none", "launch_video": "off", "grow_drafts": "off" },
+  "promo": { "brief": "", "video": "" },
   "merge_policy": "ask",
   "ship_mode": "guarded",
   "planning": { "methodology": "", "budget_forecast": "", "documents": [], "dashboard_url": "" },
@@ -67,6 +69,8 @@ Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A repl
 | `brief.locales` | The locale list, source locale first. One entry = locale-ready basics only; more than one = full translation machinery and per-locale checks. See `references/i18n.md` |
 | `deploy.rollout` | `full` (default) or `canary` (10% → bake → 100% on targets that split traffic; a percentage flag elsewhere). Chosen per deploy. See `references/rollout.md` |
 | `monitoring.status_page` | URL of the public status page (client-facing or paid products), hosted on a different provider than the app. See `references/monitoring.md` F |
+| `options.*` | The four add-ons recorded here — `advisor` (`none`/`economy`/`extra-review`), `scene_3d` (`none`/`shapes`/`model`), `launch_video` and `grow_drafts` (`off`/`on`). All off by default; each is defined in exactly one file, listed with every other optional choice in `references/options.md` |
+| `promo.*` | Set by `/pf-promo` (`references/launch-video.md`): `brief` (the brief-pack folder), `video` (path of the finished file the user reports). Never a gate |
 | `ship_mode` | `guarded` (default — `/pf-ship` pauses at every human gate) or `streamlined` (low-stakes `data_sensitivity: normal` only — auto-advance to a preview, pause once at go-live). Streamlined never applies to `data_sensitivity: high`. Overridable per run with `--guarded`/`--streamlined`. See `pf-ship` |
 | `planning.*` | Set by `/pf-plan` (the PM/BA/PO stage, `references/planning.md`): `methodology` (`ship-it`/`agile`/`kanban`), `budget_forecast` (plain forecast under the cost posture — a budget never unlocks paid), `documents` (links to the brief/PRD, architecture, MVP, stack, budget docs + backlog/sprints), `dashboard_url` (the living db-backed progress dashboard for agile/team projects) |
 | `gates.plan` | `pending` / `approved` per "Approval words". Set by `/pf-plan` on plan sign-off; precedes `gates.design`. A project started straight at `/pf-design` leaves it `pending` (planning optional for small/solo work) |
@@ -89,7 +93,7 @@ Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A repl
 | `deploy.preview_url` / `live_tag` | The last preview deployed (`deploy-rule.md` "Preview first") and the `live-<yyyymmdd-HHMM>` git tag of what is live now (the rollback and changelog marker) |
 | `gates.delivery` / `delivery.*` | Set by `/pf-deliver` (`references/delivery.md`): the gate flips only on the recipient's acceptance; `recipient` (name or organization — no contact details), `pack_url`, `transfer` (per-item status), `accepted` date, `access_after` (`ended` or the retained scope). Optional stage — an unstarted delivery stays `pending` and blocks nothing |
 | `deploy.live_url` | Set only after the target's health check passes. `custom_domain` set by `/pf-setup domain`. `netlify_site_id` is not a secret and may be stored |
-| `log[]` | Append-only; `ts`, `stage` (`plan`/`design`/`build`/`merge`/`deploy`/`harden`/`pentest`/`monitor`/`maintain`/`deliver`/`setup`), `event`, optional `lane` |
+| `log[]` | Append-only; `ts`, `stage` (`plan`/`design`/`build`/`merge`/`deploy`/`harden`/`pentest`/`monitor`/`maintain`/`deliver`/`promo`/`grow`/`setup`), `event`, optional `lane` |
 
 ## Who writes what (avoids write collisions when the folder is cloud-synced)
 

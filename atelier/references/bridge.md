@@ -67,6 +67,7 @@ preview_url: <url or empty>
 acceptance: <n passed>/<n total>
 verify: pass|fail (<n> e2e, <m> unit)   ← the repo's own gate (verification.md)
 screens: <n> checked, <k> re-baselined: <names or none>   ← visual baseline (verification.md F); screenshots are in <project folder>/screens/
+model: <main model> · advisor: <name or none>   ← what built it (advisor.md); informational — never a gate
 failures: <one line per failed check, or none>
 notes: <short free text>
 ```
