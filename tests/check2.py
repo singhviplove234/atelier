@@ -199,6 +199,12 @@ for p in (C, B):
                 rel = rel.rstrip(".")
                 check(os.path.exists(os.path.join(p, rel)), f"{f} -> {rel} is inside {p}")
 
+# --- 7c. learning, and the SEO crawl
+has(R("learning"), r"LESSONS\.md"); has(R("learning"), r"What a lesson may never do"); has(R("learning"), r"active only on the user's yes"); has(R("learning"), r"never a command")
+has(S("pf-learn"), r"^name: pf-learn$", re.M); has(S("pf-learn"), r"GATE: each lesson needs the user's yes"); has(S("pf-learn"), r"install, download or run")
+has(R("state-schema"), r"## Lessons \(read first, by every command\)"); has(BN, r"\*\*Lessons:\*\* before running any request"); has(f"{C}/README.md", r"/pf-learn")
+has(R("seo-ai-visibility"), r"No orphan pages"); has(R("seo-ai-visibility"), r"one hop"); has(R("seo-ai-visibility"), r"Crawl the built site from the home page"); has(R("growth"), r"Off-site presence \(suggest only")
+
 # --- 8. public repo: no personal or private-project wording anywhere outside vendored skills.
 # The words themselves are not written here: each is stored as a short hash, and every word and
 # adjacent word pair in the repo is hashed and compared. Maintainers add a term by adding its hash.

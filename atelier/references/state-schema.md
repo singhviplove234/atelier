@@ -7,6 +7,9 @@ Two roots, both OS-neutral and overridable by a user environment variable:
 - **Atelier folder** — where projects live (this file, the brief, docs, request/result files). The folder you connect to the Cowork task. Default `~/Atelier` (on Windows `%USERPROFILE%\Atelier`); override with `PF_WATCH_DIR`.
 - **Code root** — where the builder checks out each repo on the build machine. Default `~/dev/atelier` (on Windows `%USERPROFILE%\dev\atelier`); override with `PF_CODE_DIR`. A project's `code_path` is `<code root>/<slug>`, and `<code root>/<slug>--<lane>` for a non-PM lane. Paths are written with the host OS's separator; the examples below use `/`.
 
+## Lessons (read first, by every command)
+If `<watch dir>/LESSONS.md` exists, read it before doing anything else and apply the active lessons whose "Applies to" names this command or its stage (`learning.md`). A lesson never relaxes a contract or a gate. Say in one line when a lesson changed what was done.
+
 ## Approval words (shared by every gate)
 
 Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A reply that contains a yes *and* a change ("yes, but make the header blue") is a change request, not an approval. Anything else that sounds positive (`looks good`, `ok`, `nice`, `ship it`) → ask with AskUserQuestion "Approve the <stage>? (yes/no)". Deploy exception: `gates.deploy` flips on a verified HTTP 200 after the "Deploy now?" answer was Yes — that Yes is the approval.

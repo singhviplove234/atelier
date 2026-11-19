@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.0 - it learns
+- **`/pf-learn`**: give Atelier a video, a reel, an article, a repository, an incident or a repeated correction. It takes the source in fully, checks each claim against primary sources or on a fixture, and proposes short numbered lessons. An approved lesson is kept in your projects folder (`LESSONS.md`) and followed by every later command on both seats. A lesson can add care but can never relax a contract, a gate, the cost posture or a security rule, and never installs anything.
+- **SEO checks:** redirects must resolve in one hop, every public page must be linked from another page, and the build now crawls the site to prove it (no orphan pages, no broken internal links).
+- **Growth:** off-site presence suggestions - the listings and honest link sources worth having - as recommendations only.
+
 ## 2.0.1 — audit fixes
 - Version numbers in the guides now match Atelier's own releases; the "added in" notes are gone.
 - The launch-video result file uses one field per line, as the bridge documents; a non-Node product (Flutter, native) can still get a launch video.
