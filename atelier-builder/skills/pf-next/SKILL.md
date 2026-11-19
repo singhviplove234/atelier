@@ -1,9 +1,9 @@
 ---
 name: pf-next
-description: "Runs one named Atelier request — /pf-next SLUG build|merge|deploy|harden|pentest [--lane x] [--go] — by reading the matching request file under the Atelier folder and running the right builder skill. Also /pf-next doctor [SLUG], a read-only check that this Code seat has every tool the factory needs. Use when the user (or the Cowork seat typing through Chrome) says /pf-next."
+description: "Runs one named Atelier request — /pf-next SLUG build|merge|deploy|harden|pentest|promo [--lane x] [--go] — by reading the matching request file under the Atelier folder and running the right builder skill. Also /pf-next doctor [SLUG], a read-only check that this Code seat has every tool the factory needs. Use when the user (or the Cowork seat typing through Chrome) says /pf-next."
 ---
 
-# /pf-next <slug> <build|merge|deploy|harden|pentest> [--lane <name>] [--go] · /pf-next doctor [<slug>]
+# /pf-next <slug> <build|merge|deploy|harden|pentest|promo> [--lane <name>] [--go] · /pf-next doctor [<slug>]
 
 Runs exactly one request. Triggered only by a typed command — never by a timer, hook or file watcher.
 
@@ -13,26 +13,28 @@ Watch dir = `PF_WATCH_DIR` if set, else the `Atelier` folder in your home direct
 - `merge` → `MERGE-REQUEST-<lane>.md` (lane required), result `MERGE-RESULT-<lane>.md`
 - `deploy` → `DEPLOY-REQUEST.md`, result `DEPLOY-RESULT.md`
 - `harden` → `HARDEN-REQUEST.md`, result `HARDEN-RESULT.md`
+- `promo` → `PROMO-REQUEST.md` (carries `stage: stills|video`), result `PROMO-RESULT.md` — optional, never a gate
 - `pentest` → `PENTEST-REQUEST.md` (carries `mode: scanners|agent|both`), result `PENTEST-RESULT.md` (**never** skips confirm — ignore `--go`; re-confirm the target against `factory.json.security_testing.authorized_targets[]` before running)
 
-The request file must exist, its first line must be the expected header (`PF-BUILD v1` / `PF-MERGE v1` / `PF-DEPLOY v1` / `PF-HARDEN v1` / `PF-PENTEST v1`), and it must be **pending**: the result file is missing, older than it, or carries a different `request_id`. Otherwise say exactly what is wrong ("no pending build request for lane backend in pf-app") and stop. Bare `/pf-next` with no arguments → list every pending request across projects and stop; never guess.
+The request file must exist, its first line must be the expected header (`PF-BUILD v1` / `PF-MERGE v1` / `PF-DEPLOY v1` / `PF-HARDEN v1` / `PF-PENTEST v1` / `PF-PROMO v1`), and it must be **pending**: the result file is missing, older than it, or carries a different `request_id`. Otherwise say exactly what is wrong ("no pending build request for lane backend in pf-app") and stop. Bare `/pf-next` with no arguments → list every pending request across projects and stop; never guess.
 
 ## 1b. `/pf-next doctor [<slug>]` — is this seat ready? (read-only; no request file, no confirm)
 Check each item and print one table — item · ok/missing · the one line that fixes it — then write the same table to `<watch dir>/DOCTOR-RESULT.md` under the first line `PF-DOCTOR-RESULT v1` (plus `checked: <timestamp>` and `plugin: <this plugin's version>`). It installs nothing, changes nothing and prints **no secret value** — for env vars it reports only whether the **name** is set.
-- Tools: `node -v` (20+), `git --version`, `gh --version` and `gh auth status`, `npx playwright --version` (e2e + diagram PNG export), `gitleaks version` (secret scan in `verify`), and `/diagram-design:doctor`.
+- Tools: `node -v` (20+), `git --version`, `gh --version` and `gh auth status`, `npx playwright --version` (e2e, screenshots, and the Chromium the diagram renderer reuses), `npx -y @mermaid-js/mermaid-cli --version` (diagrams), and `gitleaks version` (secret scan in `verify`).
 - The watch dir exists and is writable; the code root (`PF_CODE_DIR`, default `~/dev/atelier`) exists or can be created.
 - With a `<slug>`: read `<watch dir>/<slug>/factory.json` → for `deploy.target` (or `brief.deploy_hint`), each **Required** env var name in that target file is set and each **Checks** command passes; when the project has a Data model, the database names are set (and the `PROD_`-prefixed ones when `database` is `split`); when `ci` is `self-hosted`, `gh api repos/<owner>/<slug>/actions/runners` shows a runner online; in the project checkout, `git config core.hooksPath` is `.githooks`.
 - Informational (never counted as missing): the Claude Code version and the `advisorModel` setting (or `none`).
-- With a `<slug>` whose `factory.json.options.launch_video` is `on`: `python -c "import PIL, numpy, scipy"`, `ffmpeg -version`, and Chrome found. With `options.scene_3d` of `model` and a Blender-made file expected: `blender --version`.
+- With a `<slug>` whose `factory.json.options.launch_video` is `on`: `ffmpeg -version` and `ffprobe -version`.
 End with `ready` or `<n> missing — fix the first, then run /pf-next doctor again`.
 
 ## 2. Confirm
-Show `Next: <kind> <slug> [lane] — request_id <id>`. For `pentest`, always ask and name the target (never skip, even with `--go`). For build/merge/deploy, ask yes/no — **unless `--go` was given, which means skip the confirm** (the Cowork seat passes it only after the user approved that stage there).
+Show `Next: <kind> <slug> [lane] — request_id <id>`. For `pentest`, always ask and name the target (never skip, even with `--go`). For build/merge/deploy/harden/promo, ask yes/no — **unless `--go` was given, which means skip the confirm** (the Cowork seat passes it only after the user approved that stage there).
 
 ## 3. Run
 - build → `pf-build-from-spec` on that file.
 - deploy → `pf-deploy-from-spec` on that file.
 - harden → `pf-harden-from-spec` on that file.
+- promo → `pf-promo-from-spec` on that file.
 - pentest → `pf-pentest-from-spec` on that file. **`--go` never skips the confirm for pentest**: always show the target and require a typed yes, and refuse any target not on the project's authorized pre-production allowlist.
 - merge → read `repo`, `pr_url`, `strategy`; run `gh pr merge <pr_url> --repo <repo> --squash --delete-branch` (no checkout needed). On a merge conflict write `status: failed`, `notes: conflict with main — lane must rebase and rebuild`. Write `MERGE-RESULT-<lane>.md`: `PF-MERGE-RESULT v1` / `request_id: <echoed>` / `status: ok|failed` / `notes: <short>`.
 

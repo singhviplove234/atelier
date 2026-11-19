@@ -53,13 +53,12 @@ In **Cowork**, run:
 /pf-setup project my-first-idea
 ```
 
-This is the step that makes Atelier fully equipped. The **first time** you run it, it automatically:
+Atelier arrives complete — there are no extra skills or plugins to add. The **first time** you run setup, it:
 
-- Installs the recommended helper skills from their own official sources (the three permissively-licensed ones ship with Atelier; the rest are fetched with one confirmation — see `THIRD-PARTY-NOTICES.md` and `atelier/references/skill-catalog.md`).
 - Checks you have Node, Git and `gh`, and gives you the exact install command for anything missing.
 - Walks you through the human-only bits one at a time: connecting a project folder, signing in to GitHub and your chosen host, and setting up a database if your project needs one.
 
-After the first run, Atelier knows which skill to use when, and later projects skip straight past setup.
+After the first run, later projects skip straight past setup.
 
 ## Step 5 — Build your first product
 
@@ -82,7 +81,7 @@ Prefer to go one step at a time? Run `/pf-design`, review it, then `/pf-build`, 
 ## Good to know
 
 - **You need both Cowork and Claude Code.** Cowork is where you talk to Atelier; Claude Code (on your own machine) is where the building happens.
-- **The first project is the slow one** — that's when setup and the skill install happen. Everything after is quicker.
+- **The first project is the slow one** — that's when the one-time setup happens. Everything after is quicker.
 - **Atelier never spends money or ships anything without asking.** It pre-fills what's safe and hands you the final click on anything that signs in, pays, deploys or publishes.
 - **Stuck on a step?** `/pf-setup` can be re-run safely any time — it only does what's still missing.
 

@@ -1,27 +1,44 @@
-# Launch video — a short product animation from what the factory already holds (optional)
+# Launch video — a short product animation Atelier makes itself (optional)
 
-Added in 0.5.0. An option (`options.md`), run by `/pf-promo` after a product is live. It does not make the video itself: it prepares everything a motion-graphics run needs, hands it to a **separate tool on the user's own computer**, and records the result. Nothing here is a gate, and no build depends on it.
+An option (`options.md`), run by `/pf-promo` after a product is live. Atelier builds the animation as a small web page, renders it frame by frame with its own script, and hands back a video file. Everything it needs is already part of Atelier or already on the build machine for other reasons (Node, Playwright's Chromium, ffmpeg); nothing else is installed, no video or image model is used, and no graphics card is required. It is never a gate, and no build depends on it.
 
-## A. The tool, stated honestly
-- The factory's default is the **Motion Design** skill (by Mr. Pynk, built on work credited to Rourke Heath): a folder the user downloads and adds to Claude on their computer, which builds an 8–20 second animation as code and renders it locally with Node, Python (Pillow, numpy, scipy), ffmpeg and Chrome. It is free to use.
-- **It is not part of this plugin and never will be bundled:** it carries no licence. The user downloads it themselves from the author's page; the factory only points to it.
-- **It needs a real graphics card**, so it runs in Claude Code or the desktop app on the user's PC — not in a cloud session. A render is heavy: one at a time.
-- Known rough edges the factory tells the user up front: its notes mention helper scripts that are not in the download; an interrupted render starts again from the beginning; its starter template is plain, so quality comes from the storyboard notes, not from the first draft.
-- Any other tool the user prefers can take the same brief pack — the pack is plain files.
+## A. What it is — and is not
+- **Is:** an 8–15 second piece (20 at most) built from the product's real logo, colours, type and screens, in 16:9 or 9:16, rendered at 1080p or 4K. Because it is code, a note such as "slower here" is a small edit and a re-render.
+- **Is not:** filmed footage, a talking head, generated imagery, or a soundtrack. The result is a **silent master** by default; sound is section E.
+- **Honest limit:** the first draft is competent, not remarkable. Quality comes from the storyboard notes — direction is the user's contribution, and the flow is built around it.
 
-## B. The brief pack (what `/pf-promo` writes — `<project folder>/promo/`)
-Everything comes from what the project already recorded; nothing is invented:
-- `brief.md` — the product in one sentence and who it is for (from the brief); length (default 10 s, 8–15 s recommended); where it will play and the format that implies (16:9 for a site or presentation, 9:16 for reels); tone, from the design direction; **the ending** — the live URL as the call to action; and the on-screen lines, each one taken from the SPEC's verbatim copy.
-- `assets/` — the logo and wordmark (from the design system / repo), the brand colours and fonts as a small text file (from the SPEC's tokens), and the chosen screens (from `<project folder>/screens/`, which are test-data-only by rule — `verification.md` F — so no real user's data can appear in a video).
-- `rules.md` — four lines the tool must follow, written into the pack because the tool's own instructions are broader: use only the files in this folder (do not search the computer for assets); every claim on screen comes from `brief.md`; no music, sound or font without a licence that covers advertising; show the storyboard and wait before building.
+## B. The brief pack (written by `/pf-promo` into `<project folder>/promo/`)
+Everything comes from what the project already recorded; nothing is invented.
+- `brief.md` — the product in one sentence and who it is for; length; format (16:9 for a site or presentation, 9:16 for reels); tone, from the design direction; **the ending** — the live URL as the call to action; the on-screen lines, each taken from the SPEC's verbatim copy or the user's own words.
+- `assets/` — logo and wordmark, a `brand.txt` with the colours and fonts from the SPEC's tokens, and the chosen screens copied from `<project folder>/screens/` (test-data only by rule — `verification.md` F — so no real user's data can appear).
+- `storyboard.md` — section C.
 
-## C. How it runs
-1. `/pf-promo` checks the product is live, writes the pack, and gives the user the exact words to say on their computer: open the Motion Design folder in Claude and type `start motion design — use the brief pack at <path>`.
-2. The user directs it there: brief, assets, storyboard notes **by shot number**, stills, render, sound. Those approvals are the tool's own and stay with the user.
-3. Back in the factory, the user gives the path of the finished file; it is recorded as `promo.video`. If the page should show it, that is a normal build change (a poster image first, the video on interaction — `performance-budget.md` rule 5).
-4. Housekeeping the factory reminds the user of once: the tool leaves temporary browser-profile folders in the system temp folder after each render; they are safe to delete.
+## C. The storyboard — approved before anything is built
+Five to eight **numbered** shots. Each has: a time range; what is on screen, named by asset; the line, if any; what moves; and how it becomes the next shot. It is shown to the user as a table, and nothing is built until they approve it or give notes by shot number ("3 is too fast; swap 5 and 6"). This is the cheapest place to change anything.
+Rules the storyboard is written to:
+1. **One idea.** The piece says one thing about the product. If it needs a second sentence to explain, it is two videos.
+2. **Shots hand over to each other.** Something in each shot — a shape, a position, a colour field — carries into the next, so the eye is never dropped. No hard jumps between unrelated frames.
+3. **What matters sits in the middle** of the frame, and stays roughly where the eye already is across a change.
+4. **Always a little movement**, even in a hold — a slow push or drift — and direction never reverses mid-move.
+5. **Quick to arrive, slow to settle.** The first second earns attention; the product and the ending get time.
+6. **Real things only.** The actual logo, the actual screens, the actual words. Nothing redrawn from memory, no invented statistics, reviews, badges or other companies' marks.
+7. **It ends on what to do next** — the address, held long enough to read twice.
+
+## D. The build (done on the build machine by `pf-promo-from-spec`)
+- **One page, one clock.** `promo/page.html` in the product repo (on its own `promo` branch — it is not product code and never ships with the site) with local assets only. It exposes `window.TOTAL` (seconds) and `window.renderAt(t)`, which draws the whole frame for time `t` from scratch. No timers, no CSS animations that run on their own, no network: every frame must be reproducible from `t` alone. All shot timings sit in one block at the top so re-timing is a one-line change.
+- **Plain web technology** — HTML, CSS transforms and opacity, SVG, 2D canvas. Fonts are local files from the project (the same licensed ones the site uses).
+- **Review stills first.** `node <plugin>/scripts/render-video.mjs stills promo/page.html promo/out/stills <times>` at the middle of every shot and at two points in every handover. The stills go back to the PM, who shows them against the storyboard; the full render happens only after that approval.
+- **Render.** `node <plugin>/scripts/render-video.mjs video promo/page.html promo/out/<slug>-launch.mp4 --fps 30 [--scale 2] [--portrait]`. One render at a time. 1080p by default; `--scale 2` (4K) only when the user asked for it.
+- **Check the file**, not the log: duration matches `TOTAL`, the resolution is as requested, and a contact sheet of one frame per second shows no blank or half-drawn frame.
+
+## E. Sound
+The master is silent. If the user puts an audio file **they own or have a licence for** in `<project folder>/promo/audio/`, the build adds it under the picture with ffmpeg (trimmed to length, faded out over the last half second) as a second file, keeping the silent master. Atelier does not generate music or voice and does not source audio from anywhere.
+
+## F. Result and after
+`PROMO-RESULT.md` (shape in `bridge.md`) reports the stills folder, the video path, duration, resolution and any note. The PM records `promo.video`. If the page should show the video, that is a normal build change — a poster image first, the video on interaction (`performance-budget.md` rule 5).
 
 ## Never
-- Bundle, copy or redistribute the tool, or present it as part of the factory.
-- Publish, post or upload a video on the user's behalf.
-- Put a claim, statistic, review or logo of another brand in a brief that the project's own brief does not contain.
+- Use an asset, font or sound the project does not own or have a licence for, or put another company's name or mark on screen.
+- Put a claim on screen that the project's brief does not contain.
+- Publish, post or upload the video — that is the user's action.
+- Let the promo page or its branch reach the deployed site.
