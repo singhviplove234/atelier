@@ -7,6 +7,7 @@ Atelier is one bundle. Every method, contract and tool it relies on ships inside
 - **Design craft** — `design-craft.md`: direction playbooks, detail craft, motion, redesigns, brand kits. Used by `/pf-design` and the build, inside the limits of `design-standard.md`.
 - **Diagrams** — `diagram-render.md`: every SPEC diagram rendered by Atelier itself from Mermaid source in the project's own colours.
 - **Launch video** — `launch-video.md` and the bundled renderer `atelier-builder/scripts/render-video.mjs`: a short product animation built and rendered by Atelier (optional).
+- **Learning** — `learning.md`: how Atelier turns a video, an article or its own mistake into a checked, approved lesson (`/pf-learn`), kept in your projects folder.
 - **The contracts** — performance, SEO and AI visibility, security, simplicity, design, compliance, verification, data safety, deploy, delivery — and the options index (`options.md`).
 
 ## Bundled open-source skills (shipped inside the plugins, with their licences — `THIRD-PARTY-NOTICES.md`)

@@ -23,6 +23,7 @@ Takes an idea all the way: **plan → design → build → deploy → harden →
 | `/pf-grow [--schedule]` | PM | Reads Search Console/GA4/Clarity, proposes the next SEO/content/conversion fixes; changes nothing on its own | — |
 | `/pf-deliver` | PM | Final stage for a product built for someone else: checks the repo's docs (architecture + every diagram, runbook, admin guide, changelog), assembles the delivery pack from recorded proof, walks the ownership transfer with secrets rotated afterwards | recipient's acceptance — and every account change is your click |
 | `/pf-promo` | PM | Optional, after go-live: a short launch video made by Atelier itself — brief pack, a numbered storyboard you approve, review stills, then the render on your build machine (browser + ffmpeg, no graphics card) | never a gate; you approve each step and you publish it |
+| `/pf-learn <source>` | PM | Learns from a video, reel, article, repository, incident or repeated correction: takes it in fully, checks every claim, and proposes short numbered lessons that every later command follows (`references/learning.md`) | each lesson needs your yes; a lesson can never relax a contract or a gate |
 | `/pf-board` | PM | One live control panel of every project — stage, gates, health, maintenance, what's waiting on you | — |
 | `/pf-ship <idea|slug>` | PM | The conductor: runs the whole chain, pausing only at the human gates. `ship_mode` guarded (default) or streamlined (low-stakes only) | each gate (or just go-live, streamlined) |
 
