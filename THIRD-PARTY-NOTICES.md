@@ -9,7 +9,7 @@ their respective authors.
 
 | Skill (path) | License | Copyright | Source |
 |---|---|---|---|
-| `atelier/skills/humanizer` | MIT | © 2025 Siqi Chen | bundled, license in folder |
+| `atelier/skills/humanizer` | MIT | © 2025 Siqi Chen | bundled without the upstream README and packaging script; license in folder |
 | `atelier/skills/design-md` | MIT | © 2026 VoltAgent | bundled, license in folder |
 | `atelier-builder/skills/security-audit` | MIT | © 2025–2026 Cloudflare, Inc. | `cloudflare/security-audit-skill`; license in folder |
 

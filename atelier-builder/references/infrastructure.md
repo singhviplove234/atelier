@@ -1,6 +1,6 @@
 # Infrastructure as code — when the cloud setup is more than one command
 
-Added in 0.4.0. A static site on a free host needs no infrastructure code: the target file's few CLI steps *are* the setup, and adding more would only be weight (`code-simplicity.md`). But once a product is several cloud resources wired together — a container app, a database server, a queue, storage, a vault, networking — clicking or typing them by hand cannot be reviewed, repeated or handed over. Then the infrastructure is written down as code, in the repo.
+A static site on a free host needs no infrastructure code: the target file's few CLI steps *are* the setup, and adding more would only be weight (`code-simplicity.md`). But once a product is several cloud resources wired together — a container app, a database server, a queue, storage, a vault, networking — clicking or typing them by hand cannot be reviewed, repeated or handed over. Then the infrastructure is written down as code, in the repo.
 
 ## A. When it applies — `factory.json.infra` (decided at plan time)
 | Value | When | Tool |

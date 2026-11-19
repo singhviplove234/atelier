@@ -55,7 +55,7 @@ In **Cowork**, run:
 
 Atelier arrives complete — there are no extra skills or plugins to add. The **first time** you run setup, it:
 
-- Checks you have Node, Git and `gh`, and gives you the exact install command for anything missing.
+- Checks you have Node, Git and `gh` — plus the two small helpers the builder uses, Playwright's browser and `gitleaks` — and gives you the exact install command for anything missing.
 - Walks you through the human-only bits one at a time: connecting a project folder, signing in to GitHub and your chosen host, and setting up a database if your project needs one.
 
 After the first run, later projects skip straight past setup.

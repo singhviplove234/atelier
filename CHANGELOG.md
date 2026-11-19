@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.1 — audit fixes
+- Version numbers in the guides now match Atelier's own releases; the "added in" notes are gone.
+- The launch-video result file uses one field per line, as the bridge documents; a non-Node product (Flutter, native) can still get a launch video.
+- The top-level README now mentions lanes, delivery and the launch video; the builder README lists the bundled security audit.
+- The bundled `humanizer` ships without its upstream packaging script.
+- The validator's private-wording check stores hashes instead of words.
+
 ## 2.0.0 — one bundle
 Atelier no longer asks you to install, and no longer fetches, any other skill or plugin. Everything it uses is inside its two plugins.
 - **Removed:** the first-run installer (`/pf-bootstrap`), the bundled skill finder (`find-skill`) and the outside-skill catalogue; every "install this plugin" step in setup.
