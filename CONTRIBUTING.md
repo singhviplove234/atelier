@@ -7,6 +7,7 @@ Thanks for your interest in improving Atelier. It's two Claude plugins — `atel
 - **Keep the safety model intact.** Atelier never types or stores secrets, never deploys/publishes/spends without an explicit human yes, and never runs the pentest against production, real data, or on a schedule. Changes must preserve these.
 - **Quality and security are gates, not suggestions.** The build contracts (performance, security, SEO, accessibility, simplicity, compliance) are hard gates. Don't weaken a gate to make something pass.
 - **Free-first, provider-agnostic.** Don't add a paid default or lock a step to one cloud.
+- **One bundle.** Atelier never tells a user to install another skill or plugin, and never fetches one. A new capability is written into Atelier itself, or shipped inside it only when its licence allows redistribution (with the licence file and an entry in `THIRD-PARTY-NOTICES.md`). Ordinary command-line programs on the build machine are fine; `/pf-next doctor` must check for them. The validator fails on any outside pointer.
 - **The two plugins share reference files.** Several files under `references/` are kept **byte-identical** between `atelier/` and `atelier-builder/` (the validator enforces it). Edit the `atelier/` copy, then mirror it to `atelier-builder/`.
 
 ## Before you open a PR

@@ -75,7 +75,7 @@ You can also install from a downloaded release: in the Plugins panel choose **Ad
 /pf-setup project my-first-idea
 ```
 
-It stands up everything a project needs (a connected projects folder, GitHub, the chosen host's CLI and sign-in, a database if needed, monitoring, backups) and walks you through each human step. On the **very first run** it also runs `/pf-bootstrap` once, which installs Atelier's recommended helper skills from their official sources so the factory is fully equipped (Atelier bundles the three it may redistribute; the rest install on first run — see `THIRD-PARTY-NOTICES.md` and `atelier/references/skill-catalog.md`). See **Requirements** below for what to have installed first.
+It stands up everything a project needs (a connected projects folder, GitHub, the chosen host's CLI and sign-in, a database if needed, monitoring, backups) and walks you through each human step. **There is nothing else to install: Atelier is one bundle and never asks you to add another skill or plugin** (`atelier/references/skills.md` lists everything inside it). See **Requirements** below for what to have installed first.
 
 ---
 
@@ -106,7 +106,8 @@ Prefer one step at a time? Run `/pf-design`, review, then `/pf-build`, `/pf-depl
 - Deploy, publish, merge or spend money without your explicit yes.
 - Run the security pentest on a schedule, against production, or against anything with real data.
 - Build remotely on paid CI, or create a billed resource without stopping to show you the price.
-- Redistribute a skill whose license forbids it — the three bundled skills ship under their own permissive licenses (`THIRD-PARTY-NOTICES.md`) and everything else installs from its own official source; downgrade quality or security to save money.
+- Send you off to install another skill or plugin — everything it uses is inside the bundle (three open-source skills ship under their own licences, `THIRD-PARTY-NOTICES.md`; the rest is Atelier's own).
+- Downgrade quality or security to save money.
 
 ## The contracts (what every build must pass)
 
@@ -119,6 +120,7 @@ Speed (mobile Lighthouse ≥ 90), security (secure by default — data-access ru
 On the machine that runs **Claude Code** (the builder):
 
 - **Node 20+** and **Git**, and **GitHub CLI** (`gh`) signed in.
+- Playwright's browser (`npx playwright install chromium`) and `gitleaks`; `ffmpeg` only if you want a launch video. These are ordinary programs, not Claude skills.
 - Per chosen host, its CLI: `vercel`, Azure `az`, Docker Desktop, `wrangler` (Cloudflare), `netlify`, `gcloud`, or `flyctl`.
 - A free **Supabase** account if the project needs a database.
 - Remote Control on in Claude Code (`/remote-control`) so Cowork can drive it, or you paste the one `/pf-next` command when asked.

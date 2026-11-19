@@ -33,4 +33,4 @@ The four rows in bold are recorded under `factory.json.options`; every other row
 - **One line, once.** An offer is a single sentence with the cost and the con. No option is pushed, bundled with another, or assumed from a similar project.
 - **The plan is where most are settled** (`pf-plan` §3c), so nothing optional is discovered mid-build. The bold rows can also be chosen later, because they do not change what was built before them.
 - **Not offered** is as deliberate as offered: a brochure site is not asked about tenancy, a solo internal tool is not asked about a status page.
-- **A third-party tool behind an option is never bundled** unless its licence allows it; it is installed from its own source on the machine that uses it, and the option's file says which.
+- **Every option is complete inside Atelier.** None of them asks you to install another skill or plugin; the most an option needs is an ordinary program on the build machine (for example `ffmpeg` for the launch video), and `/pf-next doctor` says so.

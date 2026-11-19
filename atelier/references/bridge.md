@@ -143,6 +143,31 @@ pr_url: <url>
 perf_before / perf_after / budget_met / indexes_added / caching / load / limits / reverted / needs_decision / notes  ← see pf-harden-from-spec
 ```
 
+`PROMO-REQUEST.md` (optional — written by `/pf-promo`, run by `/pf-next <slug> promo`; never a gate)
+```
+PF-PROMO v1
+request_id: <slug>-promo-<yyyymmddHHMM>
+project: <slug>
+code_path: <code root>/<slug>
+stage: stills|video
+format: 16x9|9x16
+scale: 1|2
+notes: <changes by shot number, or empty>
+```
+
+`PROMO-RESULT.md`
+```
+PF-PROMO-RESULT v1
+request_id: <echoed>
+status: ok|failed
+stage: stills|video
+stills: <folder or empty>
+video: <path or empty>
+duration: <seconds or empty>
+resolution: <WxH or empty>
+notes: <short free text>
+```
+
 `DOCTOR-RESULT.md` (in the watch dir itself, not a project folder — written by `/pf-next doctor`, read by `/pf-setup --check`; it has no request file because it changes nothing)
 ```
 PF-DOCTOR-RESULT v1
