@@ -1,6 +1,6 @@
 # SaaS blueprint — the parts every paid, multi-user product needs
 
-Added in 0.3.0 (18 Nov 2026). "build me a SaaS" must not mean re-inventing accounts, tenants, billing, admin and email on every project — and must never mean shipping one without them. When the plan says the product has **paying customers or organizations as customers**, `/pf-plan` works through this list with the user and `/pf-build` writes each chosen block into the SPEC (screens, data model, routes, a `feature-` diagram each, acceptance checks). It is a checklist of decisions, not code: the stack stays whatever the plan locks, and every block is built to the existing contracts. A block the product does not need is recorded as "not needed — <reason>", never silently dropped.
+Added in 1.1.0 (18 Nov 2026). "build me a SaaS" must not mean re-inventing accounts, tenants, billing, admin and email on every project — and must never mean shipping one without them. When the plan says the product has **paying customers or organizations as customers**, `/pf-plan` works through this list with the user and `/pf-build` writes each chosen block into the SPEC (screens, data model, routes, a `feature-` diagram each, acceptance checks). It is a checklist of decisions, not code: the stack stays whatever the plan locks, and every block is built to the existing contracts. A block the product does not need is recorded as "not needed — <reason>", never silently dropped.
 
 | Block | The decision to make at plan time | What the SPEC must then carry |
 |---|---|---|

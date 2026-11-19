@@ -1,6 +1,6 @@
 # Options — what a project can add, and when the factory offers it
 
-Added in 0.5.0. The contracts are not optional: every build meets them. Everything on this page **is** optional — an add-on that is offered only when the project needs it, clearly benefits from it, or the user asks for it, and that is otherwise left out so a project never carries machinery it does not use (`code-simplicity.md`). This page is the single index: one row per option, who offers it, where the choice is recorded, and the one file that defines it. An option is never defined in two places — if a row points to a contract, that contract is the only definition.
+The contracts are not optional: every build meets them. Everything on this page **is** optional — an add-on that is offered only when the project needs it, clearly benefits from it, or the user asks for it, and that is otherwise left out so a project never carries machinery it does not use (`code-simplicity.md`). This page is the single index: one row per option, who offers it, where the choice is recorded, and the one file that defines it. An option is never defined in two places — if a row points to a contract, that contract is the only definition.
 
 ## How an option is offered (the same three triggers for every row)
 1. **The project requires it** — the plan's facts make it necessary (the row's "Offered when" column). The factory says so and explains why in one line.

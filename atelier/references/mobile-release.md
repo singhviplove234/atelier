@@ -1,6 +1,6 @@
 # Mobile release — getting an app into the stores
 
-Added in 0.3.0 (18 Nov 2026). the factory plans, designs and builds mobile apps (`design-standard.md` "Mobile apps"), so it must also say truthfully how one ships — and never let "build me an app" quietly end at a build. A store release is not a web deploy: it has fees no free tier removes, a review by a third party, and a publish step that cannot be undone. This file is what `/pf-plan` tells the user up front and what `/pf-deploy` follows through the `expo-eas` target.
+The factory plans, designs and builds mobile apps (`design-standard.md` "Mobile apps"), so it must also say truthfully how one ships — and never let "build me an app" quietly end at a build. A store release is not a web deploy: it has fees no free tier removes, a review by a third party, and a publish step that cannot be undone. This file is what `/pf-plan` tells the user up front and what `/pf-deploy` follows through the `expo-eas` target.
 
 ## A. Said at plan time, before the stack is locked
 - **Fees that cannot be avoided** (the one standing exception to zero recurring fees — stated with the price, on a yes): the Apple Developer Program (yearly) for the App Store, and a Google Play developer account (one-time). Read the current prices from Apple's and Google's own pages at plan time; never quote from memory.

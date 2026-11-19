@@ -1,6 +1,6 @@
 # Data safety — two databases and migrations that cannot lose data
 
-Added in 0.3.0 (18 Nov 2026). once a product holds real data, a build, a test or a preview must never be able to touch it, and a schema change must never be able to destroy it. Stack-neutral: the names below are the Supabase/Postgres defaults; another database uses its own equivalents and the same rules.
+Once a product holds real data, a build, a test or a preview must never be able to touch it, and a schema change must never be able to destroy it. Stack-neutral: the names below are the Supabase/Postgres defaults; another database uses its own equivalents and the same rules.
 
 ## A. Two databases once data is real
 - **Test database** — what builds, tests, e2e, previews and restore drills use. Synthetic/seed data only. On the build machine it is the **unprefixed** env names (`SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_DB_URL`, `SUPABASE_SERVICE_ROLE_KEY`, or `DATABASE_URL`).
