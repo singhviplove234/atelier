@@ -49,7 +49,7 @@ for p in (C, B):
                 check(r in refs[p] or r in refs[C] or local, f"{f} -> references/{r} exists")
             for r in set(re.findall(r"`([a-z0-9-]+\.md)`", t)):
                 if r in refs[C] | refs[B]: continue
-                if r in ("verify.yml", "brief.md", "rules.md") or not re.match(r"[a-z]", r): continue
+                if r in ("verify.yml", "brief.md", "rules.md", "storyboard.md") or not re.match(r"[a-z]", r): continue
                 if r[:-3] in targets[C]: continue
                 bad(f"{f} names `{r}` which is not a reference file")
             for cmd in set(re.findall(r"(?<![\w/-])/(pf-[a-z-]+)", t)):
@@ -105,17 +105,17 @@ for p in (C, B):
         for fn in files:
             if fn.endswith(".md"):
                 f = os.path.join(root, fn)
-                if re.search(r"eight headings|all eight|plan-audit\.md", read(f)): bad(f"{f} has stale wording")
-ok("no stale 'eight headings' / plan-audit wording") if True else None
+                if re.search(r"eight headings|all eight", read(f)): bad(f"{f} has stale wording")
+ok("no stale 'eight headings' wording") if True else None
 
 # --- 7. feature wiring (each line = a promise the docs make somewhere else)
 BB, BD, BN = f"{B}/skills/pf-build-from-spec/SKILL.md", f"{B}/skills/pf-deploy-from-spec/SKILL.md", f"{B}/skills/pf-next/SKILL.md"
 S = lambda n: f"{C}/skills/{n}/SKILL.md"; R = lambda n: f"{C}/references/{n}.md"
 # 0.2.0: diagrams gate, attribution, token-light
-has(BB, r"## 1b\. Diagrams gate"); has(BB, r"/diagram-design:doctor"); has(BB, r"failures: no diagram for")
+has(BB, r"## 1b\. Diagrams gate"); has(BB, r"references/diagram-render\.md"); has(BB, r"@mermaid-js/mermaid-cli --version"); has(BB, r"failures: no diagram for")
 has(BB, r'"attribution"'); has(BB, r"includeCoAuthoredBy"); hasnt(BB, r"~/.claude/settings.json`\s*\(create")
 has(S("pf-build"), r"Token-light"); has(S("pf-deploy"), r"Token-light"); has(S("pf-setup"), r"0b2\.")
-has(R("skills"), r"diagram-design"); has(R("growth"), r"includingRegex|Questions:")
+has(R("skills"), r"never asks you to install another skill or plugin"); has(R("growth"), r"includingRegex|Questions:")
 # 0.3.0: verify + e2e from diagrams
 has(R("verification"), r"^## A\. One command", re.M); has(R("verification"), r"// diagram: <id>"); has(R("verification"), r"failure path")
 has(BB, r"npm run verify"); has(BB, r"e2e/<id>\.spec"); has(BB, r"takes its failure path"); has(BB, r"\.githooks/pre-push"); has(BB, r"core\.hooksPath")
@@ -154,7 +154,7 @@ for row, ref in (("Advisor model","advisor.md"),("3D product scene","scene-3d.md
     has(R("options"), rf"{row}.*`{re.escape(ref)}`")
 has(R("advisor"), r"machine"); has(R("advisor"), r"no percentage"); has(R("advisor"), r"experimental"); has(S("pf-setup"), r"/pf-setup advisor"); has(S("pf-setup"), r"Never claim a saving"); has(BB, r"^model: <this session", re.M); has(R("bridge"), r"^model: <main model>", re.M); has(BN, r"advisorModel")
 has(R("scene-3d"), r"250 KB gzipped"); has(R("scene-3d"), r"1\.5 MB"); has(R("scene-3d"), r"failure path"); has(BB, r"references/scene-3d\.md"); has(S("pf-build"), r"`3D scene:` line"); has(R("performance-budget"), r"scene-3d\.md")
-has(R("launch-video"), r"never will be bundled"); has(R("launch-video"), r"do not search the computer"); has(S("pf-promo"), r"deploy\.live_url"); has(S("pf-promo"), r"AskUserQuestion"); has(S("pf-promo"), r"never a gate|Treat this as a gate"); has(S("pf-ship"), r"Optional add-ons are not stages"); has(R("state-schema"), r'"promo": \{')
+has(R("launch-video"), r"render-video\.mjs"); has(R("launch-video"), r"storyboard"); has(S("pf-promo"), r"deploy\.live_url"); has(S("pf-promo"), r"AskUserQuestion"); has(S("pf-promo"), r"never a gate|Treat this as a gate"); has(S("pf-ship"), r"Optional add-ons are not stages"); has(R("state-schema"), r'"promo": \{')
 has(R("growth"), r"^## Drafts", re.M); has(R("growth"), r"28 days"); has(R("growth"), r"five pages per run"); has(S("pf-grow"), r"--draft"); has(S("pf-grow"), r"Publish a draft")
 has(S("pf-build"), r"D1, D2"); has(R("growth"), r"G1, G2")
 # an option is defined once: the four new contracts are not restated in other references
@@ -163,12 +163,48 @@ for other in ("verification","deploy-rule","design-standard","monitoring","plann
 # standing safety rules still present
 has(S("pf-setup"), r"Never type"); has(S("pf-ship"), r"never flips `gates\.delivery`"); has(BN, r"never.* skips confirm|never skips the confirm", re.S)
 
+# --- 7b. one bundle: nothing points outside Atelier for a skill or plugin
+PF = f"{B}/skills/pf-promo-from-spec/SKILL.md"
+for gone in (f"{C}/skills/pf-bootstrap", f"{C}/skills/find-skill", f"{C}/references/skill-catalog.md"):
+    check(not os.path.exists(gone), f"{gone} is gone")
+for need in (R("plan-audit"), R("design-craft"), R("diagram-render"), f"{B}/references/diagram-render.md", f"{B}/references/launch-video.md", f"{B}/scripts/render-video.mjs", PF):
+    check(os.path.exists(need), f"{need} exists")
+for shared in ("diagram-render.md", "launch-video.md"):
+    check(read(f"{C}/references/{shared}") == read(f"{B}/references/{shared}"), f"{shared} identical in both plugins")
+has(R("plan-audit"), r"^## A\b", re.M); has(R("plan-audit"), r"^## B\b", re.M); has(R("plan-audit"), r"^## C\b", re.M)
+has(S("pf-plan"), r"plan-audit\.md` section A"); has(S("pf-plan"), r"plan-audit\.md` section B"); has(S("pf-plan"), r"section C"); has(S("pf-design"), r"design-craft\.md")
+has(PF, r"^name: pf-promo-from-spec$", re.M); has(PF, r"PF-PROMO v1"); has(PF, r"PF-PROMO-RESULT v1"); has(PF, r"scripts/render-video\.mjs"); has(PF, r"Never merge `promo` into `main`")
+has(BN, r"promo → `pf-promo-from-spec`"); has(BN, r"PROMO-REQUEST\.md"); has(BN, r"PF-PROMO v1"); has(BN, r"ffmpeg -version"); has(BN, r"@mermaid-js/mermaid-cli --version")
+has(R("bridge"), r"^PF-PROMO v1$", re.M); has(R("bridge"), r"^PF-PROMO-RESULT v1$", re.M); has(S("pf-promo"), r"/pf-next <slug> promo")
+has(BB, r"\*\*Review pass \(always\):\*\*"); has(BB, r"\*\*Plan-first \+ self-verify \(always\):\*\*")
+has("THIRD-PARTY-NOTICES.md", r"Nothing else is installed or fetched")
+OUTSIDE = (r"diagram[- ]design|superpowers|apple-look|blender|motion design|claude-mem|graphify|find-skill|pf-bootstrap|skill-catalog|"
+           r"swot-analysis|tech-doc-audit|llmcouncil|impeccable|design-taste|gpt-taste|emil-design|brandkit|remove-ai-marks|context_tooling|"
+           r"official sources?\b|/plugin (?:marketplace add|install) (?!singhviplove234/atelier|atelier@atelier|atelier-builder@atelier)|"
+           r"skills\.sh|npx skills|cathrynlavery|obra/")
+for top in (C, B, "README.md", "INSTALL.md", "CONTRIBUTING.md", "THIRD-PARTY-NOTICES.md", ".claude-plugin"):
+    paths = [top] if os.path.isfile(top) else [os.path.join(r, x) for r, _, fs in os.walk(top) for x in fs]
+    for f in paths:
+        if any(v in f for v in ("security-audit", "design-md/references")) or not f.endswith((".md", ".json", ".mjs")): continue
+        m = re.search(OUTSIDE, read(f), re.I)
+        if m: bad(f"{f} points outside the bundle: {m.group(0)}")
+ok("outside-pointer scan ran")
+# every SKILL.md / reference a plugin names with ${CLAUDE_PLUGIN_ROOT} exists inside that plugin
+for p in (C, B):
+    for root, _, files in os.walk(p):
+        for fn in files:
+            if not fn.endswith(".md"): continue
+            f = os.path.join(root, fn)
+            for rel in set(re.findall(r"\$\{CLAUDE_PLUGIN_ROOT\}/([A-Za-z0-9_./-]+)", read(f))):
+                rel = rel.rstrip(".")
+                check(os.path.exists(os.path.join(p, rel)), f"{f} -> {rel} is inside {p}")
+
 # --- 8. public repo: no personal or private-project wording anywhere outside vendored skills
 PRIV = r"$^"  # the word list is not kept in the repository
 for top in (C, B, "README.md", "INSTALL.md", "CONTRIBUTING.md", "tests"):
     paths = [top] if os.path.isfile(top) else [os.path.join(r, x) for r, _, fs in os.walk(top) for x in fs]
     for f in paths:
-        if any(v in f for v in ("security-audit", "design-md", "humanizer", "find-skill", "check2.py", "check.sh")) or not f.endswith((".md", ".json", ".sh", ".py")): continue
+        if any(v in f for v in ("security-audit", "design-md", "humanizer", "check2.py", "check.sh")) or not f.endswith((".md", ".json", ".sh", ".py")): continue
         m = re.search(PRIV, read(f))
         if m: bad(f"{f} contains private wording: {m.group(0)}")
 ok("personal-data scan ran")

@@ -17,7 +17,7 @@ A bundled copy of [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awe
 ## Guardrails
 
 - These are *inspired-by* analyses for styling reference. Don't reproduce a company's logo, trademarked name, or product copy in the user's work, and don't build pages that could pass as the real brand's site.
-- Combine with other design skills (e.g. `impeccable`, `design-taste-frontend`) for layout and quality; this skill supplies the visual system.
+- Layout and quality come from the project's own design guide; this skill supplies the visual system.
 
 ## Brand index
 

@@ -368,13 +368,11 @@ if [ "$STAGE" -ge 13 ]; then
   need_grep $P/skills/pf-build/SKILL.md 'Adversarial edge-case tests pass'
   need_grep $P/README.md 'project CLAUDE.md'
   # Official in-session review + claude-mem recommendation
-  need_grep atelier-builder/skills/pf-build-from-spec/SKILL.md '/code-review'
-  need_grep atelier-builder/skills/pf-build-from-spec/SKILL.md 'Official review'
-  need_grep atelier-builder/skills/pf-harden-from-spec/SKILL.md '/security-review'
-  need_grep $P/skills/pf-setup/SKILL.md 'claude-mem'
-  need_grep $P/skills/pf-setup/SKILL.md 'built into Claude Code'
-  need_grep $P/README.md 'built-in'
-  need_grep $P/skills/pf-build/SKILL.md 'Official /code-review'
+  need_grep atelier-builder/skills/pf-build-from-spec/SKILL.md 'code-simplicity.md'
+  need_grep atelier-builder/skills/pf-build-from-spec/SKILL.md 'Review pass \(always\)'
+  need_grep atelier-builder/skills/pf-harden-from-spec/SKILL.md 'review pass'
+  need_grep $P/README.md 'Reviewed twice'
+  need_grep $P/skills/pf-build/SKILL.md 'Review pass run'
   # Free-first cost posture + project size / context-tool trigger
   for f in $P/references/cost-posture.md atelier-builder/references/cost-posture.md; do need_file $f; done
   if diff -q $P/references/cost-posture.md atelier-builder/references/cost-posture.md >/dev/null; then ok "cost-posture mirrored"; else bad "cost-posture differs between plugins"; fi
@@ -390,10 +388,6 @@ if [ "$STAGE" -ge 13 ]; then
   need_grep $P/references/security.md 'Gated checks before merge'
   need_grep $P/references/security.md 'self-hosted'
   need_grep $P/skills/pf-design/SKILL.md 'cost-posture.md'
-  need_grep $P/skills/pf-design/SKILL.md 'brief.context_tooling'
-  need_grep $P/references/state-schema.md '"context_tooling"'
-  need_grep $P/skills/pf-setup/SKILL.md 'Graphify'
-  need_grep atelier-builder/skills/pf-build-from-spec/SKILL.md 'Context-speed note'
   need_grep $P/README.md 'Free-first'
   # Handoff modes A/B (27 Oct): both built, A default, user chooses with pros/cons/cost
   need_file $P/references/handoff.md
@@ -517,38 +511,29 @@ if [ "$STAGE" -ge 13 ]; then
   need_grep $P/skills/pf-plan/SKILL.md 'platform-selection.md'
   need_grep $P/skills/pf-plan/SKILL.md 'Platform . stack'
   need_grep $P/skills/pf-setup/SKILL.md 'pf-setup project'
-  need_grep $P/skills/pf-setup/SKILL.md 'Superpowers'
   need_grep atelier-builder/skills/pf-build-from-spec/SKILL.md 'Plan-first'
   need_file $P/references/skills.md
   need_grep $P/references/skills.md 'overrides a contract'
-  need_grep $P/references/skills.md 'find-skill'
+  need_grep $P/references/skills.md 'never asks you to install another skill or plugin'
   need_grep $P/references/skills.md 'team-lane'
-  need_grep $P/skills/pf-design/SKILL.md 'skills.md'
-  need_grep $P/skills/pf-plan/SKILL.md 'tech-doc-audit'
+  need_grep $P/skills/pf-design/SKILL.md 'design-craft.md'
+  need_grep $P/skills/pf-plan/SKILL.md 'plan-audit.md'
   need_grep $P/skills/pf-plan/SKILL.md 'team-lane'
   # Full skill catalog (which/when/how) is the detailed map
-  need_file $P/references/skill-catalog.md
-  need_grep $P/references/skill-catalog.md 'tech-doc-audit'
-  need_grep $P/references/skill-catalog.md 'swot-analysis'
-  need_grep $P/references/skill-catalog.md 'Out of scope'
-  need_grep $P/references/skill-catalog.md 'never overrides a contract'
   # One-stop bundling: 3 permissive MIT skills vendored WITH their licenses, others install on first run
-  for s in find-skill humanizer design-md; do
+  for s in humanizer design-md; do
     need_file $P/skills/$s/SKILL.md
     if ls $P/skills/$s/LICENSE* >/dev/null 2>&1; then ok "$s ships its LICENSE"; else bad "$s missing its LICENSE"; fi
   done
   # brand-guidelines must NOT be bundled (it is Anthropic's own brand skill — not redistributable)
   if [ -e $P/skills/brand-guidelines ]; then bad "brand-guidelines must not be bundled (Anthropic brand skill)"; else ok "brand-guidelines not bundled"; fi
   need_file THIRD-PARTY-NOTICES.md
-  for h in humanizer design-md find-skill; do need_grep THIRD-PARTY-NOTICES.md "$h"; done
+  for h in humanizer design-md; do need_grep THIRD-PARTY-NOTICES.md "$h"; done
   need_grep THIRD-PARTY-NOTICES.md 'MIT'
-  # First-run bootstrap installer
-  need_file $P/skills/pf-bootstrap/SKILL.md
-  need_grep $P/skills/pf-bootstrap/SKILL.md '^name: pf-bootstrap$'
-  need_grep $P/skills/pf-bootstrap/SKILL.md 'official source'
-  need_grep $P/skills/pf-bootstrap/SKILL.md 'once-per'
-  need_grep $P/skills/pf-bootstrap/SKILL.md 'bootstrap.json'
-  need_grep $P/skills/pf-setup/SKILL.md 'pf-bootstrap'
+  # Self-contained: the outside-skill installer and catalogue are gone
+  for gone in $P/skills/pf-bootstrap $P/skills/find-skill $P/references/skill-catalog.md; do if [ -e $gone ]; then bad "$gone must not exist (Atelier is self-contained)"; else ok "$gone absent"; fi; done
+  need_file $P/references/plan-audit.md
+  need_file $P/references/design-craft.md
   # Standing pros/cons rule + pf-ship autonomy level (27 Oct)
   need_file $P/references/recommendations.md
   need_grep $P/references/recommendations.md 'pros, cons and cost'
@@ -636,7 +621,6 @@ need_grep atelier-builder/skills/security-audit/LICENSE 'Cloudflare'
 need_grep atelier-builder/skills/pf-harden-from-spec/SKILL.md 'security-audit'
 need_grep atelier-builder/skills/pf-pentest-from-spec/SKILL.md 'security-audit'
 need_grep THIRD-PARTY-NOTICES.md 'security-audit'
-need_grep atelier/references/skill-catalog.md 'security-audit'
 # New design-library guidance, polish fixes, and the gated (token-thrifty) deep audit
 need_grep atelier-builder/references/design-standard.md 'Magic UI'
 need_grep atelier/references/design-standard.md 'Magic UI'
