@@ -39,7 +39,7 @@ The Cowork side writes a request file into a shared project folder and triggers 
   (PM/BA)    (design)     (code)      (go live)    (fast+found)  (safety net)  (keep healthy)  (grow)
 ```
 
-`/pf-ship` runs the whole chain for you and pauses only at your gates. `/pf-board` shows every project's status on one live dashboard. A data-sensitive project also gets `/pf-pentest` (an authorized security attack-test of your own pre-production, before any real data). Team projects split into lanes (`/pf-lanes`, `/pf-merge`); a product built for someone else ends with `/pf-deliver` (docs, a delivery pack, ownership transfer, their acceptance); and `/pf-promo` can make a short launch video once you are live — optional, never a gate.
+`/pf-ship` runs the whole chain for you and pauses only at your gates. `/pf-learn` teaches Atelier from a video, an article or its own mistakes - checked first, then kept as a lesson only with your yes. `/pf-board` shows every project's status on one live dashboard. A data-sensitive project also gets `/pf-pentest` (an authorized security attack-test of your own pre-production, before any real data). Team projects split into lanes (`/pf-lanes`, `/pf-merge`); a product built for someone else ends with `/pf-deliver` (docs, a delivery pack, ownership transfer, their acceptance); and `/pf-promo` can make a short launch video once you are live — optional, never a gate.
 
 Each arrow is a gate: Atelier shows you the result and waits for your **yes** before moving on.
 
