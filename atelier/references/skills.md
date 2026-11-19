@@ -29,3 +29,7 @@ present, governs the lane.
 - Atelier redistributes only the three bundled skills; all others install from their own official source (licensing — some skills are proprietary or unlicensed and must not be copied).
 - Use a skill only where it beats hand-rolled instructions; recommend any optional one with pros, cons and cost per `recommendations.md`.
 - Content, social-media and media-production skills are out of scope — the factory builds software products.
+
+## Optional third-party tools behind an option (never bundled — `options.md`)
+- **blender-skills** *(third-party, MIT — `EL4CTEO/blender-skills`)* — Blender workflows as agent skills, used only when a project's 3D scene is of kind `model` and the file is made in Blender on the Code machine (`scene-3d.md`). Installed from its own repository via `/pf-setup options`; needs Blender installed.
+- **Motion Design** *(third-party, no licence stated — by Mr. Pynk, on work credited to Rourke Heath)* — the default tool for the optional launch video (`launch-video.md`). A folder the user downloads from the author's page and runs on their own computer; the factory only writes a brief pack for it and never copies or redistributes it.

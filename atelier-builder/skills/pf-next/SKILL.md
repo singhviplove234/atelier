@@ -22,6 +22,8 @@ Check each item and print one table — item · ok/missing · the one line that 
 - Tools: `node -v` (20+), `git --version`, `gh --version` and `gh auth status`, `npx playwright --version` (e2e + diagram PNG export), `gitleaks version` (secret scan in `verify`), and `/diagram-design:doctor`.
 - The watch dir exists and is writable; the code root (`PF_CODE_DIR`, default `~/dev/atelier`) exists or can be created.
 - With a `<slug>`: read `<watch dir>/<slug>/factory.json` → for `deploy.target` (or `brief.deploy_hint`), each **Required** env var name in that target file is set and each **Checks** command passes; when the project has a Data model, the database names are set (and the `PROD_`-prefixed ones when `database` is `split`); when `ci` is `self-hosted`, `gh api repos/<owner>/<slug>/actions/runners` shows a runner online; in the project checkout, `git config core.hooksPath` is `.githooks`.
+- Informational (never counted as missing): the Claude Code version and the `advisorModel` setting (or `none`).
+- With a `<slug>` whose `factory.json.options.launch_video` is `on`: `python -c "import PIL, numpy, scipy"`, `ffmpeg -version`, and Chrome found. With `options.scene_3d` of `model` and a Blender-made file expected: `blender --version`.
 End with `ready` or `<n> missing — fix the first, then run /pf-next doctor again`.
 
 ## 2. Confirm
