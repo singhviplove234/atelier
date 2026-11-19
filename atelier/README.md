@@ -22,6 +22,7 @@ Takes an idea all the way: **plan → design → build → deploy → harden →
 | `/pf-maintain [--schedule]` | PM | Keeps it patched, re-checks the contracts for drift, verifies backups + runs a **tested restore**; proposes a PR (never auto-merged for sensitive) | your merge |
 | `/pf-grow [--schedule]` | PM | Reads Search Console/GA4/Clarity, proposes the next SEO/content/conversion fixes; changes nothing on its own | — |
 | `/pf-deliver` | PM | Final stage for a product built for someone else: checks the repo's docs (architecture + every diagram, runbook, admin guide, changelog), assembles the delivery pack from recorded proof, walks the ownership transfer with secrets rotated afterwards | recipient's acceptance — and every account change is your click |
+| `/pf-promo` | PM | Optional, after go-live: writes a launch-video brief pack (product line, format, ending, logo, colours, test-data screenshots, safety rules) for a motion-graphics tool that runs on your own PC | never a gate; you direct and publish the video |
 | `/pf-board` | PM | One live control panel of every project — stage, gates, health, maintenance, what's waiting on you | — |
 | `/pf-ship <idea|slug>` | PM | The conductor: runs the whole chain, pausing only at the human gates. `ship_mode` guarded (default) or streamlined (low-stakes only) | each gate (or just go-live, streamlined) |
 
@@ -55,6 +56,9 @@ Each is a hard gate at build (enumerated in `/pf-build` acceptance) and re-check
 ## Product shapes the plan knows
 - **SaaS** (`saas-blueprint.md`) — tenancy, roles, billing, plans and limits, lifecycle email, admin back-office, account lifecycle and onboarding are decided at plan time and written into the SPEC in full; money paths are treated as data-sensitive and no live charge is ever made by the factory.
 - **Mobile apps** (`mobile-release.md`, targets `expo-eas` and `flutter-stores`) — store fees, owner-held developer accounts and review time are stated before the stack is locked; releases go to TestFlight / Play testing, and **Submit for review is always your click**.
+
+## Options — offered only when a project needs or benefits from them (`references/options.md`)
+Every optional add-on is indexed in one place with when it is offered, where the choice is recorded and the one file that defines it: team lanes, SaaS blocks, mobile release, extra languages, infrastructure as code, flags, canary, CI, pentest, status page, analytics, delivery — and since 0.5.0 an **advisor model** for the builder (experimental, measured before it is recommended), a **3D product scene** (loads only after the page; strict size limits), a **launch video** brief pack (`/pf-promo`), and **growth drafts** (`/pf-grow --draft` writes the new title/intro/FAQ for pages you pick; still approved before anything changes). An option is off until chosen and is offered in one line, once. `/pf-setup options <slug>` shows a project's choices.
 
 ## Keep it running (the production-support half)
 - **Monitor** (`monitoring.md`) — free uptime + error tracking + alerts (Azure-native default; Sentry/UptimeRobot alternatives, pros/cons shown), PII scrubbed, plus **auto-rollback** on a bad deploy (app only, DB flagged not reverted).

@@ -11,7 +11,7 @@ The builder keeps four documents current on every build (`pf-build-from-spec` §
 
 ## B. The delivery pack (assembled by `/pf-deliver`, a living doc)
 One document for the recipient, built from `factory.json`, the result files and the repo — nothing invented:
-1. **What you are getting** — the product in two sentences, the live URL, the repo, the date.
+1. **What you are getting** — the product in two sentences, the live URL, the repo, the date, and the launch video if one was recorded (`promo.video`).
 2. **What was built** — the screens and features, each linked to its diagram.
 3. **Proof** — acceptance checks passed (n/n), `verify` result and e2e count, the contract results (performance, SEO + AI visibility, security, accessibility, simplicity, compliance) from the latest build and harden, and for a data-sensitive project the pentest outcome. Numbers and dates, not adjectives.
 4. **How it runs** — hosting target and plan, monthly cost forecast vs actual (`maintenance.spend`), monitoring and alerts in place, backup location and the date of the last successful restore drill.

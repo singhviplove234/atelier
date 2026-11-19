@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.0
+- **Options index** (`references/options.md`): every optional add-on in one place — when it is offered, where the choice is recorded, the one file that defines it. Off until chosen; offered in one line, once.
+- **Advisor model** guidance for the builder: experimental, machine-wide, and measured across builds before it is recommended.
+- **3D product scene** (optional): still image first, the 3D loads on interaction, strict size limits, tested fallback.
+- **Launch video** (`/pf-promo`, optional): a brief pack for a motion-graphics tool that runs on your own computer; never bundled, never a gate.
+- **Growth drafts** (`/pf-grow --draft`, optional): the new title, description and opening written out for pages you pick; still approved before anything changes, measured after 28 days.
+- Numbered review notes (D1…, G1…) so feedback can be given by number.
+
 ## 1.2.0
 - **Looks like the design.** Every screen is screenshotted at phone and desktop size: a visual baseline that fails the build on an unexplained change, and a design check against the approved artboards before the build is approved.
 - **Locale-ready.** Dates, numbers and money always go through the locale formatter; full translation machinery when the plan lists more than one locale.

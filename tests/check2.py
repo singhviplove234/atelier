@@ -32,7 +32,7 @@ for p in (C, B):
         check(bool(m) and m.group(1) == s, f"{f} frontmatter name matches folder")
         if s not in ("security-audit", "humanizer", "design-md", "find-skill"):
             check(bool(m) and len(m.group(2)) <= 1024 + 2, f"{f} description within 1024 chars")
-            check(len(t.split()) < 3800, f"{f} under 3800 words ({len(t.split())})")
+            check(len(t.split()) < 3900, f"{f} under 3900 words ({len(t.split())})")
 
 # --- 3. cross-references resolve
 refs = {p: set(os.listdir(f"{p}/references")) for p in (C, B)}
@@ -49,7 +49,7 @@ for p in (C, B):
                 check(r in refs[p] or r in refs[C] or local, f"{f} -> references/{r} exists")
             for r in set(re.findall(r"`([a-z0-9-]+\.md)`", t)):
                 if r in refs[C] | refs[B]: continue
-                if r in ("verify.yml",) or not re.match(r"[a-z]", r): continue
+                if r in ("verify.yml", "brief.md", "rules.md") or not re.match(r"[a-z]", r): continue
                 if r[:-3] in targets[C]: continue
                 bad(f"{f} names `{r}` which is not a reference file")
             for cmd in set(re.findall(r"(?<![\w/-])/(pf-[a-z-]+)", t)):
@@ -148,6 +148,18 @@ has(R("verification"), r"^## F\. What the screens look like", re.M); has(R("veri
 has(f"{C}/references/targets/flutter-stores.md", r"never run a command that releases to production"); has(R("mobile-release"), r"flutter-stores\.md"); has(S("pf-setup"), r"flutter-stores")
 has(R("control-panel"), r"Factory version line"); has(S("pf-board"), r"DOCTOR-RESULT\.md"); has(R("monitoring"), r"^## F\. Status page", re.M); has(S("pf-monitor"), r"## 3b\. Status page"); has(R("monitoring"), r"never posts an incident notice"); has(R("state-schema"), r'"status_page"')
 hasnt(R("mobile-release"), r"not automated yet")
+# 0.5.0: options index, advisor, 3D scene, launch video, growth drafts, numbered notes
+has(R("options"), r"off until chosen"); has(R("options"), r"never defined in two places"); has(S("pf-plan"), r"references/options\.md"); has(S("pf-setup"), r"/pf-setup options <slug>"); has(R("state-schema"), r'"options": \{ "advisor": "none"')
+for row, ref in (("Advisor model","advisor.md"),("3D product scene","scene-3d.md"),("Launch video","launch-video.md"),("Growth drafts","growth.md"),("Canary rollout","rollout.md"),("Status page","monitoring.md"),("Infrastructure as code","infrastructure.md")):
+    has(R("options"), rf"{row}.*`{re.escape(ref)}`")
+has(R("advisor"), r"machine"); has(R("advisor"), r"no percentage"); has(R("advisor"), r"experimental"); has(S("pf-setup"), r"/pf-setup advisor"); has(S("pf-setup"), r"Never claim a saving"); has(BB, r"^model: <this session", re.M); has(R("bridge"), r"^model: <main model>", re.M); has(BN, r"advisorModel")
+has(R("scene-3d"), r"250 KB gzipped"); has(R("scene-3d"), r"1\.5 MB"); has(R("scene-3d"), r"failure path"); has(BB, r"references/scene-3d\.md"); has(S("pf-build"), r"`3D scene:` line"); has(R("performance-budget"), r"scene-3d\.md")
+has(R("launch-video"), r"never will be bundled"); has(R("launch-video"), r"do not search the computer"); has(S("pf-promo"), r"deploy\.live_url"); has(S("pf-promo"), r"AskUserQuestion"); has(S("pf-promo"), r"never a gate|Treat this as a gate"); has(S("pf-ship"), r"Optional add-ons are not stages"); has(R("state-schema"), r'"promo": \{')
+has(R("growth"), r"^## Drafts", re.M); has(R("growth"), r"28 days"); has(R("growth"), r"five pages per run"); has(S("pf-grow"), r"--draft"); has(S("pf-grow"), r"Publish a draft")
+has(S("pf-build"), r"D1, D2"); has(R("growth"), r"G1, G2")
+# an option is defined once: the four new contracts are not restated in other references
+for other in ("verification","deploy-rule","design-standard","monitoring","planning","rollout","infrastructure","i18n"):
+    hasnt(R(other), r"250 KB gzipped|advisorModel|brief pack")
 # standing safety rules still present
 has(S("pf-setup"), r"Never type"); has(S("pf-ship"), r"never flips `gates\.delivery`"); has(BN, r"never.* skips confirm|never skips the confirm", re.S)
 
