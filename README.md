@@ -43,6 +43,8 @@ The Cowork side writes a request file into a shared project folder and triggers 
 
 Each arrow is a gate: Atelier shows you the result and waits for your **yes** before moving on.
 
+Around that chain, each only when you want it: `/pf-brand` (a name screening, a logo and a brand kit, before design), `/pf-setup email` and `/pf-setup support` (mail that arrives; a help page and contact form), `/pf-launch` (a launch checklist, share images, a waitlist), `/pf-feedback` (what users are saying, as a numbered list), `/pf-grow --experiment` (test a change on real visitors) and `/pf-upgrade` (bring an older project up to date, or adopt an existing repository). Atelier also builds browser extensions, desktop apps, APIs, command-line tools and AI agents through the same gates.
+
 ---
 
 ## Install

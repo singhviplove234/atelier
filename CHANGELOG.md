@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.2.0 - a one-stop shop
+- **`/pf-upgrade`**: bring a project built with an older version up to today's standard. It first shows what the project lacks, then adds what you pick in a safe order - the safety nets before anything else - with no change to what the product does. `--adopt` takes on a repository Atelier did not build.
+- **More than websites:** a browser extension, a desktop app, an API, a command-line tool or an AI agent goes through the same stages and gates. Three new targets (`chrome-web-store`, `desktop-release`, `package-registry`) each end at a draft that you publish.
+- **Email that arrives:** `/pf-setup email` sets up an address on your domain and the sending identity (SPF, DKIM, DMARC) for mail the product sends, with a header check to prove it.
+- **`/pf-brand`** (optional, before design): a name screening for obvious conflicts - not legal advice - three logo directions, and a brand kit in the repository.
+- **`/pf-launch`** (optional): a launch checklist read from the project's own record, share images, an honest waitlist with double opt-in, announcement drafts, and a 48-hour watch list. It posts nothing itself.
+- **`/pf-feedback`** (optional, after launch): reads what users say, groups it into themes with honest counts, and proposes numbered fixes.
+- **Experiments:** `/pf-grow --experiment` tests a change on real visitors when the page has enough of them, and says so plainly when it does not.
+- **Support basics:** `/pf-setup support` adds a help page with an FAQ and a contact form with tested failure paths.
+- Every addition is optional, indexed in `references/options.md`, and defined in exactly one file.
+
 ## 2.1.1 - diagrams before design
 - Every product now gets two flow diagrams **before any design is drawn**: the user journey (with its decisions and unhappy paths) and the screen map. They are approved with the plan, the artboards are laid out from the screen map, and at build time they become the SPEC's journey and page diagrams. `/pf-design` writes them itself when a project skipped `/pf-plan`.
 

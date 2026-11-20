@@ -22,3 +22,6 @@ Free-first is **provider-agnostic**: the cheapest option that clears the bar win
 
 ## Deploying to the chosen platform
 If the chosen platform has a file in `references/targets/`, `/pf-deploy` follows it. If it is a provider not yet in the registry, **add a target file** for it (Fits, Env vars, Deploy steps — build locally and upload, never a remote/paid build; Health check; Custom domain) — the registry is extensible by design. Self-hosted/open-source targets deploy by the documented steps for that stack (e.g. `docker compose up -d` behind Caddy on the Oracle box) and still build locally. The one-time account/CLI/credential setup for the chosen platform is run by `/pf-setup project <slug>`.
+
+## Products that are not websites
+A browser extension, a desktop app, a command-line tool, an API or an AI agent is chosen at plan time as `brief.product_type`; what it ships through and what a deploy means for it is defined in `product-types.md` and its target file. The free-first rule above still decides where any backend or companion site runs.

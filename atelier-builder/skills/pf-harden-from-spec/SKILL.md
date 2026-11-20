@@ -19,6 +19,7 @@ First line must be exactly `PF-HARDEN v1`. Lines: `request_id:`, `project:`, `co
 `cd <code_path>`; `git fetch origin && git checkout main && git pull --rebase origin main`; `git checkout -b harden/<yyyymmdd>` (or check it out if it exists). `npm ci`. Start the app locally for testing: `npm run build && npm run start -p <free port>` (this local URL is `<local>`). All load tests and destructive checks use `<local>` with a **test database** — if `SUPABASE_DB_URL_TEST` is not set, the `load` pass reports `skipped: no test database` rather than touching the real one.
 
 ## 3. Passes (in this order; each pass = measure → fix → re-measure → one commit)
+**Product type:** when `brief.product_type` (the SPEC's `Type:` line) is not `web`, run each pass as the table "Which harden passes apply" in `${CLAUDE_PLUGIN_ROOT}/references/product-types.md` defines it for that type, and say which passes were adapted or skipped and why.
 
 **safety** (always first, never skippable): for every screen and route in the SPEC, make sure a test exists (Playwright for screens, request tests for routes) — on a project built since 1.1.0 these are the build's diagram-derived `e2e/` tests and `npm run verify` already runs them, so this pass normally only confirms them; write missing ones (same rule: one per `page-`/`feature-` diagram, failure path included); run them; they must pass before anything else changes. Commit `harden: safety-net tests`.
 

@@ -17,6 +17,7 @@ Put eyes on a live product and make a bad deploy heal itself. Read first:
 Locate the project; read `factory.json`. Require `deploy.live_url` (a deployed site). If empty: "Deploy the site first (`/pf-deploy`) — there's nothing live to monitor yet." and stop. Seat = `pm_lane`.
 
 ## 2. Recommend the free stack (per `monitoring.md` A2, with pros & cons)
+**Product type:** when `brief.product_type` is not `web`, watch what that type's **Monitor** line in `${CLAUDE_PLUGIN_ROOT}/references/product-types.md` names (an API's latency and error rate; an agent's runs, cost against its cap and waiting approvals; a desktop app's update feed). A type with no Monitor line is monitored through its backend and companion site only.
 Present the choice with **pros and cons** (per `monitoring.md` A2 / `recommendations.md`), not the upside alone: **Azure-native (App Insights + Monitor)** *(Recommended — one account, one pane, $0; cons: plainer error traces, Azure-tied)* vs **Sentry + UptimeRobot** *(best-in-class errors + simple uptime, provider-neutral; cons: two more accounts/dashboards/keys)*. State the recommendation in one plain line, offer the alternative with AskUserQuestion, and keep it **minimal** — one stack unless the user asks for more. Never propose a paid tier because it is "better"; paid only when real volume forces it, with the monthly price + a yes.
 
 ## 3. Set up (what Claude can, guide the rest)

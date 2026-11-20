@@ -18,6 +18,7 @@ Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A repl
 {
   "name": "my-saas-idea",
   "created": "2026-10-16T10:00:00+05:30",
+  "factory_version": "",
   "brief": {
     "one_liner": "", "audience": "", "goal": "",
     "screens": ["Home", "Pricing"],
@@ -26,6 +27,7 @@ Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A repl
     "deploy_hint": "",
     "size": "small",
     "design_direction": "product",
+    "product_type": "web",
     "data_sensitivity": "normal",
     "locales": ["en-US"]
   },
@@ -33,7 +35,7 @@ Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A repl
   "ci": "hook",
   "database": "single",
   "infra": "none",
-  "options": { "advisor": "none", "scene_3d": "none", "launch_video": "off", "grow_drafts": "off" },
+  "options": { "advisor": "none", "scene_3d": "none", "launch_video": "off", "grow_drafts": "off", "brand_kit": "off", "email": "none", "support": "off", "launch_pack": "off", "feedback": "off", "experiments": "off" },
   "promo": { "brief": "", "video": "" },
   "merge_policy": "ask",
   "ship_mode": "guarded",
@@ -43,6 +45,12 @@ Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A repl
     "secret_rotation": [ { "name": "SUPABASE_SERVICE_KEY", "where": "host env var", "scope": "db service", "cadence_days": 180, "last_rotated": "" } ],
     "spend": { "as_of": "", "providers": [ { "provider": "azure", "mtd": "$0.00", "forecast": "$0/month", "free_limit_note": "" } ], "alert": "" } },
   "growth": { "last_run": "", "report_url": "" },
+  "brand": { "name": "", "checked": "", "logo": "", "kit": "" },
+  "email": { "verified": "" },
+  "launch": { "checklist": "", "date": "", "waitlist": "none" },
+  "feedback": { "last_run": "", "report": "" },
+  "experiments": [],
+  "upgraded": { "date": "", "from": "", "items": [] },
   "artifacts": { "design_system_url": "", "design_url": "" },
   "gates": { "plan": "pending", "design": "pending", "build": "pending", "deploy": "pending", "delivery": "pending" },
   "delivery": { "recipient": "", "pack_url": "", "transfer": {}, "accepted": "", "access_after": "" },
@@ -71,7 +79,7 @@ Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A repl
 | `brief.locales` | The locale list, source locale first. One entry = locale-ready basics only; more than one = full translation machinery and per-locale checks. See `references/i18n.md` |
 | `deploy.rollout` | `full` (default) or `canary` (10% → bake → 100% on targets that split traffic; a percentage flag elsewhere). Chosen per deploy. See `references/rollout.md` |
 | `monitoring.status_page` | URL of the public status page (client-facing or paid products), hosted on a different provider than the app. See `references/monitoring.md` F |
-| `options.*` | The four add-ons recorded here — `advisor` (`none`/`economy`/`extra-review`), `scene_3d` (`none`/`shapes`/`model`), `launch_video` and `grow_drafts` (`off`/`on`). All off by default; each is defined in exactly one file, listed with every other optional choice in `references/options.md` |
+| `options.*` | The add-ons recorded here — `advisor` (`none`/`economy`/`extra-review`), `scene_3d` (`none`/`shapes`/`model`), `launch_video` and `grow_drafts` (`off`/`on`). Also `brand_kit`, `support`, `launch_pack`, `feedback`, `experiments` (`off`/`on`) and `email` (`none`/`address`/`transactional`/`both`). All off by default; each is defined in exactly one file, listed with every other optional choice in `references/options.md` |
 | `promo.*` | Set by `/pf-promo` (`references/launch-video.md`): `brief` (the brief-pack folder), `video` (path of the rendered file from `PROMO-RESULT.md`). Never a gate |
 | `ship_mode` | `guarded` (default — `/pf-ship` pauses at every human gate) or `streamlined` (low-stakes `data_sensitivity: normal` only — auto-advance to a preview, pause once at go-live). Streamlined never applies to `data_sensitivity: high`. Overridable per run with `--guarded`/`--streamlined`. See `pf-ship` |
 | `planning.*` | Set by `/pf-plan` (the PM/BA/PO stage, `references/planning.md`): `methodology` (`ship-it`/`agile`/`kanban`), `budget_forecast` (plain forecast under the cost posture — a budget never unlocks paid), `documents` (links to the brief/PRD, architecture, MVP, stack, budget docs + backlog/sprints), `dashboard_url` (the living db-backed progress dashboard for agile/team projects) |
@@ -79,6 +87,14 @@ Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A repl
 | `monitoring.*` | Set by `/pf-monitor` (`references/monitoring.md`): `uptime`, `errors`, `alerts` (the free stack in place, e.g. "App Insights + Monitor email/push"), `rollback` (auto-rollback configured for the target), `health_route` (the `/api/health` path). Not a gate; set after the first deploy |
 | `maintenance.*` | Set by `/pf-maintain` (`references/maintenance.md`): `schedule` (e.g. weekly), `last_run`, `backups` (what's in place — GitHub + Supabase daily + any Blob dump), `restore_tested` (last restore-drill result), `open_pr` (current maintenance PR), `secret_rotation[]` (each tracked secret's **name**, location, scope, cadence and last-rotated date — **never a value**; `maintenance.md` E), `spend` (month-to-date actuals vs forecast and free-tier limits per provider, `as_of` date, any `alert` — numbers only, no payment details; `maintenance.md` F). Phase 3 |
 | `growth.*` | Set by `/pf-grow` (`references/growth.md`): `last_run`, `report_url` (the latest prioritized next-steps report). Recommend-only. Phase 3 |
+| `factory_version` | The plugin version that created or last upgraded the project; written at creation and by `/pf-upgrade`. Empty on a project older than this field — `/pf-upgrade` then checks everything. See `references/upgrade.md` |
+| `brief.product_type` | `web` (default), `mobile`, `extension`, `desktop`, `api`, `cli` or `agent`. Set at plan time; decides what a screen, a deploy and a health check mean, and which harden passes apply. See `references/product-types.md` |
+| `brand.*` | Set by `/pf-brand` (`references/brand.md`): `name`, `checked` (date of the name screening), `logo`, `kit` (paths). Never a gate |
+| `email.verified` | Date the sending identity (SPF, DKIM, DMARC) last passed its header check. Set by `/pf-setup email` (`references/email.md`) |
+| `launch.*` | Set by `/pf-launch` (`references/launch.md`): `checklist` (where it is kept), `date` (the owner's launch date), `waitlist` (`none`/`on`). Never a gate |
+| `feedback.*` | Set by `/pf-feedback` (`references/feedback.md`): `last_run`, `report`. Recommend-only |
+| `experiments[]` | One entry per test (`references/experiments.md`): `id` (X1 …), `hypothesis`, `metric`, `start`, `end`, `sample`, `result` |
+| `upgraded.*` | Set by `/pf-upgrade`: `date`, `from` (the version it came from), `items` (the `upgrade.md` numbers done) |
 | `gates.*` | `pending` / `approved` per "Approval words". `gates.build` is approved when **every declared lane** is `ok` and merged |
 | `code_path` | The PM lane's checkout, `<code root>/<slug>` |
 | `pm_lane` | Name of the lane whose seat owns `/pf-merge` and `/pf-deploy` (the first lane in the brief; `solo` on solo projects). A seat identifies itself by the `--lane` it runs with |

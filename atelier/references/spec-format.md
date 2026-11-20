@@ -17,7 +17,7 @@ Written by `/pf-build` into the project folder. Exactly these **nine** H2 headin
 ```
 
 ## Brief
-One-liner, audience, and the goal of v1 — three short lines copied from `factory.json.brief`. Plus the SEO inputs (`seo-ai-visibility.md` A), a `Locales:` line (the locale list, source locale first — one entry unless the plan chose more; `i18n.md`), and, when the plan set them, `Flags:` (name, default, owner, remove-by — `rollout.md`), `3D scene:` (`shapes` or `model`, and the screen that carries it — `scene-3d.md`) and the SaaS blueprint decisions.
+One-liner, audience, and the goal of v1 — three short lines copied from `factory.json.brief`. Plus the SEO inputs (`seo-ai-visibility.md` A), a `Locales:` line (the locale list, source locale first — one entry unless the plan chose more; `i18n.md`), and, when the plan set them, `Flags:` (name, default, owner, remove-by — `rollout.md`), `3D scene:` (`shapes` or `model`, and the screen that carries it — `scene-3d.md`) and the SaaS blueprint decisions. Also, only when the plan set them: `Type:` (the product type when it is not `web` — `product-types.md`), `Email:` (`address`, `transactional` or `both` — `email.md`), `Support:` (`on` — `support.md`), `Experiment:` (id, flag, metric — `experiments.md`) and `Launch:` (the share images and the sign-up to build — `launch.md`).
 
 ## Stack
 Framework, styling, DB/auth, language. Locked at design approval. Default: `Next.js (App Router) + Tailwind + shadcn/ui, TypeScript; Supabase for DB/auth`.
