@@ -27,3 +27,10 @@ Using existing tooling, no bespoke scanners:
 - **Human-handoff self-review:** the builder re-reads each file it wrote and asks, per file, "could a mid-level developer in this language read this top-to-bottom and know what it does, and is any part longer than it needs to be?" — and simplifies what fails, without crossing the hard limit above.
 
 Report a short table in `notes:`: file | lines | longest function | unused found | duplication % | simplified? — before and after any simplification.
+
+## Modern platform first (front-end code)
+Coding agents reach for the patterns they saw most, which are often years old: a hand-built modal where `<dialog>` exists, a positioning library where anchor positioning or the popover attribute does the job, a JavaScript animation where a CSS transition between states works, a scroll listener where an observer or a scroll-driven animation does. Before writing any front-end behaviour, check whether the web platform now does it by itself.
+- Prefer a built-in feature that is **Baseline** (supported by the current versions of Chrome, Edge, Firefox and Safari) over a library or a hand-rolled version. For a feature that is newer than that, use it only as an enhancement over a working fallback, and say so.
+- The usual wins: `<dialog>` and the popover attribute for overlays (focus and Escape handled for you); `:has()`, container queries, nesting and `color-mix()` instead of script or a preprocessor; view transitions and `@starting-style` for entry and exit; `inert` for background content; the right `inputmode`, `autocomplete` and `enterkeyhint` on every field; text input that waits for composition to finish before acting on Enter, so typing in languages that compose characters is never submitted mid-word.
+- When the code being changed uses an old pattern, replace it only where the change already touches it - no drive-by rewrites.
+- The build result reports `platform: <built-in features used> · <libraries avoided>`. A new dependency added for something the platform does is a `simplicity` finding.

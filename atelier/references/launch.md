@@ -12,7 +12,7 @@ Each line is `done`, `missing` or `not applicable`, with the field or file that 
 | L4 | Backups exist and a restore was tested (products with data) | `maintenance.backups`, `restore_tested` |
 | L5 | Privacy notice, terms, and consent for analytics are live and accurate | `compliance.md`, the pages |
 | L6 | The custom domain serves over HTTPS and every old address redirects in one hop | `deploy.custom_domain`, the harden result |
-| L7 | Search engines can find it: sitemap submitted, no page blocked by mistake | `/pf-setup seo`, the harden result |
+| L7 | Search engines can find it: the site is verified and the sitemap submitted in **both** Google Search Console and Bing Webmaster Tools (assistant answers draw on Bing's index), and no page is blocked by mistake | `/pf-setup seo`, the harden result |
 | L8 | Every key page has a title, a description and a share image that shows correctly | B below |
 | L9 | The icon set, the not-found page and the error page exist | the build result |
 | L10 | Mail arrives (products that send any) | `email.verified` (`email.md`) |

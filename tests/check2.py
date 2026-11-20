@@ -261,4 +261,16 @@ for s_ in ("pf-upgrade", "pf-brand", "pf-launch", "pf-feedback"):
     hasnt(S(s_), r"guarantee[sd]? (?:that|a|the|you)|will rank|will go viral|legally safe"); hasnt(S(s_), r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[a-z]{2,}"); hasnt(S(s_), r"https?://")
 for r_ in ("brand", "email", "experiments", "feedback", "launch", "product-types", "support", "upgrade"):
     hasnt(R(r_), r"https?://"); hasnt(R(r_), r"\$\d|₹\d|€\d")
+# 2.3.0: lessons from the reel research - review twice, modern platform first, fix starts with a failing test, AI-look check, Bing in the launch list, reflect
+has(R("security"), r"^## D\. Review twice", re.M); has(R("security"), r"never the one that raised it"); has(R("security"), r"never after one pass"); has(f"{B}/skills/pf-harden-from-spec/SKILL.md", r"runs \*\*twice\*\*")
+has(R("code-simplicity"), r"^## Modern platform first", re.M); has(R("code-simplicity"), r"\*\*Baseline\*\*"); has(R("code-simplicity"), r"no drive-by rewrites")
+has(R("verification"), r"^## G\. A bug fix starts with a test that fails", re.M); has(R("verification"), r"git bisect"); has(R("verification"), r"A fix reported without its test is not accepted")
+has(R("design-standard"), r"^## The AI-look check", re.M); has(R("design-standard"), r"ai-look: <n> found"); has(S("pf-design"), r"the AI-look check")
+has(R("launch"), r"\| L7 \|.*\*\*both\*\* Google Search Console and Bing Webmaster Tools")
+has(R("learning"), r"^## Reflect - learning from how the work actually went", re.M); has(R("learning"), r"sends nothing anywhere"); has(R("learning"), r"at least twice"); has(S("pf-learn"), r"/pf-learn reflect"); has(S("pf-learn"), r"Ask before reading saved conversations")
+for shared_ in ("security", "code-simplicity", "verification", "design-standard"):
+    check(read(f"{B}/references/{shared_}.md") == read(R(shared_)), f"{shared_}.md still identical in both plugins")
+check(not os.path.exists(R("seo-tools")), "Atelier carries no outside-tool option file")
+for f_ in (R("security"), R("code-simplicity"), R("verification"), R("design-standard"), R("learning"), R("launch")):
+    hasnt(f_, r"github\.com|npx |modern-web-guidance|security-audit-skill|claude-seo|mcp-gsc|geo-optimizer")
 print(f"\n{n_ok} PASS, {n_bad} FAIL"); sys.exit(1 if n_bad else 0)

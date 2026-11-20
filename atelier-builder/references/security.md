@@ -41,3 +41,10 @@ Standing requirement: every product the factory ships is secure by default — s
 6. A plain-language report: table of checks (check | result | fixed on branch / needs the user) and a short "what a human pentester should still look at" list when the product handles payments, health data or more than one tenant.
 
 Never: run a scanner or test against any host other than `live_url` / `<local>` of this project; attempt to bypass auth of a live system beyond the section-B tests on test accounts; store or print credentials found during the scan (report the path only); create paid security services.
+
+## D. Review twice - one pass finds about half
+A security review done by an AI reviewer is not repeatable: each pass explores the code a little differently, and a single clean report is where most people wrongly stop. So the security review - at build step 6 and in the `/pf-harden` security pass - is **always run twice**, the second time by a fresh reviewer that has not seen the first report, starting from a different place (the first follows each route from the outside in; the second starts from the data and the secrets and works outward).
+- A finding counts only when it comes with its trace: the input, the path it takes, and the result that proves it. A suspicion without a trace is listed as `to check`, never as a finding and never as `clean`.
+- The reviewer that checks a finding is never the one that raised it; its job is to try to disprove it.
+- Merge the two reports, fix what is proved, then run the pass **once more on the changed code**. Report `security passes: <n>, new in last pass: <k>`; the review is complete when a pass finds nothing new, and never after one pass.
+- Code is only ever run to prove a finding inside the project's own test setup - never against a live host, and never with real data (`security-testing.md` covers the authorized pentest; this is not that).

@@ -41,3 +41,11 @@ After a delivery, after an incident or a rollback, and whenever the user correct
 
 ## Keeping the list healthy
 When `LESSONS.md` passes about thirty active lessons, or two lessons disagree, review it with the user: merge, pause or retire. A lesson that has not been applied in a long time is a candidate to retire. Lessons that prove themselves across several projects are worth folding into the plugin's contracts at its next version - list them when asked "what should go into the next version".
+
+## Reflect - learning from how the work actually went
+The richest source of lessons is the factory's own history, and it is already on hand. `/pf-learn reflect [<slug>]` reads it and proposes lessons the same way any other source does.
+- **What it reads - only the project record, only on this machine:** each project's `factory.json` log, the build, deploy and harden results, review notes and their answers, `NEEDS-INPUT` questions, reopened gates, and failed requests. With the user's yes for that run it may also read the saved conversations of this workspace on this computer. It reads nothing else, sends nothing anywhere, and quotes no personal detail.
+- **What it looks for:** the same correction given more than once; a question the builder had to stop and ask on more than one project; a check that failed the same way twice; a step the user did by hand each time; a gate that was reopened, and why.
+- **What counts:** a pattern seen at least twice. A single event is reported as an observation, not proposed as a lesson.
+- **What comes out:** numbered lesson proposals, each with the evidence (which project, which result, what happened), in the usual form - and, separately, a short list of repeated manual steps that could become part of a stage. Nothing becomes active without the user's yes to that lesson, exactly as for every other source, and everything in "What a lesson may never do" applies unchanged.
+- A good rhythm is after each delivered project and once a month; `--schedule monthly` sets it with the user's yes.
