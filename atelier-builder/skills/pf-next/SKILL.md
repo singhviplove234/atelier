@@ -20,6 +20,9 @@ Watch dir = `PF_WATCH_DIR` if set, else the `Atelier` folder in your home direct
 
 The request file must exist, its first line must be the expected header (`PF-BUILD v1` / `PF-MERGE v1` / `PF-DEPLOY v1` / `PF-HARDEN v1` / `PF-PENTEST v1` / `PF-PROMO v1`), and it must be **pending**: the result file is missing, older than it, or carries a different `request_id`. Otherwise say exactly what is wrong ("no pending build request for lane backend in pf-app") and stop. Bare `/pf-next` with no arguments → list every pending request across projects and stop; never guess.
 
+## 1a. Is this the authorized session? (every request; `doctor` and a bare `/pf-next` are exempt)
+Apply "The guard" in `${CLAUDE_PLUGIN_ROOT}/references/session-link.md` to `SESSION-<lane>.md` in the project folder (the PM lane's file for deploy, harden, pentest and merge). Linked to this session -> go on. Linked to **another** session, or this session is linked to a different project -> **run nothing, write nothing**, and say so in the words that file gives. No file, not linked yet, or this session cannot tell who it is -> **ignore `--go`** and wait for the user's typed yes, then suggest `/pf-link`.
+
 ## 1b. `/pf-next doctor [<slug>]` — is this seat ready? (read-only; no request file, no confirm)
 Check each item and print one table — item · ok/missing · the one line that fixes it — then write the same table to `<watch dir>/DOCTOR-RESULT.md` under the first line `PF-DOCTOR-RESULT v1` (plus `checked: <timestamp>` and `plugin: <this plugin's version>`). It installs nothing, changes nothing and prints **no secret value** — for env vars it reports only whether the **name** is set.
 - Tools: `node -v` (20+), `git --version`, `gh --version` and `gh auth status`, `npx playwright --version` (e2e, screenshots, and the Chromium the diagram renderer reuses), `npx -y @mermaid-js/mermaid-cli --version` (diagrams), and `gitleaks version` (secret scan in `verify`).

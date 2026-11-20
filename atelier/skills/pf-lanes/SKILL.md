@@ -10,10 +10,11 @@ Lanes are the unit of parallel work. A solo project has one lane, `solo`, create
 ## `/pf-lanes add <name> [<name>…]`
 - Lane names: kebab-case, not `solo`. Each name may carry a scope: `frontend:Home,Pricing`. If the project currently has only `solo`: if `solo` already has a request, refuse ("this project already started solo"); otherwise ask "Convert to a team project? `solo` will be removed and `<first>` becomes the PM lane." On no, change nothing.
 - For each name add `lanes.<name> = { branch: "lane/<name>", code_url: "", status: "idle", … }`. Append `log {stage: "setup", event: "lane added", lane}`.
-- Remind: "Run `/pf-setup` on each lane's seat to record its Code session URL."
+- For each new lane also write its invitation `SESSION-<name>.md` (`references/session-link.md`).
+- Remind: "Open a Claude Code session for each lane and run `/pf-link` there; then `/pf-setup` item 2 proves the link."
 
 ## `/pf-lanes list`
-Table: lane · branch · code_url set? · status.
+Table: lane · branch · session linked? (from `SESSION-<lane>.md`) · code_url set? · status.
 
 ## `/pf-lanes status` (the PM view)
 Refresh `factory.json.lanes` from every `lanes/<lane>.json` (PM seat only writes), then for each lane whose status is `requested` or `building`: if `BUILD-RESULT-<lane>.md` exists, is newer than the request and echoes its `request_id`, update `status` from the file first. Then show:

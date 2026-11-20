@@ -41,7 +41,7 @@ On **No**: say "Not deploying. `deploy.target` is recorded; run /pf-deploy again
 
 Make `request_id` = `<slug>-deploy-<yyyymmddHHMM>`; write `<folder>/DEPLOY-REQUEST.md` per `bridge.md` with `request_id`, `project`, `code_path`, `target`, `stage: live`, `destructive_ok:`, `rollout:` and `infra_ok:`; store `deploy.request_id`. Delete any stale `DEPLOY-RESULT.md`. Append `log {stage: "deploy", event: "request written"}`. Then tell the user:
 
-**Drive Claude Code through Chrome** per `bridge.md`: open `lanes[<pm_lane>].code_url`, verify it is this project's session, type `/pf-next <slug> deploy --go`, Enter, confirm, close the tab. Only then say:
+**Drive Claude Code through Chrome** per `bridge.md`: open `lanes[<pm_lane>].code_url`, verify it is this project's session, type `/pf-next <slug> deploy --go`, Enter, confirm, close the tab. Only then say: Only ever into the lane's authorized session (`session-link.md`): if `SESSION-<lane>.md` is not `linked`, ask the user to run `/pf-link` in that project's Code session instead of looking for one.
 
 > Deploy request sent to your Claude Code session. I'll pick up the result here automatically.
 
