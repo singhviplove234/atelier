@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.4.0 - the right session, every time
+- **`/pf-link`** (in Claude Code): run it once in a new project session and again after a restart, with nothing after it. It turns Remote Control on, names the session, and writes a small session file into the project's own folder.
+- **Hand-offs go only to that session.** The Cowork seat reads the session file, proves the page it has open is that session, and only then types. It never looks for a session by itself and never types into a tab that was already open.
+- **A session refuses work that is not its own.** A request for another project typed into it runs nothing. A session that is not linked yet asks you to confirm instead of starting by itself.
+- **Older projects:** `/pf-upgrade` lists this as U17.
+
 ## 2.3.0 - sharper reviews
 - **Security review runs twice.** One AI review pass finds roughly half of what repeated passes find, so the review is now done by two fresh reviewers and once more on the changed code. A finding needs its trace; a suspicion is never reported as clean.
 - **Modern platform first.** Before writing front-end behaviour, Atelier checks whether the browser now does it by itself (dialogs, popovers, transitions, container queries, form hints) and prefers that to a library.

@@ -125,7 +125,7 @@ On the machine that runs **Claude Code** (the builder):
 - Playwright's browser (`npx playwright install chromium`) and `gitleaks`; `ffmpeg` only if you want a launch video. These are ordinary programs, not Claude skills.
 - Per chosen host, its CLI: `vercel`, Azure `az`, Docker Desktop, `wrangler` (Cloudflare), `netlify`, `gcloud`, or `flyctl`.
 - A free **Supabase** account if the project needs a database.
-- Remote Control on in Claude Code (`/remote-control`) so Cowork can drive it, or you paste the one `/pf-next` command when asked.
+- In each project's Claude Code session, run `/pf-link` once (and again after a restart): it turns Remote Control on and tells Cowork which session is the right one. Or you paste the one `/pf-next` command when asked.
 
 `/pf-setup` checks for these and gives you the exact install command for your OS (Windows / macOS / Linux). Atelier is cross-platform.
 

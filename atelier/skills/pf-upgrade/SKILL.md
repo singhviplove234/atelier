@@ -16,7 +16,7 @@ Read first:
 Find the project (the one named, else the only one; if several and none named, ask with AskUserQuestion). Read `factory.json`, the SPEC, the latest build, deploy and harden results, and the repository's top level. Compare `factory_version` with this plugin's version: if they are equal and the last assessment found nothing missing, say "up to date" and stop.
 
 ## 2. Assess — read-only
-Go through U1–U16 in `upgrade.md`. For each: present, missing or not applicable, the evidence (a field, a file, a result line), the effort and the risk. An option the project never chose is not missing. Show one table and, below it, anything that would change behaviour, data or cost — listed separately as "not part of the upgrade".
+Go through U1–U17 in `upgrade.md`. For each: present, missing or not applicable, the evidence (a field, a file, a result line), the effort and the risk. An option the project never chose is not missing. Show one table and, below it, anything that would change behaviour, data or cost — listed separately as "not part of the upgrade".
 
 ## 3. The owner picks
 Ask which numbers to do, with AskUserQuestion ("All recommended" / "Let me choose" / "Not now"). Recommend the safety nets (U4, U5) whenever they are missing: without them nothing else can be checked.
@@ -24,7 +24,7 @@ Ask which numbers to do, with AskUserQuestion ("All recommended" / "Let me choos
 ## 4. Do it, in the contract's order
 1. **State and docs** (U1–U3, U7, U9): copy `factory.json` to `factory.json.bak-<date>` first; add only missing fields, with the schema's defaults; never overwrite. Diagrams and docs are written from the product as built and shown to the owner before they are saved.
 2. **Code items**: write the change note listing only the picked items with their `upgrade.md` numbers and the line "No change to behaviour: the e2e result must be identical before and after". On a **team** project add a PR lane named `upgrade` (`/pf-lanes add upgrade`) and run `/pf-build <slug> --lane upgrade`, then review and `/pf-merge`. On a **solo** project run `/pf-build <slug>` with that note on the `solo` lane. The nets (U4–U6) are the first commits. Then `/pf-deploy`, preview first — nothing is live until the preview's e2e matches the result recorded before the upgrade.
-3. **Account items** (U12, U13, U15, U16): name the command that owns each (`/pf-monitor`, `/pf-maintain`, `/pf-harden`) and offer to run it next. Do not do their work here.
+3. **Account items** (U12, U13, U15, U16, U17 — for U17 write the invitations, then the user runs `/pf-link`): name the command that owns each (`/pf-monitor`, `/pf-maintain`, `/pf-harden`) and offer to run it next. Do not do their work here.
 4. U10 (split data) is planned with the owner and built as **its own** request, never inside the upgrade lane.
 When the picked items are merged and live, set `factory_version` and `upgraded`, and append `log {stage: "upgrade", event: "<items>"}`.
 

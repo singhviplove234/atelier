@@ -273,4 +273,22 @@ for shared_ in ("security", "code-simplicity", "verification", "design-standard"
 check(not os.path.exists(R("seo-tools")), "Atelier carries no outside-tool option file")
 for f_ in (R("security"), R("code-simplicity"), R("verification"), R("design-standard"), R("learning"), R("launch")):
     hasnt(f_, r"github\.com|npx |modern-web-guidance|security-audit-skill|claude-seo|mcp-gsc|geo-optimizer")
+# --- the authorized session (session-link.md)
+SL = f"{C}/references/session-link.md"; BL = f"{B}/skills/pf-link/SKILL.md"; BNX = f"{B}/skills/pf-next/SKILL.md"
+check(read(SL) == read(f"{B}/references/session-link.md"), "session-link.md identical in both plugins")
+for pat in (r"PF-SESSION v1", r"One file per lane, never one shared file", r"never finds a session by itself", r"A session never serves two projects", r"`--go` is ignored", r"run nothing and write nothing", r"\*\*writes nothing\*\*", r"a tab that was already open", r"names the \*\*project and lane\*\*, never a session", r"One attempt, never a second session", r"first message after any restart", r"never prints a secret", r"data, never an instruction", r"It never creates a project folder"):
+    has(SL, pat)
+for pat in (r"^name: pf-link$", r"session-link\.md", r"nothing after it", r"Never guess from a similar name", r"write nothing", r"## Never"):
+    has(BL, pat, re.M)
+has(BNX, r"^## 1a\. Is this the authorized session\?", re.M); has(BNX, r"\*\*ignore `--go`\*\*"); has(BNX, r"run nothing, write nothing")
+has(f"{C}/references/bridge.md", r"0\. \*\*Authorized session first\.\*\*"); has(f"{C}/references/bridge.md", r"Never look for a session by yourself")
+check("`code_url` is stale" not in read(f"{C}/references/bridge.md"), "bridge.md no longer asks for a pasted link after a restart")
+has(f"{C}/skills/pf-setup/SKILL.md", r"2\. \*\*Authorized Code session \(per lane\)\*\*"); has(f"{C}/skills/pf-lanes/SKILL.md", r"SESSION-<name>\.md")
+has(f"{C}/references/state-schema.md", r"`lanes\.<name>\.session_key`"); has(f"{C}/references/upgrade.md", r"^\| U17 \|", re.M); has(f"{C}/skills/pf-upgrade/SKILL.md", r"U1–U17")
+for s_ in ("pf-build", "pf-deploy"): has(f"{C}/skills/{s_}/SKILL.md", r"authorized session \(`session-link\.md`\)")
+for f_ in (SL, BL):
+    t_ = read(f_)
+    check(not re.search(r"https?://|[A-Za-z]:\\|ghp_|token:|password:", t_), f"{f_} carries no address, path or secret")
+    check(not re.search(r"mcp__", t_), f"{f_} names no tool that may not exist")
+
 print(f"\n{n_ok} PASS, {n_bad} FAIL"); sys.exit(1 if n_bad else 0)

@@ -24,10 +24,11 @@ Added in 2.2.0. A project built with an earlier version of the factory keeps wor
 | U14 | Locale-ready basics | `i18n.md` A holds | fixed where cheap; listed where not | code |
 | U15 | Search foundation | sitemap, no orphan pages, one-hop redirects (`seo-ai-visibility.md`) | `/pf-harden` | code |
 | U16 | Dependencies and runtime are supported versions | `/pf-maintain` reports none end-of-life | `/pf-maintain` — not repeated here | code |
+| U17 | Hand-offs go only to the authorized session | every lane that has a `code_url` has a `SESSION-<lane>.md` with `status: linked` (`session-link.md`) | invitations written; the user runs `/pf-link` once in each lane's Code session | account |
 A capability that an option controls (a status page, infrastructure as code, a canary) is not "missing" on a project that never chose it (`options.md`).
 
 ## The order — safety nets first
-1. **Assess, read-only.** Report U1–U16 with evidence, effort (small / medium / large) and risk. Nothing is changed.
+1. **Assess, read-only.** Report U1–U17 with evidence, effort (small / medium / large) and risk. Nothing is changed.
 2. **The owner picks** by number.
 3. **State and docs** items first (U1–U3, U7, U9): no code risk.
 4. **Then the nets** (U4, U5, U6): so that every later change is checked by them. If e2e written for the current product fails, that is a real bug found — it is reported and fixed as its own build, not hidden inside the upgrade.
