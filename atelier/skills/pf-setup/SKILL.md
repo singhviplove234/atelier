@@ -79,6 +79,12 @@ Show the options table for this project: each row's current choice, read from th
 ## `/pf-setup advisor` — a stronger model on call for the builder (see `references/advisor.md`)
 Explain the three set-ups from `advisor.md` with their cons, and say plainly: it is experimental, the setting is **machine-wide** (every Claude Code session on that computer, not only this project), and a Fable advisor may draw on usage credits. Ask with AskUserQuestion which set-up, default "As you are". On a choice, give the lines to type in the Code session (the main-model choice, then `/advisor <name>`; `/advisor off` undoes it) — or type them through Chrome only after the user's yes here. Record `options.advisor`. When at least two builds exist on the new set-up, compare them with the builds before it from the `log` (first-attempt acceptance, fix rounds, time from request to result) in three lines and ask whether to keep it. Never claim a saving that has not been measured.
 
+## `/pf-setup email <slug>` — an address on the domain, and mail that arrives (see `references/email.md`)
+Needs a custom domain (`/pf-setup domain`). Ask what is wanted — a contact address, mail the product sends, or both — and record `options.email`. **Address:** recommend free forwarding first; a paid mailbox only on a yes with its monthly price shown. **Sending:** pick the service by free tier and fit, then prepare the exact SPF, DKIM, DMARC (`p=none` to start) and sending-subdomain records; the user pastes them at the DNS host and creates the API key themselves — its **name** goes in the SPEC, never its value. Finish with the header check in `email.md` B and record `email.verified`. Never type a DNS or registrar password; never import an address list.
+
+## `/pf-setup support <slug>` — help page, FAQ and contact form (see `references/support.md`)
+Offer it in one line, record `options.support`, and draft the questions from the product's user-journey diagram for the user to correct. It is then a normal `/pf-build` carrying a `Support:` line — the page, the form with its four tested paths, and `docs/SUPPORT.md`. Set up `support@` through `/pf-setup email` first when the form should also send mail. A chat or help-desk tool is never added by default.
+
 ## `/pf-setup env <NAME>` — when a skill reported a missing env var
 Open the page where that value is created (from the target file), pre-fill the non-secret parts, stop; then the user env var instructions; then "restart the desktop app and re-run the step that failed".
 

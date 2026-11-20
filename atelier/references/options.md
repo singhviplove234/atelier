@@ -27,10 +27,18 @@ An option is **off until chosen**. Choosing one never unlocks a paid tool by its
 | **3D product scene** | a brand/product page where the product's form is the selling point | `/pf-plan` or `/pf-setup options` | `options.scene_3d` | `scene-3d.md` |
 | **Launch video** | a launch that will be promoted (ads, social, a landing hero), after go-live | `/pf-promo` | `options.launch_video`, `promo` | `launch-video.md` |
 | **Growth drafts** | a live site with Search Console data and pages stuck on page two | `/pf-grow --draft` | `options.grow_drafts` | `growth.md` "Drafts" |
-The four rows in bold are recorded under `factory.json.options`; every other row keeps the field it already had — this page indexes them, it does not move them.
+| **Product type** (extension, desktop app, API, command-line tool, AI agent) | the product is not a website or a mobile app | `/pf-plan` | `brief.product_type` | `product-types.md` |
+| **Brand basics** (name check, logo, brand kit) | the product has no name or logo yet | `/pf-plan` or `/pf-brand` | `options.brand_kit`, `brand` | `brand.md` |
+| **Email** (an address on the domain; mail the product sends) | a custom domain, and a contact address is wanted or the product sends mail | `/pf-plan` or `/pf-setup email` | `options.email`, `email` | `email.md` |
+| **Support basics** (help page, FAQ, contact form) | users who are not the owner | `/pf-plan` or `/pf-setup support` | `options.support` | `support.md` |
+| **Launch pack** (checklist, share images, waitlist, announcement drafts) | a live product that will be announced | `/pf-launch` | `options.launch_pack`, `launch` | `launch.md` |
+| **Feedback loop** | a live product with users | `/pf-feedback` | `options.feedback`, `feedback` | `feedback.md` |
+| **Experiments** | a growth item that is a guess, on a page with enough visitors | `/pf-grow --experiment` | `options.experiments`, `experiments` | `experiments.md` |
+The rows in bold are recorded under `factory.json.options` (the product type under `brief`); every other row keeps the field it already had — this page indexes them, it does not move them.
 
 ## Rules
 - **One line, once.** An offer is a single sentence with the cost and the con. No option is pushed, bundled with another, or assumed from a similar project.
 - **The plan is where most are settled** (`pf-plan` §3c), so nothing optional is discovered mid-build. The bold rows can also be chosen later, because they do not change what was built before them.
 - **Not offered** is as deliberate as offered: a brochure site is not asked about tenancy, a solo internal tool is not asked about a status page.
+- **An upgrade is not an option.** Bringing an older project up to the current contracts is `/pf-upgrade` (`upgrade.md`); it never switches an option on.
 - **Every option is complete inside Atelier.** None of them asks you to install another skill or plugin; the most an option needs is an ordinary program on the build machine (for example `ffmpeg` for the launch video), and `/pf-next doctor` says so.

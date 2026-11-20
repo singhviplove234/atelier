@@ -24,6 +24,10 @@ Takes an idea all the way: **plan → design → build → deploy → harden →
 | `/pf-deliver` | PM | Final stage for a product built for someone else: checks the repo's docs (architecture + every diagram, runbook, admin guide, changelog), assembles the delivery pack from recorded proof, walks the ownership transfer with secrets rotated afterwards | recipient's acceptance — and every account change is your click |
 | `/pf-promo` | PM | Optional, after go-live: a short launch video made by Atelier itself — brief pack, a numbered storyboard you approve, review stills, then the render on your build machine (browser + ffmpeg, no graphics card) | never a gate; you approve each step and you publish it |
 | `/pf-learn <source>` | PM | Learns from a video, reel, article, repository, incident or repeated correction: takes it in fully, checks every claim, and proposes short numbered lessons that every later command follows (`references/learning.md`) | each lesson needs your yes; a lesson can never relax a contract or a gate |
+| `/pf-upgrade <slug>` | PM | Brings a project built with an older version up to today's standard: read-only assessment, then the picked items in a safe order through the normal build path — no change to what the product does. `--adopt` takes on a repository the factory did not build | what to upgrade |
+| `/pf-brand <slug>` | PM | Optional, before design: name screening (not legal advice), three logo directions, a brand kit in the repo | name · logo |
+| `/pf-launch <slug>` | PM | Optional, around go-live: launch checklist from the project's own record, share images, an honest waitlist, announcement drafts, a 48-hour watch list. Posts nothing itself | — |
+| `/pf-feedback <slug>` | PM | Optional, after launch: reads what users say, groups it into themes with honest counts, proposes numbered fixes; changes nothing on its own | — |
 | `/pf-board` | PM | One live control panel of every project — stage, gates, health, maintenance, what's waiting on you | — |
 | `/pf-ship <idea|slug>` | PM | The conductor: runs the whole chain, pausing only at the human gates. `ship_mode` guarded (default) or streamlined (low-stakes only) | each gate (or just go-live, streamlined) |
 
@@ -82,3 +86,6 @@ Type passwords, tokens or card numbers; click the final submit on account, payme
 - Projects (state, brief, spec, docs, request/result files): the connected `Atelier` folder → `<project>/` (with `factory.json`, `lanes/<lane>.json`).
 - Code checkouts: `<code root>/<project>/` on each lane's machine.
 - Contracts: `references/*.md` (the files named above) + `references/targets/`. State shape: `references/state-schema.md`. Validator: `tests/check.sh`.
+
+## More than websites
+A browser extension, a desktop app, an API, a command-line tool or an AI agent goes through the same stages and gates; `references/product-types.md` defines what a screen, a deploy and a health check mean for each, and three targets (`chrome-web-store`, `desktop-release`, `package-registry`) end at a draft the owner publishes. `/pf-setup email` and `/pf-setup support` add mail that arrives and a help page with a contact form; `/pf-grow --experiment` tests a change on real visitors when there are enough of them.

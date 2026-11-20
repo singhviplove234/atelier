@@ -2,7 +2,7 @@
 
 Targets live in `references/targets/<name>.md`, one file each (Fits, Env vars, Preview, Deploy steps, Health check, Custom domain). Adding a tool = adding a file; no skill changes.
 
-Shipping targets: `vercel`, `azure-static-web-apps`, `azure-container-apps`, `cloudflare-pages`, `netlify`, `github-pages`, `aws-amplify`, `gcp-cloud-run`, `render`, `fly-io`, `oracle` for the web, and `expo-eas` (React Native + Expo) and `flutter-stores` (Flutter and native) for mobile apps released to the App Store and Google Play (`mobile-release.md` — a store release has its own fees, review and owner-only publish step). The registry is extensible — a provider not listed gets a new target file (see `platform-selection.md`).
+Shipping targets: `vercel`, `azure-static-web-apps`, `azure-container-apps`, `cloudflare-pages`, `netlify`, `github-pages`, `aws-amplify`, `gcp-cloud-run`, `render`, `fly-io`, `oracle` for the web, and `expo-eas` (React Native + Expo) and `flutter-stores` (Flutter and native) for mobile apps released to the App Store and Google Play (`mobile-release.md` — a store release has its own fees, review and owner-only publish step). The registry is extensible — a provider not listed gets a new target file (see `platform-selection.md`). Products that are not hosted pages ship through `chrome-web-store` (browser extensions), `desktop-release` (installed apps) and `package-registry` (command-line tools and libraries); each ends at a draft that the owner publishes (`product-types.md`).
 
 ## How `/pf-deploy` picks
 
@@ -13,6 +13,7 @@ Shipping targets: `vercel`, `azure-static-web-apps`, `azure-container-apps`, `cl
    - A server / container / background work → a scale-to-zero host: `azure-container-apps`, `gcp-cloud-run`, `fly-io`, `render`, or `aws-amplify` — the best free fit for the runtime.
    - An always-on box / self-hosted open-source → `oracle` (Always Free ARM).
    - A mobile app → `expo-eas` (React Native + Expo) or `flutter-stores` (Flutter / native); its companion website (privacy policy, support page) deploys separately through a web target.
+   - A browser extension → `chrome-web-store`; a desktop app → `desktop-release`; a command-line tool or library → `package-registry`; an API or an AI agent → a server or scheduled-job host from the lines above. The product type is `factory.json.brief.product_type` (`product-types.md`), and the companion website, when there is one, deploys separately through a web target.
    State **one** recommendation with the reason + cost, then offer 2–3 real alternatives (including an open-source/self-host option when it fits). Azure is a strong option, never the automatic one.
 3. **Ask** with AskUserQuestion: the recommendation first, marked "(Recommended)", then the alternatives, each with one line from its `## Fits`. Record `chosen_by: user` (or `rule` if the user accepts the recommendation).
 

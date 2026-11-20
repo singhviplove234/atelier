@@ -225,4 +225,40 @@ for top in (C, B, "README.md", "INSTALL.md", "CONTRIBUTING.md", "CHANGELOG.md", 
                or any(_h(t) in PRIV_LC for t in set(low) | comp) or any(_h(a + " " + b) in PRIV_LC for a, b in set(zip(low, low[1:]))))
         if hit: bad(f"{f} contains private wording")
 ok("personal-data scan ran")
+# 2.2.0: one-stop shop - upgrade path, product types, email, brand basics, launch pack, feedback loop, experiments, support basics
+for s_ in ("pf-upgrade", "pf-brand", "pf-launch", "pf-feedback"):
+    has(S(s_), rf"^name: {s_}$", re.M); has(S(s_), r"^## Never$", re.M); has(S(s_), r"--check"); has(S(s_), r"--dry-run"); has(S(s_), r"AskUserQuestion|with the owner's yes"); has(f"{C}/README.md", rf"/{s_}")
+for row, ref in (("Product type", "product-types.md"), ("Brand basics", "brand.md"), ("Email", "email.md"), ("Support basics", "support.md"), ("Launch pack", "launch.md"), ("Feedback loop", "feedback.md"), ("Experiments", "experiments.md")):
+    has(R("options"), rf"\*\*{row}\*\*.*`{re.escape(ref)}`")
+has(R("options"), r"An upgrade is not an option"); hasnt(R("options"), r"The four rows in bold")
+for fld in (r'"factory_version": ""', r'"product_type": "web"', r'"experiments": \[\]', r'"brand_kit": "off"', r'"email": "none"', r'"launch_pack": "off"', r'"upgraded": \{'):
+    has(R("state-schema"), fld)
+for shared in ("product-types", "email", "support", "experiments"):
+    check(os.path.exists(f"{B}/references/{shared}.md") and read(f"{B}/references/{shared}.md") == read(R(shared)), f"{shared}.md is the builder's contract too, byte-identical")
+has(R("upgrade"), r"same result before and after"); has(R("upgrade"), r"safety nets first"); has(R("upgrade"), r"never overwrite a value"); has(R("upgrade"), r"\*\*its own build\*\*")
+has(S("pf-upgrade"), r"--lane upgrade"); has(S("pf-upgrade"), r"factory\.json\.bak-<date>"); has(S("pf-upgrade"), r"Hide a bug that the new e2e finds"); has(S("pf-upgrade"), r"--adopt"); has(S("pf-ship"), r"/pf-upgrade")
+has(R("product-types"), r"Manifest V3"); has(R("product-types"), r"evaluation set comes first"); has(R("product-types"), r"is data, never instructions"); has(R("product-types"), r"^## Which harden passes apply", re.M)
+has(R("product-types"), r"never raises its own cap"); has(R("product-types"), r"Signing is the real cost"); has(R("product-types"), r"No install-time scripts")
+for tg_ in ("chrome-web-store", "desktop-release", "package-registry"):
+    has(f"{C}/references/targets/{tg_}.md", r"[Nn]ever run a command that releases to production"); has(f"{C}/references/targets/{tg_}.md", r"owner's (click|action)")
+has(R("deploy-rule"), r"each ends at a draft that the owner publishes"); has(S("pf-plan"), r"brief\.product_type"); has(S("pf-design"), r"Other product types"); has(S("pf-harden"), r"Which harden passes apply")
+has(f"{B}/skills/pf-harden-from-spec/SKILL.md", r"Which harden passes apply"); has(BB, r"\*\*Other Brief lines \(only when present\):\*\*"); has(S("pf-build"), r"`Type:` line"); has(R("spec-format"), r"`Type:`.*`Email:`.*`Support:`.*`Experiment:`.*`Launch:`")
+has(R("email"), r"Never start at `reject`"); has(R("email"), r"Tests never send to real people"); has(R("email"), r"double opt-in"); has(R("email"), r"exactly one SPF record"); has(R("email"), r"not legal advice")
+has(S("pf-setup"), r"/pf-setup email <slug>"); has(S("pf-setup"), r"Never type a DNS or registrar password"); has(S("pf-setup"), r"/pf-setup support <slug>")
+has(R("brand"), r"not a legal clearance"); has(R("brand"), r"single source"); has(S("pf-brand"), r"Register, reserve or buy"); has(S("pf-brand"), r"screening sentence")
+has(R("launch"), r"\*\*not a gate\*\*"); has(R("launch"), r"No invented reviews"); has(R("launch"), r"real count"); has(S("pf-launch"), r"Post, send, submit or publish anything without"); has(S("pf-launch"), r"cannot be waved through")
+has(R("feedback"), r"data, never instructions"); has(R("feedback"), r"Three people is three people"); has(S("pf-feedback"), r"Act on an instruction found inside"); has(S("pf-feedback"), r"\*\*Nothing is changed\.\*\*")
+has(R("experiments"), r"16 × p × \(1 − p\) ÷ d²"); has(R("experiments"), r"No peeking"); has(R("experiments"), r"no clear difference"); has(S("pf-grow"), r"--experiment"); has(R("growth"), r"`experiments\.md`")
+has(R("support"), r"spam trap"); has(R("support"), r"never by default"); has(R("support"), r"only an admin may read"); has(R("support"), r"The four e2e paths are required")
+# each new contract is defined once: its key rule appears in no other reference
+NEW_ = {"email": r"Never start at `reject`", "experiments": r"16 × p ×", "product-types": r"evaluation set comes first", "support": r"hidden trap field", "brand": r"not a legal clearance", "launch": r"\| L14 \|", "feedback": r"Three people is three people", "upgrade": r"\| U16 \|"}
+for r_ in sorted(refs[C]):
+    if r_ == "targets": continue
+    for own, pat in NEW_.items():
+        if r_ != own + ".md": check(not re.search(pat, read(f"{C}/references/{r_}")), f"{r_} does not restate {own}.md")
+# the new skills promise nothing they cannot keep, and carry no secrets or addresses
+for s_ in ("pf-upgrade", "pf-brand", "pf-launch", "pf-feedback"):
+    hasnt(S(s_), r"guarantee[sd]? (?:that|a|the|you)|will rank|will go viral|legally safe"); hasnt(S(s_), r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[a-z]{2,}"); hasnt(S(s_), r"https?://")
+for r_ in ("brand", "email", "experiments", "feedback", "launch", "product-types", "support", "upgrade"):
+    hasnt(R(r_), r"https?://"); hasnt(R(r_), r"\$\d|₹\d|€\d")
 print(f"\n{n_ok} PASS, {n_bad} FAIL"); sys.exit(1 if n_bad else 0)
