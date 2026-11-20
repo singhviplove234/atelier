@@ -205,6 +205,9 @@ has(S("pf-learn"), r"^name: pf-learn$", re.M); has(S("pf-learn"), r"GATE: each l
 has(R("state-schema"), r"## Lessons \(read first, by every command\)"); has(BN, r"\*\*Lessons:\*\* before running any request"); has(f"{C}/README.md", r"/pf-learn")
 has(R("seo-ai-visibility"), r"No orphan pages"); has(R("seo-ai-visibility"), r"one hop"); has(R("seo-ai-visibility"), r"Crawl the built site from the home page"); has(R("growth"), r"Off-site presence \(suggest only")
 
+# --- 7d. flow diagrams before any design
+has(R("planning"), r"Flow diagrams, before any design"); has(R("planning"), r"user journey"); has(R("planning"), r"screen map"); has(S("pf-design"), r"## 3b\. Flow diagrams first"); has(S("pf-design"), r"No artboard is drawn before"); has(S("pf-plan"), r"Flow diagrams are part of the set for every product")
+
 # --- 8. public repo: no personal or private-project wording anywhere outside vendored skills.
 # The words themselves are not written here: each is stored as a short hash, and every word and
 # adjacent word pair in the repo is hashed and compared. Maintainers add a term by adding its hash.

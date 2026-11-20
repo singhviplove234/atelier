@@ -45,6 +45,8 @@ Per `planning.md` §4: pick **ship-it** (small/solo), **agile/scrum-lite** (larg
 ## 5. Documents
 Per `planning.md` §5 (documents use the document surface Claude itself provides — `references/skills.md`): create the warranted set as living docs (Claude Docs via the docs connector; Word/PDF/PowerPoint/Excel on request via the docx/pdf/pptx/xlsx skills after the content is settled) — product brief/PRD, architecture overview (with a diagram), MVP definition, stack decision, budget forecast; plus backlog + sprint plan for agile. Size each to the project. Record their links in `planning.documents`.
 
+**Flow diagrams are part of the set for every product:** the user journey flowchart and the screen map (`planning.md` §5), drawn before design starts and approved with the plan.
+
 ## 6. Living dashboard (agile/team only)
 Per `planning.md` §6: build it as a **published Artifact with the `db` capability** (or the Dashboard type) — published **once**, then updated by **writing rows to its database** (ArtifactData), never by republishing — so progress updates do not re-prompt a page-update approval. Mirror `factory.json` + `lanes/<lane>.json` into its db; the PM and each lane write their status there. Record `planning.dashboard_url`. A solo/small project gets a one-line status in chat instead.
 

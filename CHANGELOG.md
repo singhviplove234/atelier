@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.1.1 - diagrams before design
+- Every product now gets two flow diagrams **before any design is drawn**: the user journey (with its decisions and unhappy paths) and the screen map. They are approved with the plan, the artboards are laid out from the screen map, and at build time they become the SPEC's journey and page diagrams. `/pf-design` writes them itself when a project skipped `/pf-plan`.
+
 ## 2.1.0 - it learns
 - **`/pf-learn`**: give Atelier a video, a reel, an article, a repository, an incident or a repeated correction. It takes the source in fully, checks each claim against primary sources or on a fixture, and proposes short numbered lessons. An approved lesson is kept in your projects folder (`LESSONS.md`) and followed by every later command on both seats. A lesson can add care but can never relax a contract, a gate, the cost posture or a security rule, and never installs anything.
 - **SEO checks:** redirects must resolve in one hop, every public page must be linked from another page, and the build now crawls the site to prove it (no orphan pages, no broken internal links).
