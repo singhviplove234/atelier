@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.3.0 - sharper reviews
+- **Security review runs twice.** One AI review pass finds roughly half of what repeated passes find, so the review is now done by two fresh reviewers and once more on the changed code. A finding needs its trace; a suspicion is never reported as clean.
+- **Modern platform first.** Before writing front-end behaviour, Atelier checks whether the browser now does it by itself (dialogs, popovers, transitions, container queries, form hints) and prefers that to a library.
+- **A bug fix starts with a test that fails.** Reproduce first, find where it came in, fix the cause, keep the test.
+- **The AI-look check.** A list of tell-tale signs of machine-made design, checked before any design or screen is shown to you.
+- **Launch checklist:** the sitemap is submitted to both Google Search Console and Bing Webmaster Tools.
+- **`/pf-learn reflect`:** Atelier reads its own project record for corrections and problems that repeated, and proposes lessons - each still needs your yes, and nothing leaves your machine.
+
 ## 2.2.0 - a one-stop shop
 - **`/pf-upgrade`**: bring a project built with an older version up to today's standard. It first shows what the project lacks, then adds what you pick in a safe order - the safety nets before anything else - with no change to what the product does. `--adopt` takes on a repository Atelier did not build.
 - **More than websites:** a browser extension, a desktop app, an API, a command-line tool or an AI agent goes through the same stages and gates. Three new targets (`chrome-web-store`, `desktop-release`, `package-registry`) each end at a draft that you publish.

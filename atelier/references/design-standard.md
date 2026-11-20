@@ -78,3 +78,13 @@ Mostly reuses tools already in the build — this adds taste rules, not new scan
 - Spacing and radii come from the scale (no stray values). Report a short design table in `notes:`: tokens-only? · one-h1? · focus states? · reduced-motion? · fonts/icons licensed? — fix any "no" within the simplicity/perf/a11y limits.
 
 The aim is Apple-grade feel — clear, calm, consistent, premium — using only assets we may freely ship, and never at the cost of speed, accessibility or the other contracts.
+
+## The AI-look check (before any design or build is shown)
+A screen can meet every rule above and still look machine-made. Before a design artifact or a built screen is offered for approval, go through this list and fix what is found - it is part of the design check, and each hit is reported with the screen it was on.
+- **Colour:** a purple-to-blue or pink-to-orange gradient used because it is the default; glow and neon edges; a gradient on text; more than one accent colour; pure black on pure white with no tint.
+- **Layout:** every section a centred heading with three equal cards under it; the same rounded card repeated for everything; a hero that is a headline, a sub-line and two buttons over a blurred blob; identical padding everywhere so nothing has weight.
+- **Type:** one weight and one size doing all the work; headings in title case with an emoji in front; all-caps micro-labels above every heading.
+- **Copy:** a headline that could sit on any product ("Unlock the power of..."); three-word slogans in a row; made-up numbers, logos or testimonials; a placeholder name that was never replaced.
+- **Pictures and icons:** an emoji used as an icon; a glossy abstract shape where the product itself should be shown; stock-style people who are not the product's users; icons from two different sets.
+- **Motion:** everything fading up on scroll at the same speed; hover effects on things that are not clickable.
+The fix is never "remove it": it is the specific choice the design direction calls for in that place - the product shown for real, one accent used with intent, type that carries the hierarchy, words only this product could say. Report `ai-look: <n> found, <n> fixed` with the remaining ones named.
