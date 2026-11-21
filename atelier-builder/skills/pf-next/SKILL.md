@@ -3,7 +3,7 @@ name: pf-next
 description: "Runs one named Atelier request — /pf-next SLUG build|merge|deploy|harden|pentest|promo [--lane x] [--go] — by reading the matching request file under the Atelier folder and running the right builder skill. Also /pf-next doctor [SLUG], a read-only check that this Code seat has every tool the factory needs. Use when the user (or the Cowork seat typing through Chrome) says /pf-next."
 ---
 
-# /pf-next <slug> <build|merge|deploy|harden|pentest|promo> [--lane <name>] [--go] · /pf-next doctor [<slug>]
+# /pf-next <slug> <build|merge|deploy|harden|pentest|promo> [--lane <name>] [--go] [--seat <link> --ref <ref>] · /pf-next doctor [<slug>]
 
 Runs exactly one request. Triggered only by a typed command — never by a timer, hook or file watcher.
 
@@ -33,6 +33,9 @@ Check each item and print one table — item · ok/missing · the one line that 
 - Informational (never counted as missing): the Claude Code version and the `advisorModel` setting (or `none`).
 - With a `<slug>` whose `factory.json.options.launch_video` is `on`: `ffmpeg -version` and `ffprobe -version`.
 End with `ready` or `<n> missing — fix the first, then run /pf-next doctor again`.
+
+## 1a-2. The way back (every request typed with `--go`)
+`--seat <link> --ref <ref>` on the command: check them (`session-link.md`: the link starts with `https://claude.ai/` and holds only letters, digits, `/`, `-`, `_`; the ref is 8 letters or digits) and write `SEAT-<lane>.md` for this lane before anything else. **`--go` with no `--seat` and no valid seat file for the lane: run nothing** and reply with exactly this, first thing: `No return address - nothing was run. Send again as: /pf-next <slug> <kind> --lane <lane> --go --seat <the link of your own conversation> --ref <8 letters or digits>`. Without `--go` (a person is here) go on as usual.
 
 ## 1c. Auto mode
 If `AUTO.md` in the project folder is valid - first line `PF-AUTO v1`, `project` is this project, `until` is in the future - this request is running in the user's auto hours (`${CLAUDE_PLUGIN_ROOT}/references/auto-mode.md`): **do not stop to ask the person anything**. Any question goes through "If you must stop to ask a question" below and the one-line notice, and the Cowork seat answers. Auto mode allows nothing extra: everything in that file's section D still fails closed, the pentest still asks, and an unlinked session still waits for a typed yes. Missing, expired or mismatched `AUTO.md` -> behave exactly as without it.

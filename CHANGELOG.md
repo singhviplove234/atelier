@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.9.0 - the way back cannot be forgotten
+- **Fixed:** the Code session could finish, or stop on a question, and report "the Cowork seat was not notified because there is no seat file". The return address depended on Cowork writing a separate file at each hand-off.
+- **The address now travels with the command.** Cowork adds its own link and a reference to the line it types (`--seat ... --ref ...`), and the Code session writes the seat file itself. It stays valid for every later task and question.
+- **A hand-off that cannot report back does not start.** `--go` with no return address runs nothing and replies with the exact line to send instead.
+- **`/pf-link seat`** gives a session the address before plain-words work and at the start of an auto run.
+- With a return address saved, a question goes to the Cowork seat, not to a choice dialog.
+
 ## 2.8.0 - auto mode clears the path first
 - **Blockers are dealt with before the hours begin.** `/pf-auto` now goes through the work, finds everything that would stop it part-way, and clears it while you are there: your decisions are asked together, your own tasks are walked through, tools that are not ready are fixed. Your own tasks are never items inside the hours.
 - **The plan holds only work that runs by itself**, and says honestly when the main work needs more hours than you gave.
