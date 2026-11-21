@@ -1,6 +1,6 @@
 ---
 name: pf-build
-description: "Builds an approved Atelier design for one lane (solo by default): writes SPEC.md and BUILD-REQUEST-LANE.md, then hands off by the chosen mode (A, default: build on the user's machine and wake on the GitHub event; B: build in the cloud, result inline), and presents the repo, PR and preview for approval. Use when the user says /pf-build, /pf-build --check, 'build the product', 'build it', or 'turn the design into code'. Supports --handoff event|cloud, --dry-run and --validate-only."
+description: "Builds an approved Atelier design for one lane (solo by default): writes SPEC.md and BUILD-REQUEST-LANE.md, then hands off by the chosen mode (A, default: build on the user's machine and wake on the GitHub event; B: build in the cloud, result inline), and presents the repo, PR and preview for approval. Use when the user says /pf-build, /pf-build --check, 'build the product', 'build it', or 'turn the design into code'. Supports --handoff event|cloud, --dry-run and --validate-only. Also use when a line starting 'PF-NOTICE' for a build arrives from the Code session: it means go and read that result file."
 ---
 
 # /pf-build [--lane <name>] [--handoff event|cloud] [--dry-run] [--validate-only] [--check]

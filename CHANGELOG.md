@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.5.0 - Code tells Cowork when it is done
+- **A notice instead of waiting.** When the Code session finishes a request, or has to stop for a question, it types one fixed line into the Cowork conversation that handed the work over. Cowork then reads the result file straight away.
+- **Safe by design.** Cowork leaves a small seat file with its own link and a one-time marker; Code types only into the page that carries that marker, only that one line. The notice is never an instruction and never passes a gate - the result file decides.
+- The pull-request signal and one long backstop check remain as the second and third signals.
+
 ## 2.4.0 - the right session, every time
 - **`/pf-link`** (in Claude Code): run it once in a new project session and again after a restart, with nothing after it. It turns Remote Control on, names the session, and writes a small session file into the project's own folder.
 - **Hand-offs go only to that session.** The Cowork seat reads the session file, proves the page it has open is that session, and only then types. It never looks for a session by itself and never types into a tab that was already open.

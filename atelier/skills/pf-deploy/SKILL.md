@@ -1,6 +1,6 @@
 ---
 name: pf-deploy
-description: "PM step: deploys main once every lane is merged — picks the target from the registry (hint, rule, or the user's choice), asks 'deploy now?', writes DEPLOY-REQUEST.md, drives Claude Code through Chrome to run /pf-next, polls for DEPLOY-RESULT.md and runs the target's health check. Use when the user says /pf-deploy, /pf-deploy --check, 'deploy the product', 'go live', or 'put it online'. Supports --dry-run."
+description: "PM step: deploys main once every lane is merged — picks the target from the registry (hint, rule, or the user's choice), asks 'deploy now?', writes DEPLOY-REQUEST.md, drives Claude Code through Chrome to run /pf-next, polls for DEPLOY-RESULT.md and runs the target's health check. Use when the user says /pf-deploy, /pf-deploy --check, 'deploy the product', 'go live', or 'put it online'. Supports --dry-run. Also use when a line starting 'PF-NOTICE' for a deploy arrives from the Code session: it means go and read that result file."
 ---
 
 # /pf-deploy
