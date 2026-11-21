@@ -319,4 +319,18 @@ for pat_ in ("before the Cowork seat types anything at all into the Code session
 check("**The seat files come first.**" in AMQ and "**The way back:**" in AMQ, "auto-mode.md: seat files at the start, the way back in the ready check")
 has(f"{C}/skills/pf-auto/SKILL.md", r"`SEAT-<lane>\.md` for every lane in the plan"); has(f"{B}/skills/pf-next/SKILL.md", r"Send it before you wait"); has(f"{B}/skills/pf-next/SKILL.md", r"- The way back:"); has(f"{B}/skills/pf-link/SKILL.md", r"tell the Cowork seat first"); check(not os.path.isdir(f"{B}/hooks"), "the builder still ships no hooks module")
 
+# --- auto mode clears the path first; done is always reported
+AM3 = read(f"{C}/references/auto-mode.md"); SL3 = read(f"{C}/references/session-link.md"); PL3 = read(f"{B}/skills/pf-link/SKILL.md"); PA3 = read(f"{C}/skills/pf-auto/SKILL.md")
+check(AM3 == read(f"{B}/references/auto-mode.md") and SL3 == read(f"{B}/references/session-link.md"), "auto-mode.md and session-link.md identical in both plugins after 'clear the path'")
+for pat_ in ("3. **Clear the path.**", "the user's own tasks are never items inside the hours", "one specific, named yes for one thing the user was shown", "Never a category", "*Never ahead*", "2 hours would fit it", "A plan with nothing that runs by itself is not started", "Parking is the exception, not the plan", "The clock starts at the yes"):
+    check(pat_ in AM3, f"auto-mode.md: {pat_[:48]}")
+check(AM3.index("3. **Clear the path.**") < AM3.index("5. **The plan.**") < AM3.index("6. **One yes.**"), "auto mode: blockers are cleared before the plan, the plan before the yes")
+for pat_ in ("Do not plan first and discover blockers later", "never put a \"stops for you\" item inside the hours", "If nothing would run by itself, do not start"):
+    check(pat_ in PA3, f"pf-auto: {pat_[:48]}")
+for pat_ in ("**Done counts too.**", "When finished or stuck: /pf-link notify"):
+    check(pat_ in SL3, f"session-link.md: {pat_[:40]}")
+for pat_ in ("## `/pf-link notify <done|failed|needs-input> [<reference>]`", "do not try another way", "Nothing else is ever typed on that page", "end with `/pf-link notify done`"):
+    check(pat_ in PL3, f"pf-link: {pat_[:40]}")
+has(f"{C}/references/bridge.md", r"6b\. \*\*Every task typed into the Code session")
+
 print(f"\n{n_ok} PASS, {n_bad} FAIL"); sys.exit(1 if n_bad else 0)
