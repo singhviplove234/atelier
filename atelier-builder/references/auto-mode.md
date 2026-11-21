@@ -21,6 +21,7 @@ Only the Cowork seat writes `AUTO.md`, and only after that yes. It carries no to
 ## B. The ready check - auto mode checks settings, it never changes them
 The Cowork seat **looks and tells**; the user switches. It never edits a permission, security or system setting itself, and never asks the Code session to.
 - **This Cowork task:** its approval setting lets actions go ahead without a prompt for the run; the project folder is connected and writable; the browser tool answers on the Claude site and on the code host; the scheduled wake-up tool is available.
+- **The way back:** this seat knows its own conversation link (or the user pastes it once), so the seat files can be written; the Code session has a browser tool, so its notice can be sent - `/pf-next doctor` reports it.
 - **The Code session:** `SESSION-<lane>.md` is `linked` and proved (`session-link.md`) with Remote Control on; `/pf-next doctor <slug>` typed there comes back `ready`, including the permissions row (the commands in `/pf-setup` item 4 are allowed, so the session does not stop on a prompt nobody is there to answer); the code host is signed in with the project's own scoped token.
 - **The computer:** it stays awake and online for the hours (ask the user; say that a sleeping computer pauses the run, and that the run does not catch up afterwards).
 - **The target:** every required setting **name** for the deploy target is present. Values are never read or shown.
@@ -41,7 +42,8 @@ A contract is never relaxed to make a step pass: a step that fails its checks is
 Parked with its question, never done: go-live on an address a custom or public domain points to; loading real client data; a security test (`/pf-pentest`); a destructive migration; deleting or replacing infrastructure; any new billable resource or paid service; creating an account, a token or a key; DNS or domain changes; installing anything; sending, posting or publishing anything to people; delivery or transfer of ownership; approving a lesson; anything outside the plan the user saw; and any change to auto mode itself - longer hours, a wider scope, a different project.
 
 ## E. When something needs a decision
-- **The Code session never stops to ask the person during auto mode.** It raises the question the usual way - the `needs-input` label, `NEEDS-INPUT-<lane>.md` and the one-line notice (`session-link.md`) - and waits for the Cowork seat.
+- **The Code session never stops to ask the person during auto mode.** It raises the question the usual way - `NEEDS-INPUT-<lane>.md`, the one-line notice (`session-link.md`), and the `needs-input` label when there is a pull request - and waits for the Cowork seat. It checks `AUTO.md` before asking anything, so a question does not sit unseen on a screen nobody is watching.
+- **The seat files come first.** When auto mode starts, the Cowork seat writes `SEAT-<lane>.md` for every lane in the plan, carrying the grant, so the Code session can reach it from the first minute.
 - **The Cowork seat answers** when the spec, the RUNBOOK or the approved plan settles it. When it is the user's call (cost, scope, real data, anything in D), it **parks that item**: writes the question and the choices into `auto.parked[]`, leaves the item as it is, and **carries on with the rest of the plan**. It does not stop the whole run for one question.
 - The same item failing twice for the same reason is parked. A high security finding parks that project's remaining deploy steps.
 

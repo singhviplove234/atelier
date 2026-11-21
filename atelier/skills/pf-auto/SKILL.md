@@ -17,11 +17,11 @@ Check every item and show one table: item · ready / not ready · the one place 
 Per `auto-mode.md` A3: an ordered list of what fits, each item marked `runs by itself` or `stops for you`, plus `not in this run`. Then the two lists (C and D) in plain words, and one question: "Start auto mode until <time>?"
 
 ## 4. On yes
-Write `factory.json.auto` and `AUTO.md` in each project folder. Schedule one wake-up for the end time. Then work through the plan with the normal stage commands - each stage still owns its own checks and its own result file. Hand-offs go only to the authorized session and write the seat file, so the Code session's notice wakes this seat.
+Write `factory.json.auto` and `AUTO.md` in each project folder, and **`SEAT-<lane>.md` for every lane in the plan** (with the grant as its `request_id`, and `Hand-off sent - ref <marker>` said here) so the Code session can send its questions and its "done" back from the first minute. Schedule one wake-up for the end time. Then work through the plan with the normal stage commands - each stage still owns its own checks and its own result file. Hand-offs go only to the authorized session and write the seat file, so the Code session's notice wakes this seat.
 
 ## 5. While it runs
 - A gate inside section C: record `approved (auto, <grant>)` and go on. A gate or step in section D, or anything not in the plan: park it (`auto.parked[]`) and take the next item.
-- A `PF-NOTICE ... needs-input`: read the question; answer it in the Code session when the spec, RUNBOOK or plan settles it; otherwise park that item and tell the Code session to leave it and stop that request.
+- A `PF-NOTICE ... needs-input`: read the question; answer it by typing into the authorized Code session when the spec, RUNBOOK or plan settles it; otherwise park that item and tell the Code session to leave it and stop that request.
 - Before each new item check the clock: past the end time, start nothing.
 
 ## 6. End, status, stop
