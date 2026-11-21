@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.8.0 - auto mode clears the path first
+- **Blockers are dealt with before the hours begin.** `/pf-auto` now goes through the work, finds everything that would stop it part-way, and clears it while you are there: your decisions are asked together, your own tasks are walked through, tools that are not ready are fixed. Your own tasks are never items inside the hours.
+- **The plan holds only work that runs by itself**, and says honestly when the main work needs more hours than you gave.
+- **A specific yes ahead of time:** one named thing (this migration, this resource at this cost) can be approved before the run. Public go-live, real client data, security tests and publishing still cannot.
+- **`/pf-link notify`**: the Code session tells Cowork when any work is done or stuck - also for a task typed in plain words - and Cowork ends every task it types with that reminder.
+
 ## 2.7.0 - a question always reaches Cowork
 - **Fixed:** a Code session with a question could sit waiting on a choice dialog without telling the Cowork seat. Now the question is written down and the notice is sent before it waits - for any work in a linked session, not only a `/pf-next` request.
 - **During auto hours the Code session does not open a question dialog:** it checks the auto-mode file first and sends the question to the Cowork seat.
