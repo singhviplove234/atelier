@@ -215,12 +215,21 @@ import hashlib
 _h = lambda t: hashlib.sha256(t.encode()).hexdigest()[:16]
 PRIV_LC = {'bf77e2a6d3c0c5b6', '1d0e0e23238779ea', 'e52b9fb83fb40a16', '31a1736842d27b11', '7cf0c08e6d6cae38', '567781541aa1d043', 'cf1c96e9d2e42846', 'b78293703cf3e005', '7068f6611e5257b4', 'f04222209b2d8a97'}
 PRIV_CS = {'1a3326777cf2220b', '39943de3ebeb355c', 'b6152a0c6c5b3465'}
+# The author's name is the single allowed exception: once in each plugin's details, once as the marketplace owner,
+# once on the README's licence line and once in the LICENSE. It is assembled here so this file does not carry it.
+CREDIT = "Vip" + "love" + " " + "Si" + "ngh"
+CREDIT_IN = {f"{C}/.claude-plugin/plugin.json", f"{B}/.claude-plugin/plugin.json", os.path.join(".claude-plugin", "marketplace.json"), "README.md"}
+for f_ in sorted(CREDIT_IN) + ["LICENSE"]:
+    check(read(f_).count(CREDIT) == 1, f"{f_} names the author exactly once")
+check(not re.search(r"@[A-Za-z0-9.-]+\.[a-z]{2,}", read("LICENSE")) and "http" not in read("LICENSE"), "LICENSE carries a name only: no email, no address")
 for top in (C, B, "README.md", "INSTALL.md", "CONTRIBUTING.md", "CHANGELOG.md", "THIRD-PARTY-NOTICES.md", "tests", ".claude-plugin"):
     paths = [top] if os.path.isfile(top) else [os.path.join(r, x) for r, _, fs in os.walk(top) for x in fs]
     for f in paths:
         if any(v in f for v in ("security-audit", "design-md", "humanizer")) or not f.endswith((".md", ".json", ".sh", ".py", ".mjs")): continue
-        toks = re.findall(r"[A-Za-z0-9]+", read(f)); low = [t.lower() for t in toks]
-        comp = {t.lower() for t in re.findall(r"[A-Za-z0-9]+(?:-[A-Za-z0-9]+)+", read(f))}
+        txt_ = read(f)
+        if f in CREDIT_IN: txt_ = txt_.replace(CREDIT, "", 1)      # the one author credit; any second mention is still caught
+        toks = re.findall(r"[A-Za-z0-9]+", txt_); low = [t.lower() for t in toks]
+        comp = {t.lower() for t in re.findall(r"[A-Za-z0-9]+(?:-[A-Za-z0-9]+)+", txt_)}
         hit = (any(_h(t) in PRIV_CS for t in set(toks)) or any(_h(a + " " + b) in PRIV_CS for a, b in set(zip(toks, toks[1:])))
                or any(_h(t) in PRIV_LC for t in set(low) | comp) or any(_h(a + " " + b) in PRIV_LC for a, b in set(zip(low, low[1:]))))
         if hit: bad(f"{f} contains private wording")

@@ -1,9 +1,9 @@
 {
   "name": "atelier-builder",
-  "version": "2.9.0",
+  "version": "2.9.1",
   "description": "The Claude Code half of Atelier: builds, deploys, hardens and pentests a project from the request files the Atelier Cowork plugin writes, and replies with PF-*-RESULT blocks.",
   "author": {
-    "name": "Atelier"
+    "name": "Viplove Singh"
   },
   "keywords": [
     "build",

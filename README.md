@@ -152,4 +152,4 @@ Atelier automates software delivery but does not replace professional judgment. 
 
 ## License
 
-[MIT](LICENSE) © 2026 The Atelier Authors
+[MIT](LICENSE) © 2026 Viplove Singh

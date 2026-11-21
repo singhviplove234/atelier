@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.9.1 - author named
+- The author is now named in the licence, the README and both plugins' details. No other personal or project details were added, and nothing about how Atelier works has changed.
+
 ## 2.9.0 - the way back cannot be forgotten
 - **Fixed:** the Code session could finish, or stop on a question, and report "the Cowork seat was not notified because there is no seat file". The return address depended on Cowork writing a separate file at each hand-off.
 - **The address now travels with the command.** Cowork adds its own link and a reference to the line it types (`--seat ... --ref ...`), and the Code session writes the seat file itself. It stays valid for every later task and question.
