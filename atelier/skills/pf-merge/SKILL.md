@@ -1,6 +1,6 @@
 ---
 name: pf-merge
-description: "PM step for team projects: merges an approved lane's PR into main after the user's yes, updates the lane to merged, and flips gates.build when every lane is merged. Use when the user says /pf-merge, 'merge the LANE lane', or 'merge what's ready'."
+description: "PM step for team projects: merges an approved lane's PR into main after the user's yes, updates the lane to merged, and flips gates.build when every lane is merged. Use when the user says /pf-merge, 'merge the LANE lane', or 'merge what's ready'. Also use when a line starting 'PF-NOTICE' for a merge arrives from the Code session: it means go and read that result file."
 ---
 
 # /pf-merge --lane <name>   (or `/pf-merge --all-ready`)

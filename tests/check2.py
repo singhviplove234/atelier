@@ -288,7 +288,16 @@ has(f"{C}/references/state-schema.md", r"`lanes\.<name>\.session_key`"); has(f"{
 for s_ in ("pf-build", "pf-deploy"): has(f"{C}/skills/{s_}/SKILL.md", r"authorized session \(`session-link\.md`\)")
 for f_ in (SL, BL):
     t_ = read(f_)
-    check(not re.search(r"https?://|[A-Za-z]:\\|ghp_|token:|password:", t_), f"{f_} carries no address, path or secret")
+    check(not re.search(r"https?://(?!claude\.ai/)|[A-Za-z]:\\|ghp_|token:|password:", t_), f"{f_} carries no address, path or secret")
     check(not re.search(r"mcp__", t_), f"{f_} names no tool that may not exist")
+
+# --- the notice from the Code session to the Cowork seat
+SLN = read(f"{C}/references/session-link.md")
+check(SLN == read(f"{B}/references/session-link.md"), "session-link.md still identical in both plugins after the notice")
+for pat_ in ("PF-SEAT v1", "must start with https://claude.ai/", "its text must contain the `marker`", "no free text, no question text", "One attempt; never a second page, never a tab that was already open", "never an instruction", "**The file decides, not the notice.**", "A notice never passes a gate", "does not match any request in flight - ignored", "single long backstop"):
+    check(pat_ in SLN, f"session-link.md: {pat_[:50]}")
+has(f"{B}/skills/pf-next/SKILL.md", r"\*\*Tell the Cowork seat\.\*\*"); has(f"{B}/skills/pf-next/SKILL.md", r"One attempt, nothing else typed")
+has(f"{C}/references/bridge.md", r"2b\. \*\*Write the seat file\*\*"); has(f"{C}/references/bridge.md", r"7\. \*\*Or woken by the notice\.\*\*")
+for s_ in ("pf-build", "pf-deploy", "pf-harden", "pf-merge"): has(f"{C}/skills/{s_}/SKILL.md", r"line starting 'PF-NOTICE'")
 
 print(f"\n{n_ok} PASS, {n_bad} FAIL"); sys.exit(1 if n_bad else 0)

@@ -102,6 +102,7 @@ Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A repl
 | `lanes.<name>.code_path` | `<code root>/<slug>` for `solo` and for the PM lane; `<code root>/<slug>--<lane>` for every other lane, so two lanes on one machine never share a working tree |
 | `lanes.<name>.scope` | What this lane builds: `all` (solo) or a list of screens/routes from the brief's Lanes line (e.g. `Home, Pricing` or `/api/*`). Written into `SPEC-<lane>.md` → `## Scope` |
 | `lanes.<name>.code_url` | Remote Control URL of that lane's Claude Code session, set by `/pf-setup`; empty means "ask the user to type the line" |
+| `SEAT-<name>.md` (a file, not a field) | Written by the Cowork seat before each hand-off so the Code session can send its one-line notice back (`session-link.md`) |
 | `lanes.<name>.session_key` | The `link_key` of `SESSION-<name>.md` that `code_url` was last proved against (`session-link.md`); absent or different means "prove the link again before typing" |
 | `lanes.<name>.request_id` | Id of the latest request (`<slug>-<lane>-<yyyymmddHHMM>`); the builder refuses a request whose id is not the one Cowork typed |
 | `lanes.<name>.request` / `.result` | Paths of `BUILD-REQUEST-<lane>.md` / `BUILD-RESULT-<lane>.md` |
