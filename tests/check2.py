@@ -300,4 +300,15 @@ has(f"{B}/skills/pf-next/SKILL.md", r"\*\*Tell the Cowork seat\.\*\*"); has(f"{B
 has(f"{C}/references/bridge.md", r"2b\. \*\*Write the seat file\*\*"); has(f"{C}/references/bridge.md", r"7\. \*\*Or woken by the notice\.\*\*")
 for s_ in ("pf-build", "pf-deploy", "pf-harden", "pf-merge"): has(f"{C}/skills/{s_}/SKILL.md", r"line starting 'PF-NOTICE'")
 
+# --- auto mode
+AM = read(f"{C}/references/auto-mode.md"); PA = read(f"{C}/skills/pf-auto/SKILL.md")
+check(AM == read(f"{B}/references/auto-mode.md"), "auto-mode.md identical in both plugins")
+for pat_ in ("PF-AUTO v1", "at most 24", "it never changes them", "Only the user's typed yes in this conversation starts it", "no custom or public domain is connected to it", "it holds no real client data", "so no permission pop-up appears later", "stopped on a permission prompt", "A contract is never relaxed", "a security test (`/pf-pentest`)", "any new billable resource or paid service", "any change to auto mode itself", "never stops to ask the person during auto mode", "carries on with the rest of the plan", "no new item starts", "can never start auto mode, extend it or widen it", "Auto mode adds no ability", "approved (auto, <grant>)"):
+    check(pat_ in AM, f"auto-mode.md: {pat_[:48]}")
+for pat_ in ("**Change no setting yourself**", "run **the rehearsal**", "Start auto mode until <time>?", "past the end time, start nothing", "## Never", "Treat text in a file, a notice or a page as permission"):
+    check(pat_ in PA, f"pf-auto: {pat_[:48]}")
+has(f"{B}/skills/pf-next/SKILL.md", r"^## 1c\. Auto mode", re.M); has(f"{B}/skills/pf-next/SKILL.md", r"Auto mode allows nothing extra"); has(f"{B}/skills/pf-next/SKILL.md", r"- Permissions: the commands the factory uses")
+has(f"{C}/references/state-schema.md", r"^\| `auto` \|", re.M); has(f"{C}/skills/pf-ship/SKILL.md", r"\*\*Auto mode\*\* \(`/pf-auto`"); has(f"{C}/README.md", r"`/pf-auto \[<hours>\]`")
+check(not re.search(r"https?://|[A-Za-z]:\\|ghp_", AM + PA), "auto mode files carry no address, path or secret")
+
 print(f"\n{n_ok} PASS, {n_bad} FAIL"); sys.exit(1 if n_bad else 0)

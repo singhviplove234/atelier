@@ -28,6 +28,7 @@ Takes an idea all the way: **plan → design → build → deploy → harden →
 | `/pf-brand <slug>` | PM | Optional, before design: name screening (not legal advice), three logo directions, a brand kit in the repo | name · logo |
 | `/pf-launch <slug>` | PM | Optional, around go-live: launch checklist from the project's own record, share images, an honest waitlist, announcement drafts, a 48-hour watch list. Posts nothing itself | — |
 | `/pf-feedback <slug>` | PM | Optional, after launch: reads what users say, groups it into themes with honest counts, proposes numbered fixes; changes nothing on its own | — |
+| `/pf-auto [<hours>]` | PM | Auto mode: asks for how many hours, checks the app and the Code session are set to run without prompts, plans the work that fits, and after one yes works through it - parking anything only you can decide and carrying on. Go-live happens by itself only on a private address with no public domain; everything public, paid or irreversible waits for you. |
 | `/pf-board` | PM | One live control panel of every project — stage, gates, health, maintenance, what's waiting on you | — |
 | `/pf-ship <idea|slug>` | PM | The conductor: runs the whole chain, pausing only at the human gates. `ship_mode` guarded (default) or streamlined (low-stakes only) | each gate (or just go-live, streamlined) |
 
