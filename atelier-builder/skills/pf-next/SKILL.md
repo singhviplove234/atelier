@@ -28,9 +28,13 @@ Check each item and print one table — item · ok/missing · the one line that 
 - Tools: `node -v` (20+), `git --version`, `gh --version` and `gh auth status`, `npx playwright --version` (e2e, screenshots, and the Chromium the diagram renderer reuses), `npx -y @mermaid-js/mermaid-cli --version` (diagrams), and `gitleaks version` (secret scan in `verify`).
 - The watch dir exists and is writable; the code root (`PF_CODE_DIR`, default `~/dev/atelier`) exists or can be created.
 - With a `<slug>`: read `<watch dir>/<slug>/factory.json` → for `deploy.target` (or `brief.deploy_hint`), each **Required** env var name in that target file is set and each **Checks** command passes; when the project has a Data model, the database names are set (and the `PROD_`-prefixed ones when `database` is `split`); when `ci` is `self-hosted`, `gh api repos/<owner>/<slug>/actions/runners` shows a runner online; in the project checkout, `git config core.hooksPath` is `.githooks`.
+- Permissions: the commands the factory uses are allowed in this session's settings, so an unattended run does not stop on a prompt (report `ok` / `missing`, and name the first few that would prompt; change nothing).
 - Informational (never counted as missing): the Claude Code version and the `advisorModel` setting (or `none`).
 - With a `<slug>` whose `factory.json.options.launch_video` is `on`: `ffmpeg -version` and `ffprobe -version`.
 End with `ready` or `<n> missing — fix the first, then run /pf-next doctor again`.
+
+## 1c. Auto mode
+If `AUTO.md` in the project folder is valid - first line `PF-AUTO v1`, `project` is this project, `until` is in the future - this request is running in the user's auto hours (`${CLAUDE_PLUGIN_ROOT}/references/auto-mode.md`): **do not stop to ask the person anything**. Any question goes through "If you must stop to ask a question" below and the one-line notice, and the Cowork seat answers. Auto mode allows nothing extra: everything in that file's section D still fails closed, the pentest still asks, and an unlinked session still waits for a typed yes. Missing, expired or mismatched `AUTO.md` -> behave exactly as without it.
 
 ## 2. Confirm
 Show `Next: <kind> <slug> [lane] — request_id <id>`. For `pentest`, always ask and name the target (never skip, even with `--go`). For build/merge/deploy/harden/promo, ask yes/no — **unless `--go` was given, which means skip the confirm** (the Cowork seat passes it only after the user approved that stage there).

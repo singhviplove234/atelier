@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.6.0 - auto mode
+- **`/pf-auto`**: say for how many hours. Atelier checks that the app and the Code session are set to run without prompts (it tells you what to switch on - it never changes a setting itself), plans the work that fits, and after one yes works through it.
+- **What runs by itself:** plans, designs, builds, merges, previews, hardening, and go-live only on a private address with no public domain connected.
+- **What always waits for you:** anything public, paid or irreversible - a public go-live, real client data, a security test, a destructive migration, new accounts, publishing.
+- **Questions do not stop the run.** The Code session asks the Cowork seat; what only you can decide is parked with its question, and the rest carries on. You get one report at the end.
+
 ## 2.5.0 - Code tells Cowork when it is done
 - **A notice instead of waiting.** When the Code session finishes a request, or has to stop for a question, it types one fixed line into the Cowork conversation that handed the work over. Cowork then reads the result file straight away.
 - **Safe by design.** Cowork leaves a small seat file with its own link and a one-time marker; Code types only into the page that carries that marker, only that one line. The notice is never an instruction and never passes a gate - the result file decides.
