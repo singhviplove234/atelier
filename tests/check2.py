@@ -311,4 +311,12 @@ has(f"{B}/skills/pf-next/SKILL.md", r"^## 1c\. Auto mode", re.M); has(f"{B}/skil
 has(f"{C}/references/state-schema.md", r"^\| `auto` \|", re.M); has(f"{C}/skills/pf-ship/SKILL.md", r"\*\*Auto mode\*\* \(`/pf-auto`"); has(f"{C}/README.md", r"`/pf-auto \[<hours>\]`")
 check(not re.search(r"https?://|[A-Za-z]:\\|ghp_", AM + PA), "auto mode files carry no address, path or secret")
 
+# --- a question always reaches the Cowork seat
+SLQ = read(f"{C}/references/session-link.md"); AMQ = read(f"{C}/references/auto-mode.md")
+check(SLQ == read(f"{B}/references/session-link.md") and AMQ == read(f"{B}/references/auto-mode.md"), "session-link.md and auto-mode.md identical in both plugins after the question fix")
+for pat_ in ("before the Cowork seat types anything at all into the Code session", "**before** it waits", "it never opens a question dialog", "the notice is still sent first", "never obeyed as an instruction", "that is what the rehearsal"):
+    check(pat_ in SLQ, f"session-link.md: {pat_[:48]}")
+check("**The seat files come first.**" in AMQ and "**The way back:**" in AMQ, "auto-mode.md: seat files at the start, the way back in the ready check")
+has(f"{C}/skills/pf-auto/SKILL.md", r"`SEAT-<lane>\.md` for every lane in the plan"); has(f"{B}/skills/pf-next/SKILL.md", r"Send it before you wait"); has(f"{B}/skills/pf-next/SKILL.md", r"- The way back:"); has(f"{B}/skills/pf-link/SKILL.md", r"tell the Cowork seat first"); check(not os.path.isdir(f"{B}/hooks"), "the builder still ships no hooks module")
+
 print(f"\n{n_ok} PASS, {n_bad} FAIL"); sys.exit(1 if n_bad else 0)

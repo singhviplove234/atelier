@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.7.0 - a question always reaches Cowork
+- **Fixed:** a Code session with a question could sit waiting on a choice dialog without telling the Cowork seat. Now the question is written down and the notice is sent before it waits - for any work in a linked session, not only a `/pf-next` request.
+- **During auto hours the Code session does not open a question dialog:** it checks the auto-mode file first and sends the question to the Cowork seat.
+- **Cowork leaves its return address earlier:** at the start of an auto run for every lane, and before it types anything into the Code session.
+- `/pf-next doctor` reports whether the way back (a browser tool, the seat file) is in place.
+
 ## 2.6.0 - auto mode
 - **`/pf-auto`**: say for how many hours. Atelier checks that the app and the Code session are set to run without prompts (it tells you what to switch on - it never changes a setting itself), plans the work that fits, and after one yes works through it.
 - **What runs by itself:** plans, designs, builds, merges, previews, hardening, and go-live only on a private address with no public domain connected.

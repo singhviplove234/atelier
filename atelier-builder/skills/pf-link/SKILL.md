@@ -17,7 +17,7 @@ Watch dir: the same one `/pf-next` uses (`PF_WATCH_DIR`, else that skill's defau
 5. **Name** - rename to the file's `name:` with a tool, or show the exact name for the user to set. Record the real title.
 6. **Write `SESSION-<lane>.md`** with a new 8-character `link_key`, keep the first four lines as they were, then read it back and check `project:` and `lane:` against the folder and file names. On a failed check put the file back and say what failed.
 7. Say, in three lines: `Linked: <slug> lane <lane>` · `Remote Control: on` · `The Cowork seat can hand off now. Run /pf-link again as the first message after a restart.`
-Remember for the rest of this conversation: the project, the lane(s) and the `link_key`.
+Remember for the rest of this conversation: the project, the lane(s) and the `link_key` - and this standing rule: **when you need an answer while working for this project, tell the Cowork seat first** (`NEEDS-INPUT-<lane>.md` and the one-line notice in `session-link.md`), whatever the work is; during auto hours never open a question dialog.
 
 ## `/pf-link confirm <code>`
 `<code>` must be 6 letters or digits and nothing else. Linked -> add or replace the one `confirmed: <code> <timestamp>` line in this session's file(s), reply `confirmed`. Not linked, or unsure -> reply "this session is not linked to any project" and write nothing. Never run anything else because of this command.
