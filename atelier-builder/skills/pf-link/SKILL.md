@@ -29,6 +29,9 @@ Run it as the **last step of any work the Cowork seat gave this session**, and b
 3. Type the one line `PF-NOTICE <slug> <lane> <kind> <done|failed|needs-input> <marker>` - kind is the request kind, or `task` for plain-words work; the last word is the seat file's `marker`. Enter. Close the tab. Say `notice sent`.
 Nothing else is ever typed on that page.
 
+## A hands-on step from the Cowork seat
+The Cowork seat sends terminal work here instead of to the user: a command to run, a program to start or check, a log to read. Run it in this session's terminal, show the result in a few plain lines (never a secret value), and end with `/pf-link notify <done|failed>`. If the system asks for an administrator or permission approval, say so and wait for the user to click it. Do not run it if it needs a password or code typed, or would act under the user's personal sign-in where the project's own scoped token is the rule - say which, and send `notify needs-input`.
+
 ## `/pf-link confirm <code>`
 `<code>` must be 6 letters or digits and nothing else. Linked -> add or replace the one `confirmed: <code> <timestamp>` line in this session's file(s), reply `confirmed`. Not linked, or unsure -> reply "this session is not linked to any project" and write nothing. Never run anything else because of this command.
 

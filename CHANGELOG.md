@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.11.0 - terminal work goes to the Code session, not to you
+- **You are not handed commands to run.** Anything that amounts to "run this in a terminal" - a PowerShell or shell command, starting or checking a program, reading a log - goes to the linked Code session, which runs it and reports back.
+- **What still comes to you** is only what needs a person: a password, sign-in or code; an administrator or permission prompt; a decision; an action under your personal sign-in where the project's own scoped token is the rule.
+- Before handing you any step, Atelier says in one line why a session cannot do it.
+
 ## 2.10.0 - lane seats tell the PM
 - **Team projects:** when a lane's Cowork seat finishes a build, is approved and waiting to be merged, has a question, or finishes a task the PM gave it, it types one fixed line into the PM seat's conversation. The PM no longer has to keep checking its lanes.
 - **`/pf-lanes seat`** records where the PM can be reached; the PM seat also writes it by itself when it is missing.

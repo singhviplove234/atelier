@@ -363,4 +363,12 @@ for pat_ in ("## `/pf-lanes seat` (PM seat)", "PM address saved", "## When a lin
     check(pat_ in PLN, f"pf-lanes: {pat_[:40]}")
 has(f"{C}/skills/pf-build/SKILL.md", r"tell the PM seat now"); has(f"{C}/skills/pf-build/SKILL.md", r"ready-to-merge <marker>"); has(f"{C}/skills/pf-merge/SKILL.md", r"make sure `PM-SEAT\.md` is current first"); has(f"{C}/references/state-schema.md", r"`PM-SEAT\.md` \(a file, team projects\)")
 
+# --- hands-on steps go to the Code session before the user
+HO6 = read(f"{C}/references/handoff.md"); AM6 = read(f"{C}/references/auto-mode.md")
+check(AM6 == read(f"{B}/references/auto-mode.md"), "auto-mode.md identical in both plugins after the hands-on rule")
+for pat_ in ("## Who does a hands-on step - the Code session before the user", "The user is not a pair of hands for commands", "\"It is a PowerShell command\" is not a reason", "That rule is not relaxed here", "do not pass the work to the user instead", "a session never types a password or a code"):
+    check(pat_ in HO6, f"handoff.md: {pat_[:48]}")
+check("starting a program, pasting a link, a command that needs their own rights" not in AM6 and "never to the user" in AM6, "auto mode no longer lists commands and starting programs as the user's own tasks")
+has(f"{B}/skills/pf-link/SKILL.md", r"## A hands-on step from the Cowork seat"); has(f"{B}/skills/pf-link/SKILL.md", r"never a secret value"); has(f"{C}/skills/pf-auto/SKILL.md", r"to the Code session instead of the user")
+
 print(f"\n{n_ok} PASS, {n_bad} FAIL"); sys.exit(1 if n_bad else 0)
