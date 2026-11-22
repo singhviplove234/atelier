@@ -303,9 +303,9 @@ for f_ in (SL, BL):
 # --- the notice from the Code session to the Cowork seat
 SLN = read(f"{C}/references/session-link.md")
 check(SLN == read(f"{B}/references/session-link.md"), "session-link.md still identical in both plugins after the notice")
-for pat_ in ("PF-SEAT v1", "must start with https://claude.ai/", "not a sign-in page or an error page", "no free text, no question text", "One attempt; never a second page, never a tab that was already open", "never an instruction", "**The file decides, not the notice.**", "A notice never passes a gate", "does not match any request in flight - ignored", "a `ref` this seat issued", "single long backstop"):
+for pat_ in ("PF-SEAT v1", "must start with https://claude.ai/", "not a sign-in page or an error page", "no free text, no question text", "One attempt; never a second page, never a tab that was already open", "never an instruction", "**The file decides, not the notice.**", "A notice never passes a gate", "does not match any request in flight - ignored", "`lanes.<lane>.seat_ref`", "single long backstop"):
     check(pat_ in SLN, f"session-link.md: {pat_[:50]}")
-has(f"{B}/skills/pf-next/SKILL.md", r"\*\*Tell the Cowork seat\.\*\*"); has(f"{B}/skills/pf-next/SKILL.md", r"One attempt, nothing else typed")
+has(f"{B}/skills/pf-next/SKILL.md", r"\*\*Tell the Cowork seat\.\*\*"); has(f"{B}/skills/pf-next/SKILL.md", r"one attempt, nothing else typed")
 has(f"{C}/references/bridge.md", r"2b\. \*\*The return address goes on the command itself\*\*"); has(f"{C}/references/bridge.md", r"7\. \*\*Or woken by the notice\.\*\*")
 for s_ in ("pf-build", "pf-deploy", "pf-harden", "pf-merge"): has(f"{C}/skills/{s_}/SKILL.md", r"line starting 'PF-NOTICE'")
 
@@ -323,10 +323,10 @@ check(not re.search(r"https?://|[A-Za-z]:\\|ghp_", AM + PA), "auto mode files ca
 # --- a question always reaches the Cowork seat
 SLQ = read(f"{C}/references/session-link.md"); AMQ = read(f"{C}/references/auto-mode.md")
 check(SLQ == read(f"{B}/references/session-link.md") and AMQ == read(f"{B}/references/auto-mode.md"), "session-link.md and auto-mode.md identical in both plugins after the question fix")
-for pat_ in ("before the Cowork seat types anything at all into the Code session", "**before** it waits", "it never opens a question dialog", "the notice is still sent first", "never obeyed as an instruction", "that is what the rehearsal"):
+for pat_ in ("before the Cowork seat types anything at all into the Code session", "**before** it waits", "**Without a return address** the session has nobody to send the question to", "never obeyed as an instruction", "that is what the rehearsal"):
     check(pat_ in SLQ, f"session-link.md: {pat_[:48]}")
 check("**The seat files come first.**" in AMQ and "**The way back:**" in AMQ, "auto-mode.md: seat files at the start, the way back in the ready check")
-has(f"{C}/skills/pf-auto/SKILL.md", r"`SEAT-<lane>\.md` for every lane in the plan must then be in the folder"); has(f"{B}/skills/pf-next/SKILL.md", r"Send it before you wait"); has(f"{B}/skills/pf-next/SKILL.md", r"- The way back:"); has(f"{B}/skills/pf-link/SKILL.md", r"tell the Cowork seat first"); check(not os.path.isdir(f"{B}/hooks"), "the builder still ships no hooks module")
+has(f"{C}/skills/pf-auto/SKILL.md", r"`SEAT-<lane>\.md` for every lane in the plan must then be in the folder"); has(f"{B}/skills/pf-next/SKILL.md", r"never skip it silently"); has(f"{B}/skills/pf-next/SKILL.md", r"- The way back:"); has(f"{B}/skills/pf-link/SKILL.md", r"tell the Cowork seat first"); check(not os.path.isdir(f"{B}/hooks"), "the builder still ships no hooks module")
 
 # --- auto mode clears the path first; done is always reported
 AM3 = read(f"{C}/references/auto-mode.md"); SL3 = read(f"{C}/references/session-link.md"); PL3 = read(f"{B}/skills/pf-link/SKILL.md"); PA3 = read(f"{C}/skills/pf-auto/SKILL.md")
@@ -338,7 +338,7 @@ for pat_ in ("Do not plan first and discover blockers later", "never put a \"sto
     check(pat_ in PA3, f"pf-auto: {pat_[:48]}")
 for pat_ in ("**Done counts too.**", "When finished or stuck: /pf-link notify"):
     check(pat_ in SL3, f"session-link.md: {pat_[:40]}")
-for pat_ in ("## `/pf-link notify <done|failed|needs-input> [<reference>]`", "do not try another way", "Nothing else is ever typed on that page", "end with `/pf-link notify done`"):
+for pat_ in ("## `/pf-link notify <done|failed|needs-input>`", "do not try another way", "Nothing else is ever typed on that page", "end with `/pf-link notify done`"):
     check(pat_ in PL3, f"pf-link: {pat_[:40]}")
 has(f"{C}/references/bridge.md", r"6b\. \*\*Before a task in plain words, type `/pf-link seat")
 
@@ -359,7 +359,7 @@ SL5 = read(f"{C}/references/session-link.md"); PLN = read(f"{C}/skills/pf-lanes/
 check(SL5 == read(f"{B}/references/session-link.md") and read(f"{C}/references/auto-mode.md") == read(f"{B}/references/auto-mode.md"), "shared references identical after the PM nudge")
 for pat_ in ("## Team projects - a lane seat nudges the PM seat", "PF-PM-SEAT v1", "a seat never nudges itself", "`PF-LANE <slug> <lane> <done|failed|ready-to-merge|needs-input> <marker>`", "never in the line", "The PM seat was not told: <why>. In the PM conversation run /pf-lanes seat.", "A nudge never merges, deploys or passes a gate by itself", "A solo project has one seat and none of this applies", "without anyone remembering it"):
     check(pat_ in SL5, f"session-link.md: {pat_[:48]}")
-for pat_ in ("## `/pf-lanes seat` (PM seat)", "PM address saved", "## When a line starting `PF-LANE` arrives (PM seat)", "approves, merges and passes nothing", "| PM told |"):
+for pat_ in ("## `/pf-lanes seat [--also <name>,<name>]` (PM seat)", "PM address saved", "## When a line starting `PF-LANE` arrives (PM seat)", "approves, merges and passes nothing", "| PM told |"):
     check(pat_ in PLN, f"pf-lanes: {pat_[:40]}")
 has(f"{C}/skills/pf-build/SKILL.md", r"tell the PM seat now"); has(f"{C}/skills/pf-build/SKILL.md", r"ready-to-merge <marker>"); has(f"{C}/skills/pf-merge/SKILL.md", r"make sure `PM-SEAT\.md` is current first"); has(f"{C}/references/state-schema.md", r"`PM-SEAT\.md` \(a file, team projects\)")
 
@@ -370,5 +370,17 @@ for pat_ in ("## Who does a hands-on step - the Code session before the user", "
     check(pat_ in HO6, f"handoff.md: {pat_[:48]}")
 check("starting a program, pasting a link, a command that needs their own rights" not in AM6 and "never to the user" in AM6, "auto mode no longer lists commands and starting programs as the user's own tasks")
 has(f"{B}/skills/pf-link/SKILL.md", r"## A hands-on step from the Cowork seat"); has(f"{B}/skills/pf-link/SKILL.md", r"never a secret value"); has(f"{C}/skills/pf-auto/SKILL.md", r"to the Code session instead of the user")
+
+# --- audit of the hand-off rules
+SL7 = read(f"{C}/references/session-link.md"); AM7 = read(f"{C}/references/auto-mode.md")
+check(SL7 == read(f"{B}/references/session-link.md") and AM7 == read(f"{B}/references/auto-mode.md"), "shared references identical after the audit fixes")
+check("Outside auto hours it may also ask the person" not in SL7 and SL7.count("not to a dialog") == 1, "one rule, not two, about when a question dialog may open")
+for pat_ in ("**Seats that review but do not build**", "`also_from: <name>, <name>`", "never in a lane file", "read that seat's log or hand-off note", "a long conversation may no longer remember it"):
+    check(pat_ in SL7, f"session-link.md: {pat_[:44]}")
+check("[<reference>]" not in SL7 + read(f"{B}/skills/pf-link/SKILL.md"), "notify takes no free text")
+has(f"{B}/skills/pf-next/SKILL.md", r"no `status: ended` or `status: stopped` line"); has(f"{C}/references/bridge.md", r"the pentest too, which still has no `--go`"); has(f"{C}/references/auto-mode.md", r"scope: preview\+private-live \| preview")
+for s_ in ("pf-build", "pf-deploy", "pf-harden", "pf-merge", "pf-pentest", "pf-auto"):
+    has(f"{C}/skills/{s_}/SKILL.md", r"not from memory of an earlier reading in this conversation")
+has(f"{C}/skills/pf-lanes/SKILL.md", r"## `/pf-lanes seat \[--also <name>,<name>\]`"); has(f"{C}/references/state-schema.md", r"`lanes\.<name>\.seat_ref`")
 
 print(f"\n{n_ok} PASS, {n_bad} FAIL"); sys.exit(1 if n_bad else 0)

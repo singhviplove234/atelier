@@ -5,6 +5,8 @@ description: "Auto mode for Atelier: asks for how many hours, checks that the Cl
 
 # /pf-auto [<slug> ...] [<hours>] · /pf-auto status · /pf-auto stop
 
+**Every time this command runs, read `${CLAUDE_PLUGIN_ROOT}/references/session-link.md` and `bridge.md` again** - not from memory of an earlier reading in this conversation: these rules change between plugin versions, and a long-running conversation that skips this hands off the old way.
+
 Read first: `${CLAUDE_PLUGIN_ROOT}/references/auto-mode.md` (the contract - follow it), `session-link.md`, `bridge.md`, `state-schema.md`.
 
 ## 1. Hours and projects

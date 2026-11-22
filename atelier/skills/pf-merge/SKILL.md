@@ -5,6 +5,8 @@ description: "PM step for team projects: merges an approved lane's PR into main 
 
 # /pf-merge --lane <name>   (or `/pf-merge --all-ready`)
 
+**Before every hand-off, read `${CLAUDE_PLUGIN_ROOT}/references/session-link.md` and `bridge.md` again** - not from memory of an earlier reading in this conversation: these rules change between plugin versions, and a long-running conversation that skips this hands off the old way.
+
 Seat identity = `--lane` (default `solo`); it must equal `factory.json.pm_lane`, else "Only the PM lane (`<pm_lane>`) merges." and stop. Lanes whose `branch == main` (solo) never need this. First refresh `factory.json.lanes` from every `lanes/<lane>.json`.
 
 

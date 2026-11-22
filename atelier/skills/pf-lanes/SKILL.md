@@ -13,7 +13,8 @@ Lanes are the unit of parallel work. A solo project has one lane, `solo`, create
 - For each new lane also write its invitation `SESSION-<name>.md` (`references/session-link.md`).
 - Remind: "Open a Claude Code session for each lane and run `/pf-link` there; then `/pf-setup` item 2 proves the link."
 
-## `/pf-lanes seat` (PM seat) - "this is where the lane seats reach me"
+## `/pf-lanes seat [--also <name>,<name>]` (PM seat) - "this is where the lane seats reach me"
+`--also` lists seats that review but do not build (for example `security`); they go on the `also_from:` line and may nudge this conversation too.
 Per `${CLAUDE_PLUGIN_ROOT}/references/session-link.md`, "Team projects": write `PM-SEAT.md` in the project folder with this conversation's own link and a new 8-character marker, read it back, and say `PM address saved - lane seats will tell this conversation when they are done`. Only the PM lane's seat runs this. Also do it quietly, without being asked, at the start of `add` and `status` when the file is missing or names another conversation.
 
 ## When a line starting `PF-LANE` arrives (PM seat)

@@ -5,6 +5,8 @@ description: "PM step after a deploy: makes the live product fast, findable and 
 
 # /pf-harden [--passes safety,perf,seo,security,compliance,indexes,caching,load,limits] [--dry-run]
 
+**Before every hand-off, read `${CLAUDE_PLUGIN_ROOT}/references/session-link.md` and `bridge.md` again** - not from memory of an earlier reading in this conversation: these rules change between plugin versions, and a long-running conversation that skips this hands off the old way.
+
 Post-launch hardening. Read first: `${CLAUDE_PLUGIN_ROOT}/references/performance-budget.md`, `seo-ai-visibility.md`, `security.md`, `deploy-rule.md` (cost posture), `bridge.md`, `handoff.md`.
 
 ## 0. Flags first

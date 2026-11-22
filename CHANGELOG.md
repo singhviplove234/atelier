@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.12.0 - audit of the hand-off rules
+- **Seats that review but do not build** (security, architecture, operations) can now nudge the PM too: `/pf-lanes seat --also <names>`. They record it in their own log only.
+- **A long-running conversation re-reads the hand-off rules before every hand-off**, so it does not keep working the old way after an update.
+- **Fixed two rules that disagreed** about when a Code session may open a question dialog: with a return address saved the question goes to the Cowork seat; without one it says so first.
+- The reference a notice must carry is now written down by the Cowork seat, not kept in memory. A stopped auto run is no longer treated as running. The security-test hand-off carries the return address too.
+
 ## 2.11.0 - terminal work goes to the Code session, not to you
 - **You are not handed commands to run.** Anything that amounts to "run this in a terminal" - a PowerShell or shell command, starting or checking a program, reading a log - goes to the linked Code session, which runs it and reports back.
 - **What still comes to you** is only what needs a person: a password, sign-in or code; an administrator or permission prompt; a decision; an action under your personal sign-in where the project's own scoped token is the rule.

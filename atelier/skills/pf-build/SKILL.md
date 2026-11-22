@@ -42,6 +42,7 @@ Validate: all **nine** headings present in order (Brief, Stack, Screens, Tokens,
 ## 3. (flags handled in step 0)
 
 ## 4. Hand-off (see `handoff.md` for the two modes)
+**Before every hand-off, read `${CLAUDE_PLUGIN_ROOT}/references/session-link.md` and `bridge.md` again** - not from memory of an earlier reading in this conversation: these rules change between plugin versions, and a long-running conversation that skips this hands off the old way.
 
 **Pick the handoff mode first.** Read `handoff.mode` from `factory.json`. If `--handoff event|cloud` was passed, use it for this run (and, on `/pf-build --handoff …` with no build, record it as the new default and stop). If `handoff.mode` is unset and this is the project's first build, present **both modes** with AskUserQuestion using the pros/cons/**cost** from `handoff.md` — **"A — Local build + event wake (Recommended)"** first, then **"B — Cloud build"** — and record the answer as `handoff.mode` (`event`|`cloud`), `log {stage:"build", event:"handoff mode = <mode>"}`. **Guardrail:** if `brief.data_sensitivity == "high"`, do **not** offer B by default — default to `event`; only if the user explicitly asks for `cloud`, warn per `handoff.md` (client-data path stays local; needs Key Vault + the Phase-2 safety net) and confirm once more before recording it. The pentest step is always `event` regardless.
 

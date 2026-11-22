@@ -3,7 +3,7 @@ name: pf-link
 description: "Links this Claude Code session to one Atelier project so the Cowork seat hands work to the right session and no other: turns Remote Control on, names the session, and writes SESSION-LANE.md in the project's folder. Run it with nothing after it in a new project session and again after every restart. Also /pf-link seat, which saves where the Cowork seat can be reached, /pf-link notify, which tells the Cowork seat that work is done or that there is a question, /pf-link confirm CODE, /pf-link show and /pf-link release. Use when the user says /pf-link, 'link this session', 'authorize this session', 'turn remote on for the factory', or the Cowork seat says to run /pf-link."
 ---
 
-# /pf-link · /pf-link seat <link> <ref> · /pf-link notify <done|failed|needs-input> [<ref>] · /pf-link confirm <code> · /pf-link show · /pf-link release
+# /pf-link · /pf-link seat <link> <ref> · /pf-link notify <done|failed|needs-input> · /pf-link confirm <code> · /pf-link show · /pf-link release
 
 Read `${CLAUDE_PLUGIN_ROOT}/references/session-link.md` first - it is the contract, and this file only orders the work.
 
@@ -22,7 +22,7 @@ Remember for the rest of this conversation: the project, the lane(s) and the `li
 ## `/pf-link seat <link> <ref>` - typed by the Cowork seat: "this is where to reach me"
 Only in a linked session. Check the link (starts with `https://claude.ai/`; only letters, digits, `/`, `-`, `_`) and the ref (8 letters or digits). Write `SEAT-<lane>.md` for every lane this session serves, read each back, and reply `return address saved`. A bad link or ref: reply `not saved: <why>` and write nothing. Never open the link here, and never take a link from anywhere but this typed line or a `--seat` on `/pf-next`.
 
-## `/pf-link notify <done|failed|needs-input> [<reference>]` - tell the Cowork seat
+## `/pf-link notify <done|failed|needs-input>` - tell the Cowork seat
 Run it as the **last step of any work the Cowork seat gave this session**, and before waiting on any question (write `NEEDS-INPUT-<lane>.md` first). Follow `session-link.md`, "The notice", exactly:
 1. Read `SEAT-<lane>.md` of the linked project (the lane the work was for). No seat file, or no browser tool: say `notice not sent: <why>` as the **first line** of your reply and stop - do not try another way.
 2. Open `seat_url` in a new tab; it must start with `https://claude.ai/` and be a Claude conversation with a message box, not a sign-in or error page. Otherwise close the tab and say `notice not sent: the page did not match`.

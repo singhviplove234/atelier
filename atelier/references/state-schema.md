@@ -106,6 +106,7 @@ Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A repl
 | `SEAT-<name>.md` (a file, not a field) | Written by the **Code session** from the `--seat`/`--ref` the Cowork seat puts on its typed line (or `/pf-link seat`); it stays until replaced and lets the Code session send its one-line notice back (`session-link.md`) |
 | `PM-SEAT.md` (a file, team projects) | Written by the PM seat (`/pf-lanes seat`, or by itself on `add`/`status`/`merge`/auto start): where the lane seats type their one-line `PF-LANE` nudge. `lanes.<name>.pm_notice` records whether the PM was told; `lanes.<name>.question` holds a lane's open question for the PM |
 | `lanes.<name>.session_key` | The `link_key` of `SESSION-<name>.md` that `code_url` was last proved against (`session-link.md`); absent or different means "prove the link again before typing" |
+| `lanes.<name>.seat_ref` | The 8-character ref this seat last put on a typed line for that lane (`--ref`); a `PF-NOTICE` must carry it (`session-link.md`) |
 | `lanes.<name>.request_id` | Id of the latest request (`<slug>-<lane>-<yyyymmddHHMM>`); the builder refuses a request whose id is not the one Cowork typed |
 | `lanes.<name>.request` / `.result` | Paths of `BUILD-REQUEST-<lane>.md` / `BUILD-RESULT-<lane>.md` |
 | `lanes.<name>.status` | `idle` → `requested` → `building` → `ok` \| `failed` → `merged` |

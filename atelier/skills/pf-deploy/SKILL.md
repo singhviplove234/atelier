@@ -5,6 +5,8 @@ description: "PM step: deploys main once every lane is merged — picks the targ
 
 # /pf-deploy
 
+**Before every hand-off, read `${CLAUDE_PLUGIN_ROOT}/references/session-link.md` and `bridge.md` again** - not from memory of an earlier reading in this conversation: these rules change between plugin versions, and a long-running conversation that skips this hands off the old way.
+
 Ship an approved build and verify it is live. Read first:
 - `${CLAUDE_PLUGIN_ROOT}/references/state-schema.md`
 - `${CLAUDE_PLUGIN_ROOT}/references/deploy-rule.md`
