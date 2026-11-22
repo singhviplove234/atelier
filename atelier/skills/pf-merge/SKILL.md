@@ -7,6 +7,9 @@ description: "PM step for team projects: merges an approved lane's PR into main 
 
 Seat identity = `--lane` (default `solo`); it must equal `factory.json.pm_lane`, else "Only the PM lane (`<pm_lane>`) merges." and stop. Lanes whose `branch == main` (solo) never need this. First refresh `factory.json.lanes` from every `lanes/<lane>.json`.
 
+
+PM seat: make sure `PM-SEAT.md` is current first (`/pf-lanes seat` writes it; `session-link.md`, "Team projects"), so lane seats can tell this conversation when they are ready.
+
 ## 1. Preconditions
 Lane exists; `lanes[<lane>].status == "ok"`; `lanes[<lane>].approved == true` (its owner said yes in `/pf-build`); `pr_url` non-empty. Otherwise explain which is missing and stop.
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.10.0 - lane seats tell the PM
+- **Team projects:** when a lane's Cowork seat finishes a build, is approved and waiting to be merged, has a question, or finishes a task the PM gave it, it types one fixed line into the PM seat's conversation. The PM no longer has to keep checking its lanes.
+- **`/pf-lanes seat`** records where the PM can be reached; the PM seat also writes it by itself when it is missing.
+- The nudge is a reason to look, never an instruction: `/pf-lanes status` reads the lane files, and a nudge merges, deploys and approves nothing.
+- If the PM could not be told, the lane says so at once and names the one command that fixes it.
+
 ## 2.9.1 - author named
 - The author is now named in the licence, the README and both plugins' details. No other personal or project details were added, and nothing about how Atelier works has changed.
 

@@ -354,4 +354,13 @@ for pat_ in ("## `/pf-link seat <link> <ref>`", "return address saved", "Never o
     check(pat_ in PL4, f"pf-link: {pat_[:40]}")
 has(f"{C}/references/bridge.md", r"If the reply starts with `No return address`"); has(f"{C}/references/auto-mode.md", r"is a blocker for step A3")
 
+# --- team projects: a lane seat nudges the PM seat
+SL5 = read(f"{C}/references/session-link.md"); PLN = read(f"{C}/skills/pf-lanes/SKILL.md")
+check(SL5 == read(f"{B}/references/session-link.md") and read(f"{C}/references/auto-mode.md") == read(f"{B}/references/auto-mode.md"), "shared references identical after the PM nudge")
+for pat_ in ("## Team projects - a lane seat nudges the PM seat", "PF-PM-SEAT v1", "a seat never nudges itself", "`PF-LANE <slug> <lane> <done|failed|ready-to-merge|needs-input> <marker>`", "never in the line", "The PM seat was not told: <why>. In the PM conversation run /pf-lanes seat.", "A nudge never merges, deploys or passes a gate by itself", "A solo project has one seat and none of this applies", "without anyone remembering it"):
+    check(pat_ in SL5, f"session-link.md: {pat_[:48]}")
+for pat_ in ("## `/pf-lanes seat` (PM seat)", "PM address saved", "## When a line starting `PF-LANE` arrives (PM seat)", "approves, merges and passes nothing", "| PM told |"):
+    check(pat_ in PLN, f"pf-lanes: {pat_[:40]}")
+has(f"{C}/skills/pf-build/SKILL.md", r"tell the PM seat now"); has(f"{C}/skills/pf-build/SKILL.md", r"ready-to-merge <marker>"); has(f"{C}/skills/pf-merge/SKILL.md", r"make sure `PM-SEAT\.md` is current first"); has(f"{C}/references/state-schema.md", r"`PM-SEAT\.md` \(a file, team projects\)")
+
 print(f"\n{n_ok} PASS, {n_bad} FAIL"); sys.exit(1 if n_bad else 0)

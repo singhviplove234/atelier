@@ -104,6 +104,7 @@ Flip a gate **only** on one of: `yes`, `approve`, `approved`, `go ahead`. A repl
 | `lanes.<name>.scope` | What this lane builds: `all` (solo) or a list of screens/routes from the brief's Lanes line (e.g. `Home, Pricing` or `/api/*`). Written into `SPEC-<lane>.md` → `## Scope` |
 | `lanes.<name>.code_url` | Remote Control URL of that lane's Claude Code session, set by `/pf-setup`; empty means "ask the user to type the line" |
 | `SEAT-<name>.md` (a file, not a field) | Written by the **Code session** from the `--seat`/`--ref` the Cowork seat puts on its typed line (or `/pf-link seat`); it stays until replaced and lets the Code session send its one-line notice back (`session-link.md`) |
+| `PM-SEAT.md` (a file, team projects) | Written by the PM seat (`/pf-lanes seat`, or by itself on `add`/`status`/`merge`/auto start): where the lane seats type their one-line `PF-LANE` nudge. `lanes.<name>.pm_notice` records whether the PM was told; `lanes.<name>.question` holds a lane's open question for the PM |
 | `lanes.<name>.session_key` | The `link_key` of `SESSION-<name>.md` that `code_url` was last proved against (`session-link.md`); absent or different means "prove the link again before typing" |
 | `lanes.<name>.request_id` | Id of the latest request (`<slug>-<lane>-<yyyymmddHHMM>`); the builder refuses a request whose id is not the one Cowork typed |
 | `lanes.<name>.request` / `.result` | Paths of `BUILD-REQUEST-<lane>.md` / `BUILD-RESULT-<lane>.md` |
