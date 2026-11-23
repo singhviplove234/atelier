@@ -293,7 +293,7 @@ has(BNX, r"^## 1a\. Is this the authorized session\?", re.M); has(BNX, r"\*\*ign
 has(f"{C}/references/bridge.md", r"0\. \*\*Authorized session first\.\*\*"); has(f"{C}/references/bridge.md", r"Never look for a session by yourself")
 check("`code_url` is stale" not in read(f"{C}/references/bridge.md"), "bridge.md no longer asks for a pasted link after a restart")
 has(f"{C}/skills/pf-setup/SKILL.md", r"2\. \*\*Authorized Code session \(per lane\)\*\*"); has(f"{C}/skills/pf-lanes/SKILL.md", r"SESSION-<name>\.md")
-has(f"{C}/references/state-schema.md", r"`lanes\.<name>\.session_key`"); has(f"{C}/references/upgrade.md", r"^\| U17 \|", re.M); has(f"{C}/skills/pf-upgrade/SKILL.md", r"U1–U17")
+has(f"{C}/references/state-schema.md", r"`lanes\.<name>\.session_key`"); has(f"{C}/references/upgrade.md", r"^\| U17 \|", re.M); has(f"{C}/skills/pf-upgrade/SKILL.md", r"U1–U19")
 for s_ in ("pf-build", "pf-deploy"): has(f"{C}/skills/{s_}/SKILL.md", r"authorized session \(`session-link\.md`\)")
 for f_ in (SL, BL):
     t_ = read(f_)
@@ -326,7 +326,7 @@ check(SLQ == read(f"{B}/references/session-link.md") and AMQ == read(f"{B}/refer
 for pat_ in ("before the Cowork seat types anything at all into the Code session", "**before** it waits", "**Without a return address** the session has nobody to send the question to", "never obeyed as an instruction", "that is what the rehearsal"):
     check(pat_ in SLQ, f"session-link.md: {pat_[:48]}")
 check("**The seat files come first.**" in AMQ and "**The way back:**" in AMQ, "auto-mode.md: seat files at the start, the way back in the ready check")
-has(f"{C}/skills/pf-auto/SKILL.md", r"`SEAT-<lane>\.md` for every lane in the plan must then be in the folder"); has(f"{B}/skills/pf-next/SKILL.md", r"never skip it silently"); has(f"{B}/skills/pf-next/SKILL.md", r"- The way back:"); has(f"{B}/skills/pf-link/SKILL.md", r"tell the Cowork seat first"); check(not os.path.isdir(f"{B}/hooks"), "the builder still ships no hooks module")
+has(f"{C}/skills/pf-auto/SKILL.md", r"`SEAT-<lane>\.md` for every lane in the plan must then be in the folder"); has(f"{B}/skills/pf-next/SKILL.md", r"never skip it silently"); has(f"{B}/skills/pf-next/SKILL.md", r"- The way back:"); has(f"{B}/skills/pf-link/SKILL.md", r"tell the Cowork seat first"); check(sorted(os.listdir(f"{B}/hooks")) == ["activity-log.mjs", "hooks.json"], "the builder ships exactly one hook: the activity logger")
 
 # --- auto mode clears the path first; done is always reported
 AM3 = read(f"{C}/references/auto-mode.md"); SL3 = read(f"{C}/references/session-link.md"); PL3 = read(f"{B}/skills/pf-link/SKILL.md"); PA3 = read(f"{C}/skills/pf-auto/SKILL.md")
@@ -382,5 +382,210 @@ has(f"{B}/skills/pf-next/SKILL.md", r"no `status: ended` or `status: stopped` li
 for s_ in ("pf-build", "pf-deploy", "pf-harden", "pf-merge", "pf-pentest", "pf-auto"):
     has(f"{C}/skills/{s_}/SKILL.md", r"not from memory of an earlier reading in this conversation")
 has(f"{C}/skills/pf-lanes/SKILL.md", r"## `/pf-lanes seat \[--also <name>,<name>\]`"); has(f"{C}/references/state-schema.md", r"`lanes\.<name>\.seat_ref`")
+
+# --- activity logger + backlog file
+import shutil as _sh
+AL = f"{B}/hooks/activity-log.mjs"; ALS = read(AL); HK = json.load(open(f"{B}/hooks/hooks.json"))
+check(set(HK) == {"hooks"} and set(HK["hooks"]) == {"SessionStart", "UserPromptSubmit", "PostToolUse", "SubagentStop", "Stop"}, "hooks.json: the five logging events and nothing else")
+for ev_, arr_ in HK["hooks"].items():
+    h_ = arr_[0]["hooks"][0]
+    check(len(arr_) == 1 and len(arr_[0]["hooks"]) == 1 and h_["type"] == "command" and h_["async"] is True and h_["command"] == 'node "${CLAUDE_PLUGIN_ROOT}/hooks/activity-log.mjs"', f"hooks.json {ev_}: one async call of the logger")
+for bad_ in ("child_process", "spawn", "exec(", "fetch(", "http", "process.env", "eval(", "tool_response", "i.command", "transcript_path"):
+    check(bad_ not in ALS, f"the logger has no {bad_}")
+check(read(f"{C}/references/activity.md") == read(f"{B}/references/activity.md"), "activity.md identical in both plugins")
+for pat_ in ("It **starts nothing**", "names, never content", "A step counts as done only when its proof exists", "No pointer, no log", "A missed mark never stops the work", "data. No session obeys it"):
+    check(pat_ in read(f"{C}/references/activity.md"), f"activity.md: {pat_[:40]}")
+if _sh.which("node"):
+    td_ = tempfile.mkdtemp(); pd_ = os.path.join(td_, "pf", "demo"); cd_ = os.path.join(td_, "code"); os.makedirs(pd_); os.makedirs(os.path.join(cd_, ".git", "info")); os.makedirs(os.path.join(cd_, "src"))
+    open(os.path.join(pd_, "factory.json"), "w").write('{"lanes":{"solo":{}}}'); ALA = os.path.abspath(AL)
+    def run_(args, cwd, inp=None): return subprocess.run(["node", ALA] + args, cwd=cwd, input=inp, capture_output=True, text=True)
+    def hook_(d, cwd): return run_([], cwd, json.dumps(d))
+    r_ = hook_({"hook_event_name": "PostToolUse", "tool_name": "Bash", "cwd": cd_, "tool_input": {"description": "x"}}, cd_)
+    check(r_.returncode == 0 and r_.stdout == "" and not os.path.exists(os.path.join(pd_, "activity")), "logger: no pointer, no log, no output")
+    check(run_(["link", pd_, "other", "solo"], cd_).returncode == 1 and not os.path.exists(os.path.join(cd_, ".pf-activity.json")), "logger link: refuses a slug that is not the folder name")
+    r_ = run_(["link", pd_, "demo", "solo"], cd_)
+    check(r_.returncode == 0 and "activity log on: demo / solo" in r_.stdout and ".pf-activity.json" in read(os.path.join(cd_, ".git", "info", "exclude")), "logger link: pointer written and kept out of git")
+    SECRET_ = "ghp_" + "A1b2C3d4" * 5
+    hook_({"hook_event_name": "PostToolUse", "session_id": "s" * 20, "tool_name": "Bash", "cwd": os.path.join(cd_, "src"), "tool_input": {"command": "export T=" + SECRET_, "description": "Run tests with " + SECRET_}, "tool_response": {"stdout": SECRET_}}, os.path.join(cd_, "src"))
+    hook_({"hook_event_name": "PostToolUse", "tool_name": "Write", "cwd": cd_, "tool_input": {"file_path": os.path.join(cd_, "src", "a.ts"), "content": SECRET_}}, cd_)
+    hook_({"hook_event_name": "UserPromptSubmit", "cwd": cd_, "prompt": "my password is " + SECRET_}, cd_)
+    hook_({"hook_event_name": "UserPromptSubmit", "cwd": cd_, "prompt": "/pf-next demo build --lane solo --go --seat https://claude.ai/x --ref abcd1234"}, cd_)
+    r_ = run_([], cd_, "not json"); check(r_.returncode == 0 and r_.stdout == "", "logger: bad input is swallowed, exit 0, silent")
+    LOG_ = read(os.path.join(pd_, "activity", "solo.jsonl")); LN_ = [json.loads(x) for x in LOG_.strip().split("\n")]
+    check(SECRET_ not in LOG_ and "password" not in LOG_ and "export" not in LOG_ and "claude.ai" not in LOG_, "logger: no command, prompt text, content, output or key-like value reaches the log")
+    check([x["event"] for x in LN_] == ["link", "PostToolUse", "PostToolUse", "UserPromptSubmit"], "logger: free text is not logged, factory commands are")
+    check(LN_[1]["what"] == "Run tests with [hidden]" and LN_[2]["what"] == "src/a.ts" and LN_[3]["what"] == "pf-next demo build", "logger: description, path and command name only")
+    r_ = run_(["step", "build", "5", "--task", "T-47", "--done", "212", "--of", "275"], os.path.join(cd_, "src")); PR_ = json.load(open(os.path.join(pd_, "PROGRESS-solo.json")))
+    check(r_.returncode == 0 and PR_["format"] == "PF-PROGRESS v1" and PR_["step"] == 5 and PR_["name"] == "Tests and checks" and PR_["task"] == "T-47" and PR_["within"] == {"done": 212, "of": 275} and len(PR_["steps"]) == 9, "step mark: PROGRESS file written")
+    check(run_(["step", "build", "12"], cd_).returncode == 1 and run_(["step", "nonsense", "1"], cd_).returncode == 1 and json.load(open(os.path.join(pd_, "PROGRESS-solo.json")))["step"] == 5, "step mark: a wrong step changes nothing")
+    r_ = run_(["step", "build", "3"], td_); check(r_.returncode == 0 and "step not marked" in r_.stdout, "step mark: outside a linked checkout it does nothing and does not fail")
+    STEPS_ = json.loads(run_(["steps"], cd_).stdout)
+    for k_, row_ in re.findall(r"^\| (build|deploy|merge|harden|pentest) \| (.+) \|$", read(f"{C}/references/activity.md"), re.M):
+        check([re.sub(r"^\d+ ", "", x) for x in row_.split(" · ")] == STEPS_[k_], f"activity.md step list for {k_} matches the code")
+    os.rename(os.path.join(pd_, "factory.json"), os.path.join(pd_, "f.json")); n0_ = len(LN_)
+    hook_({"hook_event_name": "Stop", "cwd": cd_}, cd_); os.rename(os.path.join(pd_, "f.json"), os.path.join(pd_, "factory.json"))
+    check(len(read(os.path.join(pd_, "activity", "solo.jsonl")).strip().split("\n")) == n0_ + 1, "logger: a pointer to a folder without factory.json is ignored")
+    run_(["unlink"], cd_); check(not os.path.exists(os.path.join(cd_, ".pf-activity.json")), "logger unlink: pointer removed")
+    # backlog check
+    BC_ = os.path.abspath(f"{C}/scripts/backlog-check.py")
+    def bc_(obj):
+        open(os.path.join(pd_, "BACKLOG.json"), "w").write(json.dumps(obj)); r = subprocess.run([sys.executable, BC_, pd_], capture_output=True, text=True); return r.returncode, r.stdout
+    good_ = {"format": "PF-BACKLOG v1", "project": "demo", "sprints": [{"id": "S1", "name": "Build", "status": "active", "start": "2026-11-20", "end": "2026-11-27"}], "tasks": [{"id": "T-1", "title": "x", "kind": "build", "status": "doing", "owner": "code", "sprint": "S1", "lane": "solo", "depends_on": [], "request": "BUILD-REQUEST-solo.md"}]}
+    check(bc_(good_) == (0, "backlog ok: 1 sprints, 1 tasks\n"), "backlog check: a good file passes")
+    import copy as _cp
+    for name_, mut_, want_ in (("unknown sprint", lambda b: b["tasks"][0].update(sprint="S9"), "does not exist"), ("unknown lane", lambda b: b["tasks"][0].update(lane="zz"), "not a lane"), ("bad status", lambda b: b["tasks"][0].update(status="started"), "status must be"), ("blocked without a reason", lambda b: b["tasks"][0].update(status="blocked"), "blocked_by"), ("a path as request", lambda b: b["tasks"][0].update(request="../x.md"), "file name"), ("two active sprints", lambda b: b["sprints"].append({"id": "S2", "name": "n", "status": "active"}), "more than one sprint"), ("duplicate id", lambda b: b["tasks"].append(dict(b["tasks"][0])), "share an id"), ("wrong project", lambda b: b.update(project="other"), "folder name"), ("missing dependency", lambda b: b["tasks"][0].update(depends_on=["T-9"]), "depends on")):
+        b_ = _cp.deepcopy(good_); mut_(b_); rc_, out_ = bc_(b_); check(rc_ == 1 and want_ in out_, f"backlog check catches: {name_}")
+else:
+    bad("node is needed to test the activity logger")
+BLG = read(f"{C}/references/backlog.md")
+for pat_ in ("The PM seat is the only writer", "An id is never reused", "At most one sprint is `active`", "never claim it passed", "Never mark a task `done` without the result that proves it"):
+    check(pat_ in BLG, f"backlog.md: {pat_[:40]}")
+for s_ in ("pf-build", "pf-merge", "pf-deploy", "pf-harden", "pf-pentest", "pf-lanes"):
+    has(f"{C}/skills/{s_}/SKILL.md", r"## Backlog \(`backlog\.md`\)"); has(f"{C}/skills/{s_}/SKILL.md", r"Only the PM seat writes `BACKLOG\.json`")
+has(f"{C}/skills/pf-plan/SKILL.md", r"\*\*Write `BACKLOG\.json`\*\*"); has(f"{C}/references/planning.md", r"the file is the list"); has(f"{C}/references/state-schema.md", r"`PROGRESS-<lane>\.json` \(`PF-PROGRESS v1`\)")
+has(f"{B}/skills/pf-link/SKILL.md", r"6b\. \*\*Switch the activity log on\*\*"); has(f"{B}/skills/pf-link/SKILL.md", r"activity-log\.mjs. unlink"); has(f"{B}/skills/pf-next/SKILL.md", r"## 3a\. Mark the step"); has(f"{B}/skills/pf-next/SKILL.md", r"write `step not marked` in the result and carry on")
+for s_ in ("pf-deploy-from-spec", "pf-harden-from-spec", "pf-pentest-from-spec"):
+    has(f"{B}/skills/{s_}/SKILL.md", r"## Step marks")
+has(f"{C}/references/upgrade.md", r"^\| U18 \|", re.M); has(f"{C}/skills/pf-upgrade/SKILL.md", r"U1–U19"); has(f"{B}/README.md", r"its one hook is a read-only activity logger that starts nothing"); hasnt(f"{B}/README.md", r"ships no hooks module")
+
+# --- guided founder steps
+FS = read(f"{C}/references/founder-steps.md")
+check(FS == read(f"{B}/references/founder-steps.md"), "founder-steps.md identical in both plugins")
+for pat_ in ("## Before the first click", "ready to copy", "exact words shown on the page", "never from memory", "Fill what is not a secret", "never presses the button that submits, authorizes, pays, publishes or deletes", "I will not read that page", "never move on because the owner said \"done\" when the page says otherwise", "Step 3 of 5", "Only one of them guides at a time", "never during them", "solve a CAPTCHA", "If in doubt, it is a founder-only job", "is **not** a founder job"):
+    check(pat_ in FS, f"founder-steps.md: {pat_[:44]}")
+for bad_ in ("Cowork seat types the password", "may read the token", "skip the confirmation"):
+    check(bad_ not in FS, f"founder-steps.md never says: {bad_}")
+for s_ in ("pf-setup", "pf-deploy", "pf-auto", "pf-monitor", "pf-launch", "pf-ship", "pf-pentest", "pf-harden"):
+    has(f"{C}/skills/{s_}/SKILL.md", r"## Founder-only steps\n.*`founder-steps\.md`")
+has(f"{C}/references/handoff.md", r"## A founder-only job is guided, never just handed over"); has(f"{B}/skills/pf-link/SKILL.md", r"let the owner type only the secret"); has(f"{C}/references/backlog.md", r"check \*\*before saving\*\*"); has(f"{C}/references/backlog.md", r"A founder-only job \(`founder-steps\.md`\) is a task")
+for s_ in ("pf-build", "pf-merge", "pf-deploy", "pf-harden", "pf-pentest", "pf-lanes"):
+    hasnt(f"{C}/skills/{s_}/SKILL.md", r"Run the check after every write")
+for f_ in sorted(os.listdir(f"{C}/references")):
+    if f_.endswith(".md") and os.path.exists(f"{B}/references/{f_}") and f_ in ("activity.md", "founder-steps.md", "session-link.md", "auto-mode.md"):
+        check(read(f"{C}/references/{f_}") == read(f"{B}/references/{f_}"), f"shared reference {f_} is the same in both plugins")
+
+# --- the logger finds the project when the session's own folder is not the checkout
+if _sh.which("node"):
+    t2_ = tempfile.mkdtemp(); h2_ = os.path.join(t2_, "home"); p2_ = os.path.join(t2_, "pf", "demo"); c2_ = os.path.join(t2_, "code"); s2_ = os.path.join(t2_, "sessionfolder")
+    for x_ in (h2_, p2_, os.path.join(c2_, "src"), s2_): os.makedirs(x_)
+    open(os.path.join(p2_, "factory.json"), "w").write("{}"); env2_ = dict(os.environ, HOME=h2_, USERPROFILE=h2_)
+    def run2_(args, cwd, inp=None): return subprocess.run(["node", ALA] + args, cwd=cwd, input=inp, capture_output=True, text=True, env=env2_)
+    run2_(["link", p2_, "demo", "solo"], c2_); lg2_ = os.path.join(p2_, "activity", "solo.jsonl"); n2_ = lambda: len(read(lg2_).strip().split("\n"))
+    run2_([], s2_, json.dumps({"hook_event_name": "PostToolUse", "session_id": "sess-A", "cwd": s2_, "tool_name": "Bash", "tool_input": {"description": "before any file was touched"}}))
+    check(n2_() == 1, "logger: a session elsewhere that has touched nothing in the checkout is not logged")
+    run2_([], s2_, json.dumps({"hook_event_name": "PostToolUse", "session_id": "sess-A", "cwd": s2_, "tool_name": "Edit", "tool_input": {"file_path": os.path.join(c2_, "src", "a.ts")}}))
+    check(n2_() == 2 and json.loads(read(lg2_).strip().split("\n")[-1])["what"] == "a.ts", "logger: found through the file a tool touched")
+    run2_([], s2_, json.dumps({"hook_event_name": "PostToolUse", "session_id": "sess-A", "cwd": s2_, "tool_name": "Bash", "tool_input": {"description": "Run the tests"}}))
+    run2_([], s2_, json.dumps({"hook_event_name": "Stop", "session_id": "sess-A", "cwd": s2_}))
+    check(n2_() == 4, "logger: the same session is then logged from its own folder")
+    run2_([], s2_, json.dumps({"hook_event_name": "PostToolUse", "session_id": "sess-B", "cwd": s2_, "tool_name": "Bash", "tool_input": {"description": "another session"}}))
+    check(n2_() == 4, "logger: another session in the same folder is not logged")
+    check(sorted(os.listdir(os.path.join(h2_, ".pf-activity"))) == ["last-hook.json", "sess-A.json"] and set(json.load(open(os.path.join(h2_, ".pf-activity", "sess-A.json")))) == {"v", "pointer"}, "logger: the per-session note holds a path and nothing else")
+    lh_ = json.load(open(os.path.join(h2_, ".pf-activity", "last-hook.json"))) if os.path.exists(os.path.join(h2_, ".pf-activity", "last-hook.json")) else {}
+    check(set(lh_) == {"v", "ts", "event"} and lh_["event"] == "PostToolUse", "logger: leaves a time-and-name-only proof that it fired")
+    run2_(["unlink"], c2_); run2_([], s2_, json.dumps({"hook_event_name": "Stop", "session_id": "sess-A", "cwd": s2_}))
+    check(n2_() == 5, "logger: after unlink the remembered session is no longer logged")
+has(f"{C}/references/activity.md", r"A session that never touched a linked checkout is never logged"); check(read(f"{C}/references/activity.md") == read(f"{B}/references/activity.md"), "activity.md still identical in both plugins")
+
+# --- logger: tool names kept, PowerShell described
+if _sh.which("node"):
+    t3_ = tempfile.mkdtemp(); p3_ = os.path.join(t3_, "pf", "demo"); c3_ = os.path.join(t3_, "code"); os.makedirs(p3_); os.makedirs(c3_)
+    open(os.path.join(p3_, "factory.json"), "w").write("{}"); e3_ = dict(os.environ, HOME=t3_, USERPROFILE=t3_)
+    r3_ = lambda args, inp=None: subprocess.run(["node", ALA] + args, cwd=c3_, input=inp, capture_output=True, text=True, env=e3_)
+    r3_(["link", p3_, "demo", "solo"])
+    r3_([], json.dumps({"hook_event_name": "PostToolUse", "cwd": c3_, "tool_name": "mcp__ccd_session_mgmt__get_session_details", "tool_input": {}}))
+    r3_([], json.dumps({"hook_event_name": "PostToolUse", "cwd": c3_, "tool_name": "PowerShell", "tool_input": {"command": "$env:TOKEN='" + "Zx9" * 12 + "'", "description": "Run the unit tests"}}))
+    r3_([], json.dumps({"hook_event_name": "PostToolUse", "cwd": c3_, "tool_name": "Evil\"name<script>", "tool_input": {}}))
+    L3_ = [json.loads(x) for x in read(os.path.join(p3_, "activity", "solo.jsonl")).strip().split("\n")]
+    check(L3_[1]["tool"] == "mcp__ccd_session_mgmt__get_session_details", "logger: a long tool name is kept, not masked")
+    check(L3_[2]["tool"] == "PowerShell" and L3_[2]["what"] == "Run the unit tests" and "TOKEN" not in json.dumps(L3_[2]), "logger: PowerShell shows its description, never its command")
+    check(L3_[3]["tool"] == "Evilnamescript", "logger: a tool name is cleaned to plain characters")
+
+# --- the activity log switches itself on
+has(f"{B}/skills/pf-next/SKILL.md", r"First, every time: is the activity log on\?"); has(f"{B}/skills/pf-link/SKILL.md", r"## Work given in plain words"); has(f"{B}/skills/pf-link/SKILL.md", r"switch the activity log on first")
+
+# --- attack checks: code checker + sourced rules + India section
+SC = os.path.abspath(f"{B}/scripts/sec-check.mjs"); SCS = read(SC); AC = read(f"{C}/references/attack-checks.md")
+check(AC == read(f"{B}/references/attack-checks.md"), "attack-checks.md identical in both plugins")
+for bad_ in ("child_process", "fetch(", "http", "writeFile", "appendFile", "unlink", "rename", "process.env", "eval("):
+    check(bad_ not in SCS, f"sec-check has no {bad_}: read-only, no network")
+rows_ = re.findall(r"^\| ([ABC]\d+) \|", AC, re.M)
+check(rows_ == ["A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4", "B5", "B6"] + [f"C{i}" for i in range(1, 11)], "attack-checks.md: exactly the twenty sourced rules")
+for row_ in [l for l in AC.split("\n") if re.match(r"^\| [ABC]\d+ \|", l)]:
+    check(row_.count('"') >= 2 and len(row_.split("|")[-2].strip()) > 20, f"attack rule {row_[2:5].strip()} carries its source and a quoted line")
+for out_ in ("timingSafeEqual", "alias"):
+    check(out_ not in AC.split("## Left out on purpose")[0], f"unverified rule not added: {out_}")
+if _sh.which("node"):
+    tb_ = tempfile.mkdtemp()
+    def mk_(rel_, body_):
+        p_ = os.path.join(tb_, rel_); os.makedirs(os.path.dirname(p_), exist_ok=True); open(p_, "w").write(body_)
+    def sc_(sub_): r = subprocess.run(["node", SC, os.path.join(tb_, sub_), "--json"], capture_output=True, text=True); return r.returncode, (json.loads(r.stdout) if r.stdout.strip().startswith("{") else r.stdout)
+    CASES_ = {
+     "view-security": ("supabase/migrations/1.sql", "create view public.v as select 1;\nCREATE OR REPLACE VIEW w WITH (security_barrier) AS select 1;\n", "create view public.v with (security_invoker = true) as select 1;\ncreate view w as select 1;\nalter view w set (security_invoker = on);\ncreate view private.x as select 1;\n-- create view commented as select 1;\ncreate view gone as select 1; drop view gone;\n", 2),
+     "weak-random": ("src/a.ts", "const resetToken = Math.random().toString(36);\n", "const resetToken = crypto.randomBytes(32).toString('hex');\nconst jitter = Math.random() * 10;\n", 1),
+     "trust-proxy": ("src/a.ts", "app.set('trust proxy', true);\n", "app.set('trust proxy', 1);\n// app.set('trust proxy', true)\n", 1),
+     "jwt-algorithm": ("src/a.ts", "import jwt from 'jsonwebtoken';\nimport { jwtVerify } from 'jose';\nconst p = jwt.verify(t, k);\nconst q = await jwtVerify(t, k, { issuer: 'x' });\n", "import jwt from 'jsonwebtoken';\nimport { jwtVerify } from 'jose';\nconst p = jwt.verify(t, k, { algorithms: ['RS256'] });\nconst q = await jwtVerify(t, k, { algorithms: ['ES256'] });\nconst s = crypto.verify('sha256', d, k, sig);\n", 2),
+    }
+    for rule_, (rel_, bad_src_, good_src_, n_) in CASES_.items():
+        mk_(f"bad-{rule_}/{rel_}", bad_src_); mk_(f"good-{rule_}/{rel_}", good_src_)
+        rc_, o_ = sc_(f"bad-{rule_}"); check(rc_ == 1 and isinstance(o_, dict) and [x["rule"] for x in o_["findings"] if x["level"] == "fail"] == [rule_] * n_, f"sec-check rejects the bad sample: {rule_}")
+        rc_, o_ = sc_(f"good-{rule_}"); check(rc_ == 0 and isinstance(o_, dict) and o_["fails"] == 0, f"sec-check accepts the good sample: {rule_}")
+    mk_("bundle/public/viewer.js", "var a=1;" + "x=Math.random();token=x;" * 400 + "\n"); rc_, o_ = sc_("bundle"); check(rc_ == 0 and o_["skipped"] == ["public/viewer.js"] and o_["fails"] == 0, "sec-check names a minified bundle as skipped and does not judge it")
+    mk_("tests-only/tests/x.test.ts", "const token = Math.random();\n"); rc_, o_ = sc_("tests-only"); check(rc_ == 0, "sec-check ignores test files")
+    r_ = subprocess.run(["node", SC, os.path.join(tb_, "nope")], capture_output=True, text=True); check(r_.returncode == 2 and "not run" in r_.stdout, "sec-check that cannot run says so and exits 2, never 0")
+    h0_ = {f_: read(os.path.join(dp_, f_)) for dp_, _, fs_ in os.walk(tb_) for f_ in fs_}; subprocess.run(["node", SC, tb_], capture_output=True, text=True)
+    check(h0_ == {f_: read(os.path.join(dp_, f_)) for dp_, _, fs_ in os.walk(tb_) for f_ in fs_}, "sec-check changes no file")
+else:
+    bad("node is needed to test sec-check")
+CMP = read(f"{C}/references/compliance.md"); IND = CMP.split("## India: the Digital Personal Data Protection rules")[1] if "## India: the Digital Personal Data Protection rules" in CMP else ""
+for pat_ in ("flag every item below for legal sign-off", "withdrawn at any time", "parent or guardian", "without delay", "₹250 crore", "eighteen-month"):
+    check(pat_ in IND, f"compliance.md India section: {pat_[:36]}")
+check("72" not in IND.split("Not in this checklist")[0] and "13 Nov" not in IND and "13 May" not in IND, "India section carries no unverified deadline or date")
+has(f"{B}/skills/pf-next/SKILL.md", r"## 3b\. The security checker"); has(f"{B}/skills/pf-next/SKILL.md", r"never `pass`"); has(f"{C}/references/security.md", r"## Attack checks \(added 23 Nov 2026\)"); has(f"{C}/references/upgrade.md", r"^\| U19 \|", re.M)
+
+# --- the factory's own web platform check
+WC = os.path.abspath(f"{B}/scripts/web-check.mjs"); WCS = read(WC); WR = read(f"{C}/references/web-checks.md")
+check(WR == read(f"{B}/references/web-checks.md"), "web-checks.md identical in both plugins")
+for bad_ in ("child_process", "fetch(", "http", "writeFile", "appendFile", "unlink", "rename", "process.env", "eval("):
+    check(bad_ not in WCS, f"web-check has no {bad_}: read-only, no network")
+check(re.findall(r"^\| (W\d+) \|", WR, re.M) == [f"W{i}" for i in range(1, 12)], "web-checks.md: exactly the eleven sourced rules")
+for row_ in [l for l in WR.split("\n") if re.match(r"^\| W\d+ \|", l)]:
+    check(row_.count('"') >= 2, f"web rule {row_.split('|')[1].strip()} carries a quoted source line")
+check("XMLHttpRequest" not in WCS and "modern-web-guidance" not in read(f"{C}/references/skills.md").lower() and "Modern Web Guidance" not in read(f"{C}/references/skills.md"), "the unverified rule and the outside tool are not in the plugin")
+if _sh.which("node"):
+    tw_ = tempfile.mkdtemp()
+    def mw_(rel_, body_):
+        p_ = os.path.join(tw_, rel_); os.makedirs(os.path.dirname(p_), exist_ok=True); open(p_, "w").write(body_)
+    def wc_(sub_): r = subprocess.run(["node", WC, os.path.join(tw_, sub_), "--json"], capture_output=True, text=True); return r.returncode, (json.loads(r.stdout) if r.stdout.strip().startswith("{") else r.stdout)
+    H_ = lambda body_, head_="": f'<!doctype html><html lang="en"><head>{head_}</head><body>{body_}</body></html>\n'
+    WCASES_ = {
+      "W1": (H_("<script>document.write('a')</script>"), H_("<script>// document.write('a')\nel.append(x)</script>")),
+      "W2": (H_("<script>addEventListener('unload', f)</script>"), H_("<script>addEventListener('pagehide', f)</script>")),
+      "W3": (H_("<script>if (e.keyCode === 13) go()</script>"), H_("<script>if (e.key === 'Enter') go()</script>")),
+      "W4": (H_("<script>document.execCommand('copy')</script>"), H_("<script>navigator.clipboard.writeText(t)</script>")),
+      "W5": (H_("<script>s.substr(1)</script>"), H_("<script>s.slice(1); s.substring(1)</script>")),
+      "W6": (H_("<script>var q = escape(s)</script>"), H_("<script>var q = encodeURIComponent(s); CSS.escape(s); _.escape(s)</script>")),
+      "W7": (H_("<script>el.addEventListener('DOMNodeInserted', g)</script>"), H_("<script>new MutationObserver(g).observe(el, {childList: true})</script>")),
+      "W8": (H_("<center>x</center>"), H_("<!-- <center>old</center> --><div class=\"center\">x</div>")),
+      "W9": (H_("x", '<meta name="viewport" content="width=device-width, user-scalable=no">'), H_("x", '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">')),
+      "W10": ("<!doctype html><html><head></head><body>x</body></html>\n", H_("x")),
+      "W11": (H_("x", "<style>a:focus{outline:none}</style>"), H_("x", "<style>a:focus{outline:none;box-shadow:0 0 0 2px #0b6b5f} .x{outline:none}</style>")),
+    }
+    for rule_, (bad_src_, good_src_) in WCASES_.items():
+        mw_(f"bad-{rule_}/index.html", bad_src_); mw_(f"good-{rule_}/index.html", good_src_)
+        rc_, o_ = wc_(f"bad-{rule_}"); check(rc_ == 1 and isinstance(o_, dict) and {x["rule"] for x in o_["findings"]} == {rule_}, f"web-check rejects the bad sample: {rule_}")
+        rc_, o_ = wc_(f"good-{rule_}"); check(rc_ == 0 and isinstance(o_, dict) and o_["fails"] == 0, f"web-check accepts the good sample: {rule_}")
+    mw_("next/src/layout.tsx", "export const viewport = { userScalable: false };\nexport default function L(){ return <html><body/></html> }\n"); rc_, o_ = wc_("next")
+    check(rc_ == 1 and sorted(x["rule"] for x in o_["findings"]) == ["W10", "W9"], "web-check reads a framework layout file too")
+    mw_("bundle/public/app.js", "var a=1;" + "document.write(1);" * 400 + "\n"); rc_, o_ = wc_("bundle"); check(rc_ == 0 and o_["skipped"] == ["public/app.js"], "web-check names a minified bundle as skipped")
+    r_ = subprocess.run(["node", WC, os.path.join(tw_, "nope")], capture_output=True, text=True); check(r_.returncode == 2 and "not run" in r_.stdout, "web-check that cannot run says so and exits 2, never 0")
+else:
+    bad("node is needed to test web-check")
+has(f"{B}/skills/pf-next/SKILL.md", r"web-check\.mjs"); has(f"{C}/references/upgrade.md", r"`web-check: pass`")
+
+# --- the checkers are shipped in both plugins, identical
+for n_ in ("sec-check.mjs", "web-check.mjs"):
+    check(read(f"{C}/scripts/{n_}") == read(f"{B}/scripts/{n_}"), f"{n_} identical in both plugins")
+check("what a live tracker reads" in read("CHANGELOG.md"), "changelog entry for the port")
 
 print(f"\n{n_ok} PASS, {n_bad} FAIL"); sys.exit(1 if n_bad else 0)

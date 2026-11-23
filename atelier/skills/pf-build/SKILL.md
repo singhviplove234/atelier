@@ -85,3 +85,6 @@ On an approval word (per "Approval words" in `state-schema.md`): set `lanes[<lan
 - Put a secret value in `SPEC.md`, `factory.json`, or the message.
 - Re-scaffold a project that already has `repo_url` — always `mode: continue`.
 - Write `factory.json` from a non-PM seat (write `lanes/<lane>.json` instead).
+
+## Backlog (`backlog.md`)
+When the build request is written, set its task in `BACKLOG.json` to `doing` with `request:` the request file's name, and put a `task: <id>` line in the request. No task for this work -> add one first. When the result is picked up, record `result:` and `pr:`, and set `waiting` with `owner: you` if it now needs approval, `blocked` with `blocked_by:` if it failed. Only the PM seat writes `BACKLOG.json`; a lane seat writes its changes under `tasks:` in its own `lanes/<lane>.json`. Run the check before every save (`backlog.md`, "The check").

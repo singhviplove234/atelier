@@ -35,3 +35,6 @@ Write the 48-hour watch list (`launch.md` E). Ask for the launch date and record
 - Invent a review, a testimonial, a user count, a deadline or a waitlist number.
 - Mark a checklist line done without its proof, or wave through a contract line.
 - Treat this as a gate — the launch decision is the owner's.
+
+## Founder-only steps
+Any step here that only the owner can do is guided page by page, with the non-secret values filled in and each step watched (`founder-steps.md`).

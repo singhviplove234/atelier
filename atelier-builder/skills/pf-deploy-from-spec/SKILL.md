@@ -51,3 +51,6 @@ rollout: <full | canary 10→100 | rolled back at 10>
 notes: <short>
 ```
 `status: ok` only when the health check passed (and, on a preview, the e2e suite passed). Then: "Result written — Cowork will pick it up (it is woken by the PR event, not polling)."
+
+## Step marks
+Mark each step as the work reaches it, exactly as `/pf-next` section 3a lists for this kind of work (`references/activity.md`). A missed mark never stops the work.

@@ -40,7 +40,7 @@ Generate the set the project warrants, as **living docs** (Claude Docs) by defau
 - **MVP definition** — the smallest shippable slice and its acceptance.
 - **Tech-stack decision** — what and why (locked at design approval).
 - **Budget forecast** — section 3.
-For an Agile project also: **the backlog (user stories)** and **the sprint plan**. Size each to the project — a small project gets a one-page brief, not a binder; never generate a document the project does not need.
+For an Agile project also: **the backlog (user stories)** and **the sprint plan**. For **every** project the list of sprints and tasks itself is written to `BACKLOG.json` (`backlog.md`); the documents explain the work, the file is the list. Size each to the project — a small project gets a one-page brief, not a binder; never generate a document the project does not need.
 
 ## 6. The living progress dashboard (and the artifact-update fix)
 For an Agile/team project, create a **living dashboard** the user monitors progress from, built so it updates **without re-asking permission every time**:

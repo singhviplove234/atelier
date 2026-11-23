@@ -70,3 +70,9 @@ Deploy is the only irreversible stage, so verify before recording success:
 - Let a destructive migration through without its own explicit yes, or point a preview at production data.
 - Record `live_url` before a 200 is observed.
 - Put a secret value in `factory.json` or a message.
+
+## Backlog (`backlog.md`)
+The deploy has its own task in `BACKLOG.json` (kind `deploy`): `doing` when the request is written, `waiting` with `owner: you` at the go-live question, `done` when the health check passes on the live address. Fold in every lane's `tasks:` first. Only the PM seat writes `BACKLOG.json`; a lane seat writes its changes under `tasks:` in its own `lanes/<lane>.json`. Run the check before every save (`backlog.md`, "The check").
+
+## Founder-only steps
+Any step here that only the owner can do is guided page by page, with the non-secret values filled in and each step watched (`founder-steps.md`).

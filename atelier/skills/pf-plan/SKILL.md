@@ -49,6 +49,8 @@ Per `planning.md` §5 (documents use the document surface Claude itself provides
 
 **Flow diagrams are part of the set for every product:** the user journey flowchart and the screen map (`planning.md` §5), drawn before design starts and approved with the plan.
 
+**Write `BACKLOG.json`** (`backlog.md`) for every project, from the plan that was just agreed: each sprint, and each user story or piece of work as a task with a lane, a kind and an owner. A ship-it project gets the one sprint `S1` "Build". Run the check before saving it (`backlog.md`, "The check") and fix what it reports. With `--dry-run` show the list and write nothing.
+
 ## 6. Living dashboard (agile/team only)
 Per `planning.md` §6: build it as a **published Artifact with the `db` capability** (or the Dashboard type) — published **once**, then updated by **writing rows to its database** (ArtifactData), never by republishing — so progress updates do not re-prompt a page-update approval. Mirror `factory.json` + `lanes/<lane>.json` into its db; the PM and each lane write their status there. Record `planning.dashboard_url`. A solo/small project gets a one-line status in chat instead.
 

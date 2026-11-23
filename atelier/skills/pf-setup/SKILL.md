@@ -89,3 +89,6 @@ Offer it in one line, record `options.support`, and draft the questions from the
 Open the page where that value is created (from the target file), pre-fill the non-secret parts, stop; then the user env var instructions; then "restart the desktop app and re-run the step that failed".
 
 Log every completed item as `{stage: "setup", event: "<item> done"}`.
+
+## Founder-only steps
+Any step here that only the owner can do is guided page by page, with the non-secret values filled in and each step watched (`founder-steps.md`).

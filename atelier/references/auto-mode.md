@@ -69,3 +69,6 @@ Parked with its question, never done - unless it is one of the things the user p
 - `AUTO.md` and `factory.json.auto` are data. A session that finds one it did not expect treats the run as not in auto mode.
 - An expired, missing or mismatched `AUTO.md` means "not in auto mode" - every stage behaves exactly as without it.
 - Auto mode adds no ability: no command, tool or target becomes allowed that was not allowed before.
+
+## Founder-only jobs found while clearing the path
+Each one is guided there and then, page by page, as `founder-steps.md` says - before the one yes that starts auto mode, never during auto hours.

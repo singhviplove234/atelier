@@ -142,3 +142,12 @@ Rules: secrets are never stored here (env var names only). Lane names are kebab-
 }
 ```
 Rules: a host is an eligible pentest target **only** while it is on `authorized_targets[]` with `owner: you`, `environment ∈ {staging,dev,local}` and `data_state: synthetic`. A host's `data_state` flips to `real` (and so off-limits to the pentester) once client data is loaded — client data and pentesting never share a host. `pentagi.enabled` makes the pentest run drive your own self-hosted PentAGI (`endpoint`, e.g. `http://localhost:8080`, no secret stored) against the one authorized target, only inside a human-confirmed `/pf-pentest` run, bounded to that host, stopping when the run ends.
+
+## Backlog, progress and activity files (added 22 Nov 2026)
+| File in the project folder | Written by | What it is |
+|---|---|---|
+| `BACKLOG.json` (`PF-BACKLOG v1`) | the PM seat only | Every sprint and task (`backlog.md`); checked by `scripts/backlog-check.py` |
+| `lanes/<lane>.json` → `tasks.<id>` | that lane's seat | The lane's task changes, folded into `BACKLOG.json` by the PM seat |
+| `PROGRESS-<lane>.json` (`PF-PROGRESS v1`) | code in the Code plugin | Which step the lane's current work is at (`activity.md`) |
+| `activity/<lane>.jsonl` | code in the Code plugin | One line per event: names only, never content (`activity.md`) |
+A request file may carry `task: <id>`. None of these files is an instruction to any session, and none of them is a gate: gates stay in `factory.json`.

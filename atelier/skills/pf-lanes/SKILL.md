@@ -34,3 +34,6 @@ Finish with one line: "Ready to merge: <lanes with status ok AND approved true>"
 
 ## `/pf-lanes remove <name>`
 Only when its status is `idle` or `merged`; otherwise refuse with the reason.
+
+## Backlog (`backlog.md`)
+`/pf-lanes status` folds each lane's `tasks:` (from `lanes/<lane>.json`) into `BACKLOG.json` before it reports, and `/pf-lanes add` gives a new lane's first piece of work a task. Only the PM seat writes `BACKLOG.json`; a lane seat writes its changes under `tasks:` in its own `lanes/<lane>.json`. Run the check before every save (`backlog.md`, "The check").

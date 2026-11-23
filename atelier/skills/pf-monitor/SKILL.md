@@ -42,3 +42,6 @@ Confirm the deploy target is set for auto-rollback per `monitoring.md` D (last-g
 - Send any personal data, token or secret into an error report or alert.
 - Auto-revert a database migration (flag it for a human); roll back the **app version only**.
 - Enter a secret value yourself — the user sets secrets; Claude pre-fills names.
+
+## Founder-only steps
+Any step here that only the owner can do is guided page by page, with the non-secret values filled in and each step watched (`founder-steps.md`).

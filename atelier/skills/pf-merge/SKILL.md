@@ -27,3 +27,6 @@ Write `<folder>/MERGE-REQUEST-<lane>.md` exactly per `bridge.md` (`PF-MERGE v1`,
 On `ok`: `lanes[<lane>].status = "merged"`, log `{stage: "merge", lane, event: "merged"}`. On `failed` with a conflict note: tell the lane's owner to run `/pf-build --lane <lane>` again (the builder rebases on `main`), and leave status `ok` → it will be re-set by the rebuild. If **every** declared lane is now `merged`, set `gates.build = "approved"`, log it, and say "All lanes merged — run `/pf-deploy` when ready." Otherwise list the lanes still open.
 
 `--all-ready`: run the above for each lane with status `ok`, asking once per lane.
+
+## Backlog (`backlog.md`)
+When a lane is merged, set that lane's merged build tasks in `BACKLOG.json` to `done`, and fold in every lane's `tasks:` from `lanes/<lane>.json`. Only the PM seat writes `BACKLOG.json`; a lane seat writes its changes under `tasks:` in its own `lanes/<lane>.json`. Run the check before every save (`backlog.md`, "The check").

@@ -50,3 +50,6 @@ pf-ship advances on its own **only** past a stage that passed its gate; it never
 - Run the pentest with `--go`, on a schedule, in cloud mode, or against anything but a registered pre-production host.
 - Load real client data, or treat a `data_sensitivity: high` project's build as cloud-eligible without the warned yes in `handoff.md`.
 - Proceed past a failed stage, or skip a stage whose gate is still `pending`.
+
+## Founder-only steps
+Any step here that only the owner can do is guided page by page, with the non-secret values filled in and each step watched (`founder-steps.md`).

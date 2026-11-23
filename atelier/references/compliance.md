@@ -24,3 +24,13 @@ Reuse existing tooling, no new scanner:
 - A short compliance table in `notes:`: item | required? | present? | needs-human? — with a one-line "what a lawyer should still review" when the app handles payments, minors, health or multi-tenant client data.
 
 Never: give legal advice, assert the app is "compliant" or "legal", or quietly add legal text as if a lawyer wrote it. The factory reduces obvious risk and flags the rest for a human; the final call on legal sign-off is always the owner's (and their lawyer's).
+
+## India: the Digital Personal Data Protection rules (when a product collects personal data from people in India)
+These points come from the Government of India's own explainer of the DPDP Rules, 2025 (Press Information Bureau, 17 November 2025, opened 23 November 2026). They are a checklist to take to a lawyer, not legal advice: **flag every item below for legal sign-off before it gates a product.**
+- **Phased compliance.** The explainer gives an eighteen-month period for phased compliance from notification in November 2025. Ask the lawyer which duties already apply to this product.
+- **Consent can be withdrawn at any time.** The product gives a clear way to withdraw consent, and withdrawing stops the processing that relied on it.
+- **Children.** Verifiable consent from a parent or guardian is required before a child's personal data is processed, with narrow exceptions for essential services.
+- **A breach is told to the people affected without delay,** in plain language: what happened, what it may mean for them, and what they can do.
+- **Penalties are large.** The explainer lists up to ₹250 crore for failing to keep reasonable security safeguards, up to ₹200 crore for not notifying a breach or for breaking the rules on children's data, and up to ₹50 crore for other breaches.
+- **Consent managers** are separate registered companies based in India that let a person give, review and withdraw consent in one place. A product does not need to be one; it may need to work with one.
+Not in this checklist because it was not confirmed from the government source: any fixed number of hours for breach reporting, and the exact date each phase starts. Ask the lawyer for both.

@@ -51,6 +51,21 @@ Show `Next: <kind> <slug> [lane] — request_id <id>`. For `pentest`, always ask
 - pentest → `pf-pentest-from-spec` on that file. **`--go` never skips the confirm for pentest**: always show the target and require a typed yes, and refuse any target not on the project's authorized pre-production allowlist.
 - merge → read `repo`, `pr_url`, `strategy`; run `gh pr merge <pr_url> --repo <repo> --squash --delete-branch` (no checkout needed). On a merge conflict write `status: failed`, `notes: conflict with main — lane must rebase and rebuild`. Write `MERGE-RESULT-<lane>.md`: `PF-MERGE-RESULT v1` / `request_id: <echoed>` / `status: ok|failed` / `notes: <short>`.
 
+## 3a. Mark the step (every kind; `references/activity.md`)
+The live tracker shows which step this work is at. Mark it by running, from the code checkout, `node "${CLAUDE_PLUGIN_ROOT}/hooks/activity-log.mjs" step <kind> <number> [running|waiting|blocked|done] [--task <id>] [--done <n> --of <n>]`. Add `--task` with the id on the request's `task:` line when it has one.
+- **First, every time: is the activity log on?** If the root of this lane's code checkout has no `.pf-activity.json`, switch it on now, from that root: `node "${CLAUDE_PLUGIN_ROOT}/hooks/activity-log.mjs" link "<the project's folder>" <slug> <lane>`. A session that was linked before the checkout existed, or before this plugin version, has none - without it the tracker shows nothing for this lane. No checkout yet -> do it as soon as the checkout exists.
+- **build**: `3` when the request is accepted (after 1a and 2) · `4` when coding starts · `5` when `npm run verify` and the tests start (`--done`/`--of` with the test count when the runner prints it) · `6` when the reviews start · `7 done` when the result is written.
+- **deploy**: `2` accepted · `3` preview deploy starts · `4` the health check starts · `4 done` when the result is written.
+- **merge**: `2` accepted · `3` the merge and its checks start · `4 done` when merged.
+- **harden**: `2` accepted · `3` the passes start · `4 done` when the result is written.
+- **pentest**: `2` accepted · `3` the scope guardrails are being verified · `4` testing starts · `5 done` when the report is written.
+- When the work stops on a question or a failure, mark the current step again with `waiting` (a question for a person) or `blocked` (it cannot go on), then follow the rules below.
+- A mark is one short command, never a reason to stop: if it cannot be run, write `step not marked` in the result and carry on. `/pf-next doctor` reports it on a line `- Activity log:`, adding whether the automatic logger fires at all (the time in `~/.pf-activity/last-hook.json`; no such file after some tool calls means the plugin's hook is not running in this app, and only the step marks will reach the tracker), (on when `.pf-activity.json` is in the checkout and `node` runs the file; otherwise off, with "run /pf-link").
+
+## 3b. The security checker (build and harden; `references/attack-checks.md`)
+Before the reviews step, run `node "${CLAUDE_PLUGIN_ROOT}/scripts/sec-check.mjs" "<code checkout>"`. It is read-only. Every `FAIL` line is fixed before the result can say `status: ok`; a `note` line is read and left. Put its last line in the result as `sec-check:`. If it cannot be run, write `sec-check: not run (<why>)` - never `pass`. Then review the section B rules, and the section C rules whose feature the product uses, and list the ones that applied.
+On a web build also run `node "${CLAUDE_PLUGIN_ROOT}/scripts/web-check.mjs" "<code checkout>"` (`references/web-checks.md`): the same rules - every `FAIL` fixed, its last line in the result as `web-check:`, and `web-check: not run (<why>)` if it cannot be run, never `pass`.
+
 ## If you must stop to ask a question (any stage)
 **Send it before you wait, and not through a question dialog when a return address is saved.** Write `NEEDS-INPUT-<lane>.md`, then `/pf-link notify needs-input` (`session-link.md`, "The notice" - this holds for any work in a linked session, not only a `/pf-next` request), then wait for the answer to be typed here.
 

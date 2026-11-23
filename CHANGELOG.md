@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.13.0 - what a live tracker reads, guided owner steps, and three new checks
+- **Activity log and step marks.** The Code plugin now records each step of a linked session by itself: names only, never a command, a prompt, a file's content or a value. It starts nothing and cannot block or fail the work. `/pf-link` switches it on for a checkout and every request checks it is on. This replaces the earlier promise that the Code plugin runs nothing by itself with a narrower one: its one hook is a read-only logger.
+- **Step marks.** Each build, deploy, merge, hardening pass and security test marks which step it is at, in a `PROGRESS-<lane>.json` file. Work given in plain words marks its steps too.
+- **Backlog file.** Every project keeps its sprints and tasks in one `BACKLOG.json`, with a checker script. `/pf-plan` creates it and the commands that move work keep it current.
+- **Guided owner steps.** A job only the owner can do (a sign-in, a code, a token, a consent, a payment) is walked through page by page, with every value that is not a secret prepared and each step confirmed. The plugin never types or reads a secret.
+- **Security checker.** A read-only script fails a build on four things a program can decide for certain: a database view that can skip row level security, a predictable random function making something that guards access, proxy trust left wide open, and a login token verified without a fixed algorithm. Twenty attack rules sit beside it, each written from a primary source and quoting it.
+- **Web platform checker.** A read-only script fails a web build on eleven outdated or harmful patterns: deprecated browser features, a page that stops people zooming, a page with no language set, a focus outline removed with nothing in its place. Each rule quotes the page it came from.
+- **India data-protection section** in the compliance checklist, taken from the government's own explainer and flagged for a lawyer's sign-off.
+- `/pf-upgrade` gains U18 and U19 for existing projects.
+
 ## 2.12.0 - audit of the hand-off rules
 - **Seats that review but do not build** (security, architecture, operations) can now nudge the PM too: `/pf-lanes seat --also <names>`. They record it in their own log only.
 - **A long-running conversation re-reads the hand-off rules before every hand-off**, so it does not keep working the old way after an update.

@@ -48,3 +48,6 @@ A security review done by an AI reviewer is not repeatable: each pass explores t
 - The reviewer that checks a finding is never the one that raised it; its job is to try to disprove it.
 - Merge the two reports, fix what is proved, then run the pass **once more on the changed code**. Report `security passes: <n>, new in last pass: <k>`; the review is complete when a pass finds nothing new, and never after one pass.
 - Code is only ever run to prove a finding inside the project's own test setup - never against a live host, and never with real data (`security-testing.md` covers the authorized pentest; this is not that).
+
+## Attack checks (added 23 Nov 2026)
+Every build is also checked against `attack-checks.md`: four rules decided by code (`scripts/sec-check.mjs` in the Code plugin), six reviewed on every web build, and ten reviewed only when the product uses the feature they concern. Each rule there names the primary source it was written from. Those rules add to this file and loosen nothing in it.

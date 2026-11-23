@@ -41,3 +41,9 @@ Record `harden.status`, `harden.pr_url`, `harden.branch`; log `{stage: "harden",
 If `status: ok`: AskUserQuestion `Merge the hardening PR into main and redeploy? Yes / No`. On Yes: write `MERGE-REQUEST-harden.md` per `bridge.md` (`repo`, `pr_url`, `strategy: squash`), drive `/pf-next <slug> merge --lane harden --go`, poll `MERGE-RESULT-harden.md` (20 min), then run the `/pf-deploy` flow from its step 4 (it asks "Deploy now?" itself). On No: "PR is open at <pr_url>; run /pf-harden again or merge later." If `status: failed`: show `notes`/`failures` and offer "run again with fewer passes" or "tell me what to fix".
 
 Never: load-test a live URL, add Redis or any paid resource, upgrade a plan, push to `main` directly, or run without the Yes in step 2.
+
+## Backlog (`backlog.md`)
+The hardening pass has its own task in `BACKLOG.json` (kind `harden`): `doing` when the request is written, `waiting` with `owner: you` when its pull request needs approval, `done` when merged. Only the PM seat writes `BACKLOG.json`; a lane seat writes its changes under `tasks:` in its own `lanes/<lane>.json`. Run the check before every save (`backlog.md`, "The check").
+
+## Founder-only steps
+Any step here that only the owner can do is guided page by page, with the non-secret values filled in and each step watched (`founder-steps.md`).

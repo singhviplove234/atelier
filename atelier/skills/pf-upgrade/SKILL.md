@@ -16,7 +16,7 @@ Read first:
 Find the project (the one named, else the only one; if several and none named, ask with AskUserQuestion). Read `factory.json`, the SPEC, the latest build, deploy and harden results, and the repository's top level. Compare `factory_version` with this plugin's version: if they are equal and the last assessment found nothing missing, say "up to date" and stop.
 
 ## 2. Assess — read-only
-Go through U1–U17 in `upgrade.md`. For each: present, missing or not applicable, the evidence (a field, a file, a result line), the effort and the risk. An option the project never chose is not missing. Show one table and, below it, anything that would change behaviour, data or cost — listed separately as "not part of the upgrade".
+Go through U1–U19 in `upgrade.md`. For each: present, missing or not applicable, the evidence (a field, a file, a result line), the effort and the risk. An option the project never chose is not missing. Show one table and, below it, anything that would change behaviour, data or cost — listed separately as "not part of the upgrade".
 
 ## 3. The owner picks
 Ask which numbers to do, with AskUserQuestion ("All recommended" / "Let me choose" / "Not now"). Recommend the safety nets (U4, U5) whenever they are missing: without them nothing else can be checked.

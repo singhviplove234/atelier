@@ -90,3 +90,12 @@ Type passwords, tokens or card numbers; click the final submit on account, payme
 
 ## More than websites
 A browser extension, a desktop app, an API, a command-line tool or an AI agent goes through the same stages and gates; `references/product-types.md` defines what a screen, a deploy and a health check mean for each, and three targets (`chrome-web-store`, `desktop-release`, `package-registry`) end at a draft the owner publishes. `/pf-setup email` and `/pf-setup support` add mail that arrives and a help page with a contact form; `/pf-grow --experiment` tests a change on real visitors when there are enough of them.
+
+## What the live tracker reads
+Two things are kept by code rather than by instructions, so they are the same every time: `BACKLOG.json`, the one list of sprints and tasks (`references/backlog.md`, checked by `scripts/backlog-check.py`), and the Code plugin's activity log and step marks (`references/activity.md`). Neither is a gate and neither is an instruction to any session.
+
+## When only you can do it
+Sign-ins, codes, tokens, consents and payments stay yours. The factory guides you through each one page by page: it opens the exact page, tells you what to press in the words on the screen, fills in everything that is not a secret, and checks each step before the next (`references/founder-steps.md`).
+
+## Attack checks and India's data rules
+`references/attack-checks.md` holds twenty attack rules, each written from a primary source that was opened and read; four are decided by code in the Code plugin. `references/compliance.md` has a section for products that collect personal data from people in India, taken from the government's own explainer and flagged for a lawyer's sign-off.

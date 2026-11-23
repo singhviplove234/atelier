@@ -51,3 +51,6 @@ The Code session has a real terminal on the user's computer. The user is not a p
 
 ## Unchanged in both modes
 The human approval gates do not move: **design sign-off**, **deploy go-live** (always a yes), **pentest scope** (never scheduled, never `--go`), and **client-data go-live**. The contracts (performance, SEO, security, compliance, simplicity, design, cost) are met in full whichever mode builds the code.
+
+## A founder-only job is guided, never just handed over
+When a step is the owner's alone (a sign-in, a code, a token, a consent, a payment, a reserved final button), follow `founder-steps.md`: a guide card with every non-secret value ready, then one page at a time with the exact words on the page, non-secret fields filled, and each step watched and confirmed - by the Cowork seat in a browser, by the Code session on the computer. Never "please do X and tell me when it is done".
